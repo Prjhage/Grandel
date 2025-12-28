@@ -1,0 +1,188 @@
+<% layout("./layouts/boilerplate") -%>
+<style>
+  .booking-container {
+    max-width: 520px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    animation: fadeSlideUp 0.5s ease;
+  }
+
+  .booking-container h3 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .booking-info p {
+    margin-bottom: 0.4rem;
+    color: #333;
+  }
+
+  .booking-info span {
+    font-weight: 600;
+  }
+
+  input[type="date"] {
+    border-radius: 10px;
+    padding: 0.6rem;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  input[type="date"]:focus {
+    border-color: #ff385c;
+    box-shadow: 0 0 0 0.15rem rgba(255, 56, 92, 0.25);
+  }
+
+  .price-summary {
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+  }
+
+  .price-summary.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+
+  .price-total {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .btn-confirm {
+    background: linear-gradient(135deg, #ff385c, #e61e4d);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem;
+    font-weight: 600;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-confirm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(255, 56, 92, 0.4);
+  }
+  /* subtle entry animation */
+
+  @keyframes fadeSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+<div class="booking-container">
+  <h3>Confirm your booking</h3>
+
+  <div class="booking-info">
+    <p><b>Listing:</b> <span><%= listing.title %></span></p>
+    <p>
+      <b>Price per night:</b> ₹<span id="pricePerNight"
+        ><%= listing.price %></span
+      >
+    </p>
+    <p><b>Guest:</b> <span><%= user.username %></span></p>
+  </div>
+
+  <form action="/listings/<%= listing._id %>/book" method="POST">
+    <label>Check-in</label>
+    <input
+      type="date"
+      name="startDate"
+      id="startDate"
+      required
+      class="form-control mb-2"
+    />
+
+    <label>Check-out</label>
+    <input
+      type="date"
+      name="endDate"
+      id="endDate"
+      required
+      class="form-control mb-2"
+    />
+
+    <!-- PRICE SUMMARY -->
+    <div id="priceSummary" class="price-summary">
+      <div class="price-row">
+        <span>Nights</span>
+        <span id="nights">0</span>
+      </div>
+      <div class="price-row">
+        <span>Subtotal</span>
+        <span>₹<span id="subtotal">0</span></span>
+      </div>
+      <div class="price-row">
+        <span>GST (18%)</span>
+        <span>₹<span id="gst">0</span></span>
+      </div>
+      <hr />
+      <div class="price-row price-total">
+        <span>Total</span>
+        <span>₹<span id="total">0</span></span>
+      </div>
+    </div>
+
+    <button class="btn btn-confirm w-100 mt-3">Confirm Booking</button>
+  </form>
+</div>
+
+<script>
+  const pricePerNight = Number(
+    document.getElementById("pricePerNight").innerText
+  );
+
+  const startDateInput = document.getElementById("startDate");
+  const endDateInput = document.getElementById("endDate");
+
+  const summaryBox = document.getElementById("priceSummary");
+  const nightsEl = document.getElementById("nights");
+  const subtotalEl = document.getElementById("subtotal");
+  const gstEl = document.getElementById("gst");
+  const totalEl = document.getElementById("total");
+
+  function calculatePrice() {
+    const start = new Date(startDateInput.value);
+    const end = new Date(endDateInput.value);
+
+    if (!startDateInput.value || !endDateInput.value || end <= start) {
+      summaryBox.classList.remove("show");
+
+      return;
+    }
+
+    const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+
+    const subtotal = nights * pricePerNight;
+    const gst = Math.round(subtotal * 0.18);
+    const total = subtotal + gst;
+
+    nightsEl.innerText = nights;
+    subtotalEl.innerText = subtotal;
+    gstEl.innerText = gst;
+    totalEl.innerText = total;
+
+    summaryBox.classList.add("show");
+  }
+
+  startDateInput.addEventListener("change", calculatePrice);
+  endDateInput.addEventListener("change", calculatePrice);
+</script>

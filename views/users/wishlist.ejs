@@ -1,0 +1,57 @@
+<% layout("./layouts/boilerplate") -%>
+<style>
+  .listing-card {
+    border: none !important;
+    margin-bottom: 2rem;
+  }
+
+  .card-img-top {
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .card-body {
+    padding: 0 !important;
+  }
+
+  .card-text {
+    font-weight: 400 !important;
+  }
+
+  .listing-link {
+    text-decoration: none;
+  }
+</style>
+<div class="row mt-3">
+  <div class="col-8 offset-2 mb-3">
+    <h3>My Wishlist</h3>
+  </div>
+  <% if(listings.length === 0) { %>
+  <div class="col-8 offset-2">
+    <p>Your wishlist is empty.</p>
+    <a href="/listings" class="btn btn-dark">Explore Listings</a>
+  </div>
+  <% } else { %>
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for(let listing of listings) { %>
+    <a href="/listings/<%=listing._id%>" class="listing-link">
+      <div class="card col listing-card">
+        <img
+          src="<%=listing.image.url%>"
+          class="card-img-top"
+          alt="listing_image"
+          style="height: 20rem"
+        />
+        <div class="card-body">
+          <p class="card-text">
+            <b><%= listing.title %></b> <br />
+            &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+          </p>
+        </div>
+      </div>
+    </a>
+    <% } %>
+  </div>
+  <% } %>
+</div>

@@ -1,0 +1,79 @@
+<% layout("./layouts/boilerplate") -%>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <div class="listing-overlay">
+        <div class="listing-g-card create-card">
+
+            <div class="listing-header">
+                <i class="fa-solid fa-house listing-icon"></i>
+                <h2>Edit Listing</h2>
+            </div>
+
+            <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" enctype="multipart/form-data" class="listing-form" novalidate>
+
+                <div class="lf-group">
+                    <label>Title</label>
+                    <input type="text" name="listing[title]" value="<%= listing.title %>" required />
+                </div>
+
+                <div class="lf-group">
+                    <label>Description</label>
+                    <textarea name="listing[description]" rows="3" required><%= listing.description %></textarea>
+                </div>
+
+                <div class="lf-group">
+                    <label>Current Image</label>
+                    <img src="<%= orignalImageUrl %>" alt="Listing image" class="lf-preview" />
+                </div>
+
+                <div class="lf-group">
+                    <label>Upload New Image</label>
+                    <input type="file" name="listing[image]" accept="image/*" />
+                </div>
+
+                <!-- PRICE + CATEGORY -->
+                <div class="lf-row">
+                    <div class="lf-group half">
+                        <label>Price per night</label>
+                        <input type="number" name="listing[price]" value="<%= listing.price %>" min="1" required />
+                    </div>
+
+                    <div class="lf-group half">
+                        <label>Category</label>
+                        <select name="listing[category]" required>
+            <option value="trending" <%= listing.category === 'trending' ? 'selected' : '' %>>🔥 Trending</option>
+            <option value="rooms" <%= listing.category === 'rooms' ? 'selected' : '' %>>🛏 Rooms</option>
+            <option value="iconic" <%= listing.category === 'iconic' ? 'selected' : '' %>>🏙 Iconic Cities</option>
+            <option value="mountain" <%= listing.category === 'mountain' ? 'selected' : '' %>>🏔 Mountain</option>
+            <option value="castles" <%= listing.category === 'castles' ? 'selected' : '' %>>🏰 Castles</option>
+            <option value="pools" <%= listing.category === 'pools' ? 'selected' : '' %>>🏊 Amazing Pools</option>
+            <option value="camping" <%= listing.category === 'camping' ? 'selected' : '' %>>🏕 Camping</option>
+            <option value="farms" <%= listing.category === 'farms' ? 'selected' : '' %>>🚜 Farms</option>
+            <option value="arctic" <%= listing.category === 'arctic' ? 'selected' : '' %>>❄ Arctic</option>
+            <option value="domes" <%= listing.category === 'domes' ? 'selected' : '' %>>🧊 Domes</option>
+            <option value="boats" <%= listing.category === 'boats' ? 'selected' : '' %>>🚤 Boats</option>
+            <option value="forest" <%= listing.category === 'forest' ? 'selected' : '' %>>🌲 Forest</option>
+            <option value="lakefront" <%= listing.category === 'lakefront' ? 'selected' : '' %>>🌊 Lakefront</option>
+            <option value="beach" <%= listing.category === 'beach' ? 'selected' : '' %>>🏖 Beach</option>
+            <option value="urban" <%= listing.category === 'urban' ? 'selected' : '' %>>🏙 Urban</option>
+            <option value="countryside" <%= listing.category === 'countryside' ? 'selected' : '' %>>🏡 Countryside</option>
+          </select>
+                    </div>
+                </div>
+
+                <div class="lf-group">
+                    <label>Country</label>
+                    <input type="text" name="listing[country]" value="<%= listing.country %>" required />
+                </div>
+
+                <div class="lf-group">
+                    <label>Location</label>
+                    <input type="text" name="listing[location]" value="<%= listing.location %>" required />
+                </div>
+
+                <button class="listing-submit-btn">Save Changes</button>
+
+            </form>
+        </div>
+    </div>
