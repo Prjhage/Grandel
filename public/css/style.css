@@ -854,7 +854,7 @@ input:-webkit-autofill:active {
     }
 }
 
-@media (max-width: 420px) {
+@media (max-width:768px) {
     .listing-icon {
         font-size: 1.6rem;
     }
@@ -863,7 +863,7 @@ input:-webkit-autofill:active {
     }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
     .form-row {
         flex-direction: column;
     }
@@ -872,7 +872,7 @@ input:-webkit-autofill:active {
     }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
     .listing-card {
         width: 100% !important;
     }
