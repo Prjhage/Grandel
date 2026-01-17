@@ -1,72 +1,46 @@
 <% layout("./layouts/boilerplate") -%>
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
-<div class="login-overlay">
-  <div class="login-card">
-    <div class="login-header">
-      <i
-        class="fa-regular fa-house fa-bounce"
-        style="color: #005af5; font-size: 3rem"
-      ></i>
-      <h2>Wanderlust</h2>
-    </div>
-    <% if (error && error.length) { %>
-    <div class="alert alert-danger text-center"><%= error %></div>
-    <% } %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+    <div class="login-overlay">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fa-regular fa-house fa-bounce" style="color: #005af5; font-size: 3rem"></i>
+                <h2>Stayerd</h2>
+            </div>
+            <% if (error && error.length) { %>
+                <div class="alert alert-danger text-center">
+                    <%= error %>
+                </div>
+                <% } %>
 
-    <form
-      action="/login"
-      method="POST"
-      class="login-form needs-validation"
-      novalidate
-    >
-      <div class="form-group">
-        <label for="username" class="form-label">Username</label>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          required
-          id="username"
-        />
-      </div>
+                    <form action="/login" method="POST" class="login-form needs-validation" novalidate>
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" name="username" placeholder="Username" required id="username" />
+                        </div>
 
-      <div class="form-group">
-        <label for="password" class="form-label">Password</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          id="password"
-        />
-      </div>
-      <button class="login-btn btn-success">Login</button>
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" placeholder="Password" required id="password" />
+                        </div>
+                        <button class="login-btn btn-success">Login</button>
 
-      <!-- OR DIVIDER -->
-      <div class="text-center my-3">
-        <span class="divider">or</span>
-      </div>
+                        <!-- OR DIVIDER -->
+                        <div class="text-center my-3">
+                            <span class="divider">or</span>
+                        </div>
 
-      <!-- GOOGLE LOGIN BUTTON -->
-      <button
-        class="google-btn"
-        onclick="import('./js/firebase.js').then(module => module.signInWithGoogle())"
-      >
+                        <!-- GOOGLE LOGIN BUTTON -->
+                        <button class="google-btn" onclick="import('./js/firebase.js').then(module => module.signInWithGoogle())">
         <i class="fab fa-google"></i> Login with Google
       </button>
 
-      <!-- SIGNUP LINK -->
-      <p class="text-center mt-3">
-        Don’t have an account?
-        <a href="/signup" class="fw-bold text-decoration-none">Sign up</a>
-      </p>
-    </form>
-  </div>
-</div>
-<script type="module" src="/js/firebase.js"></script>
+                        <!-- SIGNUP LINK -->
+                        <p class="text-center mt-3">
+                            Don’t have an account?
+                            <a href="/signup" class="fw-bold text-decoration-none">Sign up</a>
+                        </p>
+                    </form>
+        </div>
+    </div>
+    <script type="module" src="/js/firebase.js"></script>
