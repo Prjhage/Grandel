@@ -5,11 +5,53 @@
         font-size: 2rem;
         margin-right: 2rem;
         transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: inline-flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 5px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        position: relative;
     }
-    /* .navbar-brand:hover {
-    color: #0056b3 !important;
-    transform: rotate(360deg);
-  } */
+    
+    .navbar-brand-text {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+    
+    .navbar-brand-grand {
+        color: #007bff;
+        font-size: 1.8rem;
+    }
+    
+    .navbar-brand-el {
+        color: #ff6b6b;
+        font-size: 1.8rem;
+    }
+    
+    .navbar-brand-icon {
+        font-size: 0.8rem !important;
+        color: #ff6b6b !important;
+        animation: bounce 1s infinite !important;
+        display: inline-block !important;
+        margin-bottom: 0px;
+    }
+    
+    @keyframes bounce {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+    
+    .navbar-brand:hover {
+        transform: scale(1.05);
+    }
     
     .logo-img {
         height: 50px;
@@ -335,13 +377,15 @@
         }
     }
 </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
-    <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top" style="height: 70px;">
+    <div class="container-fluid" style="height: 100%; display: flex; align-items: center;">
         <!-- LOGO -->
         <a class="navbar-brand fw-bold" href="/">
-            <span><img src="/images/logo1.png" alt="wanderlust logo" class="logo-img"
-      /></span>
-
+            <div class="navbar-brand-text">
+                <span class="navbar-brand-grand">Grand</span>
+                <span class="navbar-brand-el">el</span>
+            </div>
+            <i class="fa-solid fa-house navbar-brand-icon"></i>
         </a>
 
         <!-- SEARCH (MOVED) -->

@@ -34,8 +34,11 @@ export async function signInWithGoogle() {
     });
 
     if (response.ok) {
-      // Redirect to home or profile
-      window.location.href = "/listings";
+      const data = await response.json();
+      if (data.success) {
+        // Redirect to home or profile (only once)
+        window.location.replace("/listings");
+      }
     } else {
       alert("Login failed");
     }

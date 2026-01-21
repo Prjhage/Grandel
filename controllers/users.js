@@ -43,7 +43,7 @@ module.exports.signup = async (req, res, next) => {
       if (err) {
         return next(err);
       }
-      req.flash("success", "Welcome to Wanderlust!");
+      req.flash("success", "Welcome to Grandel!");
       res.redirect("/listings");
     });
   } catch (e) {
@@ -58,8 +58,10 @@ module.exports.renderLoginform = (req, res) => {
 };
 
 module.exports.login = (req, res) => {
-  req.flash("success", "Welcome to Wanderlust! You are logged in!");
+  req.flash("success", "Welcome to Grandel! You are logged in!");
   let redirectUrl = res.locals.redirectUrl || "/listings";
+  // Clear the redirect URL to prevent double redirect
+  res.locals.redirectUrl = null;
   res.redirect(redirectUrl);
 };
 
@@ -99,7 +101,7 @@ module.exports.profile = async (req, res) => {
   });
 
   const bookings = await Booking.find({ user: req.user._id }).populate(
-    "listing"
+    "listing",
   );
   const myListings = await Listing.find({ Owner: req.user._id });
 
@@ -151,7 +153,7 @@ module.exports.hostDashboard = async (req, res) => {
 
   // Filter out bookings where listing is null (not owned by the user)
   const filteredBookings = hostBookings.filter(
-    (booking) => booking.listing !== null
+    (booking) => booking.listing !== null,
   );
 
   // Categorize bookings by status

@@ -478,7 +478,23 @@
         }
 
         // Add click event listeners to all images in the gallery
-        document.addEventListener('DOMContentLoaded', function() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                const galleryImages = document.querySelectorAll('.listing-gallery img');
+                galleryImages.forEach(img => {
+                    img.addEventListener('click', function() {
+                        openImageModal(this.src);
+                    });
+                });
+
+                // Close modal when clicking on it
+                const modal = document.getElementById('imageModal');
+                if (modal) {
+                    modal.addEventListener('click', closeImageModal);
+                }
+            });
+        } else {
+            // DOM is already loaded
             const galleryImages = document.querySelectorAll('.listing-gallery img');
             galleryImages.forEach(img => {
                 img.addEventListener('click', function() {
@@ -491,5 +507,5 @@
             if (modal) {
                 modal.addEventListener('click', closeImageModal);
             }
-        });
+        }
     </script>
