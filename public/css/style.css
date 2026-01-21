@@ -95,9 +95,20 @@ body {
     padding: 0.5rem 1.5rem;
 }
 
+.navbar-brand {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #fe424d, #e01666);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+}
+
 .navbar-brand i {
     color: #fe424d;
     font-size: 1.9rem;
+    -webkit-text-fill-color: #fe424d;
 }
 
 .nav-link {
