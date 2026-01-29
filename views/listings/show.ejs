@@ -4,6 +4,14 @@
         const listing = <%- JSON.stringify(listing) %>;
     </script>
 
+    <style>
+        @media (max-width: 768px) {
+            .close-btn {
+                display: none;
+            }
+        }
+    </style>
+
     <div class="row mt-3">
         <div class="col-lg-8">
             <h3>
@@ -130,7 +138,7 @@
                                                             <strong><%= review.author.username %></strong><br />
                                                             <small class="text-muted">
                   <%= Math.max(1, new Date().getFullYear() - new
-                  Date(review.createdAt).getFullYear()) %> years on Wanderlust
+                  Date(review.createdAt).getFullYear()) %> years on Grandel
                 </small>
                                                         </div>
                                                     </div>
@@ -165,64 +173,25 @@
                                 </div>
                                 <% } %>
 
-                                    <div class="nearby-section mb-3 mt-3">
-                                        <h4>🏘️ Around this place</h4>
-                                        <% if (!nearbyPlaces || nearbyPlaces.length === 0) { %>
-                                            <p class="text-muted">
-                                                Nearby places are not available for this location.
-                                                <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(listing.location) %>" target="_blank">
-          Explore on Google Maps →
-        </a>
-                                            </p>
-                                            <% } else { %>
-                                                <div class="row g-3">
-                                                    <% nearbyPlaces.forEach(p => { %>
-                                                        <div class="col-md-4 col-sm-6">
-                                                            <div class="card h-100 shadow-sm">
-                                                                <img src="<%= p.image %>" class="card-img-top" style="height: 140px; object-fit: cover" alt="<%= p.name %>" />
-                                                                <div class="card-body p-2">
-                                                                    <h6 class="card-title text-truncate" title="<%= p.name %>">
-                                                                        <%= p.name %>
-                                                                    </h6>
-                                                                    <p class="card-text text-muted small mb-2">
-                                                                        <%= p.type %>
-                                                                    </p>
-                                                                    <a href="https://www.google.com/maps?q=<%= p.lat %>,<%= p.lng %>" target="_blank" class="btn btn-sm btn-outline-primary w-100">View on Map</a
-              >
-            </div>
-          </div>
-        </div>
-        <% }) %>
-      </div>
-      <% } %>
-    </div>
 
-    <% if (travelCompanion && ((travelCompanion.places &&
+
+                                    <% if (travelCompanion && ((travelCompanion.places &&
     travelCompanion.places.length > 0) || (travelCompanion.food &&
     travelCompanion.food.length > 0))) { %>
-    <div class="whats-new-card p-3 border rounded shadow-sm bg-white mb-3">
-      <h5 class="mb-3">✨ What’s new here</h5>
+                                        <div class="whats-new-card p-3 border rounded shadow-sm bg-white mb-3">
+                                            <h5 class="mb-3">✨ What’s new here</h5>
 
-      <% if (travelCompanion.places && travelCompanion.places.length > 0) { %>
-      <h6 class="text-primary">📍 Places to Visit</h6>
-      <div class="row g-2 mb-3">
-        <% travelCompanion.places.forEach(p => { %>
-        <div class="col-lg-4 col-md-4 col-sm-6">
-          <div class="card h-100 border shadow-sm">
-            <img
-              src="<%= p.image || '/images/placeholder.jpg' %>"
-              class="card-img-top p-2 rounded"
-              style="height: 150px; object-fit: cover"
-              alt="<%= p.name %>"
-            />
-            <div class="card-body p-2 text-center">
-              <a
-                href="https://www.google.com/maps?q=<%= p.name %>"
-                target="_blank"
-                class="text-decoration-none text-dark"
-              >
-                <small class="fw-bold"><%= p.name %></small>
-              </a>
+                                            <% if (travelCompanion.places && travelCompanion.places.length > 0) { %>
+                                                <h6 class="text-primary">📍 Places to Visit</h6>
+                                                <div class="row g-2 mb-3">
+                                                    <% travelCompanion.places.forEach(p => { %>
+                                                        <div class="col-lg-4 col-md-4 col-sm-6">
+                                                            <div class="card h-100 border shadow-sm">
+                                                                <img src="<%= p.image || '/images/placeholder.jpg' %>" class="card-img-top p-2 rounded" style="height: 150px; object-fit: cover" alt="<%= p.name %>" />
+                                                                <div class="card-body p-2 text-center">
+                                                                    <a href="https://www.google.com/maps?q=<%= p.name %>" target="_blank" class="text-decoration-none text-dark">
+                                                                        <small class="fw-bold"><%= p.name %></small>
+                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -245,13 +214,13 @@
                                                                 <% }) %>
                                                         </div>
                                                         <% } %>
-                                    </div>
-                                    <% } %>
-
-                                        <h3>Where you'll be</h3>
-                                        <div class="listing-map col-12 mt-5 px-0">
-                                            <iframe src="https://www.google.com/maps?q=<%= encodeURIComponent(`${listing.title}, ${listing.location}, ${listing.country}`) %>&z=14&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width: 100%; height: 420px; border: 0; border-radius: 16px"></iframe>
                                         </div>
+                                        <% } %>
+
+                                            <h3>Where you'll be</h3>
+                                            <div class="listing-map col-12 mt-5 px-0">
+                                                <iframe src="https://www.google.com/maps?q=<%= encodeURIComponent(`${listing.title}, ${listing.location}, ${listing.country}`) %>&z=14&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width: 100%; height: 420px; border: 0; border-radius: 16px"></iframe>
+                                            </div>
         </div>
 
         <div class="col-lg-4">
@@ -477,7 +446,7 @@
             modal.classList.remove('active');
         }
 
-        // Add click event listeners to all images in the gallery
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function() {
                 const galleryImages = document.querySelectorAll('.listing-gallery img');
