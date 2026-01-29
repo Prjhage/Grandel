@@ -5,7 +5,7 @@
         <div class="login-card">
             <div class="login-header">
                 <i class="fa-regular fa-house fa-bounce" style="color: #005af5; font-size: 3rem"></i>
-                <h2>Grandel</h2>
+                <h2>Welcome Back</h2>
             </div>
             <% if (error && error.length) { %>
                 <div class="alert alert-danger text-center">
@@ -13,34 +13,19 @@
                 </div>
                 <% } %>
 
-                    <form action="/login" method="POST" class="login-form needs-validation" novalidate>
+                    <form id="login-form" class="login-form needs-validation" novalidate onsubmit="loginWithEmail(event)">
                         <div class="form-group">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" name="username" placeholder="Username" required id="username" />
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" name="email" placeholder="Email address" required id="email" />
                         </div>
 
                         <div class="form-group">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" placeholder="Password" required id="password" />
+                            <input type="password" name="password" placeholder="Password" id="password" required />
                         </div>
-                        <button class="login-btn btn-success">Login</button>
+                        <button type="submit" class="login-btn btn-success">Login</button>
 
-                        <!-- OR DIVIDER -->
-                        <div class="text-center my-3">
-                            <span class="divider">or</span>
-                        </div>
-
-                        <!-- GOOGLE LOGIN BUTTON -->
-                        <!-- <button class="google-btn" onclick="import('./js/firebase.js').then(module => module.signInWithGoogle())">
-        <i class="fab fa-google"></i> Login with Google
-      </button> -->
-
-                        <!-- SIGNUP LINK -->
-                        <p class="text-center mt-3">
-                            Don’t have an account?
-                            <a href="/signup" class="fw-bold text-decoration-none">Sign up</a>
-                        </p>
+                        <a href="/signup" class="forgot-link mt-3">Don't have an account? Sign Up</a>
                     </form>
         </div>
     </div>
-    <script type="module" src="/js/firebase.js"></script>

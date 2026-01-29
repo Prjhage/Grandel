@@ -18,10 +18,10 @@
     </div>
 
     <form
-      action="/signup"
-      method="POST"
+      id="signup-form"
       class="login-form needs-validation"
       novalidate
+      onsubmit="registerWithEmail(event)"
     >
       <div class="form-group">
         <label for="username" class="form-label">Username</label>
@@ -67,22 +67,11 @@
         />
       </div>
 
-      <button class="login-btn btn-success">Sign Up</button>
+      <button type="submit" class="login-btn btn-success">Sign Up</button>
 
-      <!-- OR DIVIDER -->
-      <div class="text-center my-3">
-        <span class="divider">or</span>
-      </div>
-
-      <!-- GOOGLE SIGNUP BUTTON -->
-      <!-- <button
-        class="google-btn"
-        onclick="import('/js/firebase.js').then(module => module.signInWithGoogle())"
-      >
-        <i class="fab fa-google"></i> Sign up with Google
-      </button> -->
-
-      <a href="/login" class="forgot-link"> Already have an account? Login </a>
+      <a href="/login" class="forgot-link mt-3">
+        Already have an account? Login
+      </a>
     </form>
   </div>
 </div>

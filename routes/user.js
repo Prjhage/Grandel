@@ -10,23 +10,17 @@ const userController = require("../controllers/users.js");
 //router .routes for signup
 router
   .route("/signup")
-  .get(userController.renderSignupform) // signup form
-  .post(wrapAsync(userController.signup)); // signup logic
+  .get(userController.renderSignupform)
+  .post(wrapAsync(userController.firebaseRegister)); // Firebase signup logic
 
 //router. routes for login
 router
   .route("/login")
   .get((req, res) => {
     res.render("users/login.ejs");
-  }) // login form
-  .post(
-    saveRedirectUrl,
-    passport.authenticate("local", {
-      failureRedirect: "/login",
-      failureFlash: "Invalid username or password",
-    }),
-    userController.login
-  ); // login logic
+  })
+  // The passport.authenticate middleware is removed as Firebase handles authentication.
+  .post(saveRedirectUrl, wrapAsync(userController.firebaseLogin)); // Firebase login logic
 
 //logout
 router.get("/logout", userController.logout);
@@ -35,7 +29,7 @@ router.get("/logout", userController.logout);
 router.post(
   "/wishlist/:id",
   isLoggedIn,
-  wrapAsync(userController.toggleWishlist)
+  wrapAsync(userController.toggleWishlist),
 );
 
 router.get("/wishlist", isLoggedIn, wrapAsync(userController.getWishlist));
@@ -52,7 +46,7 @@ router.post(
   "/profile/photo",
   isLoggedIn,
   upload.single("avatar"),
-  wrapAsync(userController.updateProfilePhoto)
+  wrapAsync(userController.updateProfilePhoto),
 );
 
 const Listing = require("../models/listing");
@@ -93,7 +87,7 @@ router.get(
       cancelled,
       completed,
     });
-  })
+  }),
 );
 
 /* ================= UPDATE BOOKING STATUS ================= */
@@ -137,7 +131,7 @@ router.post(
 
     req.flash("success", `Booking status updated to ${status}`);
     res.redirect("/profile/host");
-  })
+  }),
 );
 
 module.exports = router;
