@@ -113,6 +113,12 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // For parsing application/json
 
+// Request Logging Middleware (Helps debug if requests reach the server)
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} from Origin: ${req.headers.origin}`);
+  next();
+});
+
 // Root Route - Always redirect to Frontend (for browser visits)
 app.get("/", (req, res) => {
   const redirectURL = process.env.FRONTEND_URL || 'http://localhost:5173';
@@ -158,9 +164,9 @@ app.get("/seed-db", async (req, res) => {
     if (count > 0) return res.send("Database already has data. Skipping seed.");
 
     await Listing.insertMany(sampleListings);
-    res.send("Database seeded successfully with sample listings!");
+    res.json({ success: true, message: "Database seeded successfully with sample listings!" });
   } catch (error) {
-    res.status(500).send("Error seeding DB: " + error.message);
+    res.status(500).json({ success: false, message: "Error seeding DB: " + error.message });
   }
 });
 

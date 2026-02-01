@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+let baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
+// Remove trailing slash if present to prevent double slashes (e.g., .com//api)
+if (baseURL.endsWith('/')) {
+    baseURL = baseURL.slice(0, -1);
+}
 
 if (!import.meta.env.VITE_API_BASE_URL) {
     console.warn("⚠️ VITE_API_BASE_URL is missing! Requests will fail in production.");
@@ -10,13 +15,12 @@ console.log("🔗 Axios connecting to:", baseURL);
 // Create axios instance with default config
 const axiosInstance = axios.create({
     baseURL: baseURL,
-    withCredentials: true, // Send cookies with requests
+    withCredentials: true,
     headers: {
-        // Remove default Content-Type to allow Axios to handle it for FormData
+
     }
 });
 
-// Request interceptor for adding auth tokens if needed
 axiosInstance.interceptors.request.use(
     (config) => {
 
@@ -33,6 +37,7 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
+        console.error("❌ Axios Error:", error.message, "| URL:", error.config?.baseURL + error.config?.url);
         if (error.response) {
             // Handle specific error codes
             if (error.response.status === 401) {
