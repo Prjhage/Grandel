@@ -25,8 +25,8 @@ services:
           name: grandel-frontend
           property: url
 
-staticSites:
-  - name: grandel-frontend
+  - type: static
+    name: grandel-frontend
     root: frontend
     buildCommand: npm install && npm run build
     publishDir: dist
