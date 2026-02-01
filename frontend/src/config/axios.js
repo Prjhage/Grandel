@@ -1,8 +1,15 @@
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
+if (!import.meta.env.VITE_API_BASE_URL) {
+    console.warn("⚠️ VITE_API_BASE_URL is missing! Requests will fail in production.");
+}
+console.log("🔗 Axios connecting to:", baseURL);
+
 // Create axios instance with default config
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
+    baseURL: baseURL,
     withCredentials: true, // Send cookies with requests
     headers: {
         // Remove default Content-Type to allow Axios to handle it for FormData
@@ -12,11 +19,7 @@ const axiosInstance = axios.create({
 // Request interceptor for adding auth tokens if needed
 axiosInstance.interceptors.request.use(
     (config) => {
-        // You can add auth token here if you use JWT
-        // const token = localStorage.getItem('token');
-        // if (token) {
-        //   config.headers.Authorization = `Bearer ${token}`;
-        // }
+
         return config;
     },
     (error) => {

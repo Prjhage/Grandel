@@ -20,6 +20,7 @@ const { default: MongoStore } = require("connect-mongo");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
+const Listing = require("./models/listing.js");
 
 // =================================================
 // FIREBASE ADMIN SDK INITIALIZATION
@@ -86,11 +87,14 @@ main()
   .then(() => {
     console.log("Connected to DB");
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log("Initial DB Connection Failed:", err));
 
-// async function main() {
-//     await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
-// }
+mongoose.connection.on("error", (err) => {
+  console.error("Runtime DB Error:", err);
+});
+mongoose.connection.on("disconnected", () => {
+  console.log("DB Disconnected");
+});
 
 async function main() {
   await mongoose.connect(dburl);
@@ -118,7 +122,6 @@ app.get("/", (req, res) => {
 // API Route for Featured Listings
 app.get("/api/featured", async (req, res) => {
   try {
-    const Listing = require("./models/listing.js");
     // Fetch top 6 featured listings (highest rated or recently added)
     const featuredListings = await Listing.find()
       .limit(6)
@@ -148,7 +151,6 @@ app.get("/api/featured", async (req, res) => {
 // NEW: Seed Route to populate DB if empty
 app.get("/seed-db", async (req, res) => {
   try {
-    const Listing = require("./models/listing.js");
     const { data: sampleListings } = require("./init/data.js");
 
     // Only seed if empty to prevent duplicates
