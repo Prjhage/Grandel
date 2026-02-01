@@ -20,10 +20,7 @@ services:
       - key: CLOUDINARY_SECRET
         sync: false
       - key: FRONTEND_URL
-        fromService:
-          type: static
-          name: grandel-frontend
-          property: url
+        sync: false
 
 staticSites:
   - name: grandel-frontend
