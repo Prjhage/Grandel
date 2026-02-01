@@ -29,17 +29,10 @@ const admin = require("firebase-admin");
 // Construct the service account object from environment variables
 // Ensure these variables are set in your .env file
 const serviceAccount = {
-  type: process.env.FIREBASE_TYPE,
   project_id: process.env.FIREBASE_PROJECT_ID,
-  private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
   // The private key from .env needs to have its newlines restored
-  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  private_key: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n") : undefined,
   client_email: process.env.FIREBASE_CLIENT_EMAIL,
-  client_id: process.env.FIREBASE_CLIENT_ID,
-  auth_uri: process.env.FIREBASE_AUTH_URI,
-  token_uri: process.env.FIREBASE_TOKEN_URI,
-  auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
-  client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
 };
 
 // Prevent Firebase re-initialization on dev reloads
@@ -51,6 +44,9 @@ if (!admin.apps.length) {
 // =================================================
 
 const dburl = process.env.ATLASDB_URL;
+if (!dburl) {
+  console.error("FATAL ERROR: ATLASDB_URL is not defined. Check your Render Environment Variables.");
+}
 
 const store = MongoStore.create({
   mongoUrl: dburl,
@@ -112,7 +108,8 @@ app.use(express.json()); // For parsing application/json
 //Home Route
 app.get("/", async (req, res) => {
   // If a user opens the backend URL in a browser, redirect them to the frontend
-  if (req.headers.accept && req.headers.accept.includes('text/html')) {
+  // We check !req.xhr and ensure it's not a JSON request to avoid breaking the API
+  if (req.headers.accept && req.headers.accept.includes('text/html') && !req.headers.accept.includes('application/json')) {
     const redirectURL = process.env.FRONTEND_URL || 'http://localhost:5173';
     return res.redirect(redirectURL);
   }
@@ -145,6 +142,23 @@ app.get("/", async (req, res) => {
   }
 });
 
+// NEW: Seed Route to populate DB if empty
+app.get("/seed-db", async (req, res) => {
+  try {
+    const Listing = require("./models/listing.js");
+    const { data: sampleListings } = require("./init/data.js");
+
+    // Only seed if empty to prevent duplicates
+    const count = await Listing.countDocuments();
+    if (count > 0) return res.send("Database already has data. Skipping seed.");
+
+    await Listing.insertMany(sampleListings);
+    res.send("Database seeded successfully with sample listings!");
+  } catch (error) {
+    res.status(500).send("Error seeding DB: " + error.message);
+  }
+});
+
 //Routers
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
@@ -165,6 +179,8 @@ app.use((err, req, res, next) => {
     message: message
   });
 });
-app.listen(8080, () => {
-  console.log("Server is running on port 8080");
+
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
