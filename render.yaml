@@ -13,11 +13,33 @@ services:
         sync: false
       - key: SECRET
         sync: false
-      - key: CLOUDINARY_CLOUD_NAME
+      - key: CLOUD_NAME
         sync: false
-      - key: CLOUDINARY_KEY
+      - key: CLOUD_API_KEY
         sync: false
-      - key: CLOUDINARY_SECRET
+      - key: CLOUD_API_SECRET
+        sync: false
+      - key: MAP_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: WEATHER_API_KEY
+        sync: false
+      - key: UNSPLASH_ACCESS_KEY
+        sync: false
+      - key: YOUR_KEY
+        sync: false
+      - key: YOUR_DOMAIN
+        sync: false
+      - key: YOUR_PROJECT_ID
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: GROQ_API_KEY
         sync: false
       - key: FRONTEND_URL
         sync: false
@@ -31,4 +53,16 @@ services:
     startCommand: cd frontend && npx serve -s dist -p $PORT
     envVars:
       - key: VITE_API_BASE_URL
+        sync: false
+      - key: VITE_FIREBASE_API_KEY
+        sync: false
+      - key: VITE_FIREBASE_AUTH_DOMAIN
+        sync: false
+      - key: VITE_FIREBASE_PROJECT_ID
+        sync: false
+      - key: VITE_FIREBASE_STORAGE_BUCKET
+        sync: false
+      - key: VITE_FIREBASE_MESSAGING_SENDER_ID
+        sync: false
+      - key: VITE_FIREBASE_APP_ID
         sync: false
