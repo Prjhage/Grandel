@@ -49,8 +49,8 @@ services:
     name: grandel-frontend
     env: node
     plan: free
-    buildCommand: cd frontend && npm install && npm run build
-    startCommand: cd frontend && npx serve -s dist -p $PORT
+    buildCommand: cd frontend && npm install && npm install firebase axios react-router-dom && npm run build
+    startCommand: cd frontend && npx -y serve -s dist -l $PORT
     envVars:
       - key: VITE_API_BASE_URL
         sync: false
