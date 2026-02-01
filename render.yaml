@@ -9,5 +9,30 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: FRONTEND_URL
+      - key: ATLASDB_URL
         sync: false
+      - key: SECRET
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_KEY
+        sync: false
+      - key: CLOUDINARY_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        fromService:
+          type: static
+          name: grandel-frontend
+          property: url
+
+staticSites:
+  - name: grandel-frontend
+    root: frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: grandel-backend
+          property: url
