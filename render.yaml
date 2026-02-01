@@ -4,8 +4,8 @@ services:
     name: grandel-backend
     env: node
     plan: free
-    buildCommand: npm install
-    startCommand: node app.js
+    buildCommand: cd Backend && npm install
+    startCommand: cd Backend && node app.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -28,11 +28,10 @@ services:
   # Frontend Service (Deployed as a Web Service to fix the issue)
   - type: web
     name: grandel-frontend
-    root: frontend
     env: node
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npx serve -s dist -p $PORT
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npx serve -s dist -p $PORT
     envVars:
       - key: VITE_API_BASE_URL
         fromService:
