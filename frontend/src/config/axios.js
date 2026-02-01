@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
     withCredentials: true, // Send cookies with requests
     headers: {
         // Remove default Content-Type to allow Axios to handle it for FormData
