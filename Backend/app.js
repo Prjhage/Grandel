@@ -9,16 +9,22 @@ const cors = require("cors");
 // CORS CONFIGURATION (MUST BE AT THE TOP)
 // =================================================
 const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
-app.use(cors({
+// Ensure no trailing slash in the env variable to prevent mismatch
+const cleanFrontendURL = frontendURL.replace(/\/$/, "");
+
+const corsOptions = {
   origin: [
-    frontendURL,
+    cleanFrontendURL,
     "https://grandel.vercel.app", // Explicitly allow your Vercel app
     "http://localhost:5173"       // Allow local development
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle Preflight Requests explicitly
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
