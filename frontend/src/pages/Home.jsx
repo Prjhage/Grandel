@@ -37,8 +37,8 @@ const Home = ({ currUser }) => {
     useEffect(() => {
         const fetchListings = async () => {
             try {
-                // Fetch from the root route which now returns JSON if requested
-                const res = await axios.get('/');
+                // Fetch from the dedicated API route
+                const res = await axios.get('/api/featured');
 
                 if (res.data && Array.isArray(res.data.featuredListings)) {
                     setFeaturedListings(res.data.featuredListings);

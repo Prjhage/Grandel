@@ -46,6 +46,8 @@ if (!admin.apps.length) {
 const dburl = process.env.ATLASDB_URL;
 if (!dburl) {
   console.error("FATAL ERROR: ATLASDB_URL is not defined. Check your Render Environment Variables.");
+} else {
+  console.log("ATLASDB_URL detected:", dburl.substring(0, 15) + "...");
 }
 
 const store = MongoStore.create({
@@ -105,15 +107,14 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // For parsing application/json
 
-//Home Route
+// Root Route - Always redirect to Frontend (for browser visits)
 app.get("/", async (req, res) => {
-  // If a user opens the backend URL in a browser, redirect them to the frontend
-  // We check !req.xhr and ensure it's not a JSON request to avoid breaking the API
-  if (req.headers.accept && req.headers.accept.includes('text/html') && !req.headers.accept.includes('application/json')) {
-    const redirectURL = process.env.FRONTEND_URL || 'http://localhost:5173';
-    return res.redirect(redirectURL);
-  }
+  const redirectURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+  res.redirect(redirectURL);
+});
 
+// API Route for Featured Listings (Dedicated)
+app.get("/api/featured", async (req, res) => {
   try {
     const Listing = require("./models/listing.js");
     // Fetch top 6 featured listings (highest rated or recently added)
