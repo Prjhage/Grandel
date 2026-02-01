@@ -5,6 +5,21 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+// =================================================
+// CORS CONFIGURATION (MUST BE AT THE TOP)
+// =================================================
+const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+app.use(cors({
+  origin: [
+    frontendURL,
+    "https://grandel.vercel.app", // Explicitly allow your Vercel app
+    "http://localhost:5173"       // Allow local development
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
@@ -99,16 +114,6 @@ mongoose.connection.on("disconnected", () => {
 async function main() {
   await mongoose.connect(dburl);
 }
-
-// CORS Configuration for React Frontend
-const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
-app.use(cors({
-  // Allow the defined URL and the same URL with a trailing slash (common Vercel issue)
-  origin: [frontendURL, `${frontendURL}/`],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // For parsing application/json
