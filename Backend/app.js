@@ -111,6 +111,12 @@ app.use(express.json()); // For parsing application/json
 
 //Home Route
 app.get("/", async (req, res) => {
+  // If a user opens the backend URL in a browser, redirect them to the frontend
+  if (req.headers.accept && req.headers.accept.includes('text/html')) {
+    const redirectURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+    return res.redirect(redirectURL);
+  }
+
   try {
     const Listing = require("./models/listing.js");
     // Fetch top 6 featured listings (highest rated or recently added)
