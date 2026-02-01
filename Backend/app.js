@@ -97,8 +97,10 @@ async function main() {
 }
 
 // CORS Configuration for React Frontend
+const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  // Allow the defined URL and the same URL with a trailing slash (common Vercel issue)
+  origin: [frontendURL, `${frontendURL}/`],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
