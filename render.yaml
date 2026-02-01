@@ -1,7 +1,6 @@
 services:
   - type: web
     name: grandel-backend
-    root: Backend
     env: node
     plan: free
     buildCommand: npm install
