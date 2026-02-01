@@ -1,3 +1,15 @@
+staticSites:
+  - name: grandel-frontend
+    root: frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: grandel-backend
+          property: url
+
 services:
   - type: web
     name: grandel-backend
@@ -20,15 +32,3 @@ services:
         sync: false
       - key: FRONTEND_URL
         sync: false
-
-staticSites:
-  - name: grandel-frontend
-    root: frontend
-    buildCommand: npm install && npm run build
-    publishDir: dist
-    envVars:
-      - key: VITE_API_BASE_URL
-        fromService:
-          type: web
-          name: grandel-backend
-          property: url
