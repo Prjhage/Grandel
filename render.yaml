@@ -1,16 +1,5 @@
-staticSites:
-  - name: grandel-frontend
-    root: frontend
-    buildCommand: npm install && npm run build
-    publishDir: dist
-    envVars:
-      - key: VITE_API_BASE_URL
-        fromService:
-          type: web
-          name: grandel-backend
-          property: url
-
 services:
+  # Backend Service
   - type: web
     name: grandel-backend
     env: node
@@ -31,4 +20,22 @@ services:
       - key: CLOUDINARY_SECRET
         sync: false
       - key: FRONTEND_URL
-        sync: false
+        fromService:
+          type: web
+          name: grandel-frontend
+          property: url
+
+  # Frontend Service (Deployed as a Web Service to fix the issue)
+  - type: web
+    name: grandel-frontend
+    root: frontend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s dist -p $PORT
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: grandel-backend
+          property: url
