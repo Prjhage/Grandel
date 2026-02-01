@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+app.set("trust proxy", 1); // Trust proxy for secure cookies on Render
 const cors = require("cors");
 
 // =================================================
@@ -87,9 +88,13 @@ const sessionOptions = {
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
+  proxy: true,
   cookie: {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // one week for milliseconds
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   },
 };
 
