@@ -10,14 +10,14 @@
     align-items: center;
     border-bottom: 1px solid #ddd;
     padding: 0.05rem 0.05rem;
-    margin-top: 10px;
+    margin-top: 0px;
 }
 
 #filters {
     overflow-x: auto;
     flex: 1;
     padding-right: 2rem;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
     scrollbar-width: none;
 }
 

@@ -118,9 +118,9 @@ const Listings = ({ currUser }) => {
                                 onClick={() => handleCategoryClick(cat.value)}
                             >
                                 <div>
-                                    <i className={`${cat.iconClass || 'fa-solid'} ${cat.icon}`}></i>
+                                    <i className={`${cat.iconClass || 'fa-solid'} ${cat.icon}`} style={{ fontSize: '1.2rem' }}></i>
                                 </div>
-                                <p>{cat.name}</p>
+                                <p style={{ fontSize: '0.75rem' }}>{cat.name}</p>
                             </div>
                         ))}
                     </div>
