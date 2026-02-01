@@ -1,0 +1,177 @@
+/* New Listing Page CSS */
+
+.amenities-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 10px;
+    background: #f9f9f9;
+}
+
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.amenity-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Terms Modal */
+.terms-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.terms-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.terms-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close-terms {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #666;
+    line-height: 1;
+}
+
+.close-terms:hover {
+    color: #000;
+}
+
+.terms-content h3 {
+    margin-bottom: 0.5rem;
+}
+
+.terms-content .updated {
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+}
+
+.terms-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.terms-scroll h5 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.terms-scroll p {
+    margin-bottom: 1rem;
+    color: #444;
+}
+
+.terms-link {
+    color: #ff385c;
+    text-decoration: none;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .amenities-box {
+        grid-template-columns: 1fr;
+    }
+
+    .terms-content {
+        max-width: 90%;
+        padding: 1.5rem;
+    }
+}
+
+/* Submit Button & Loading States */
+.listing-submit-btn {
+    background-color: #ff385c;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.listing-submit-btn:hover:not(:disabled) {
+    background-color: #e31c5f;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 56, 92, 0.2);
+}
+
+.listing-submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.listing-submit-btn:disabled {
+    background-color: #ebebeb;
+    color: #a3a3a3;
+    cursor: not-allowed;
+    border: 1px solid #ddd;
+}
+
+.listing-submit-btn.loading {
+    background-color: #ffb1bf;
+    cursor: wait;
+    opacity: 0.8;
+}
+
+.listing-submit-btn i {
+    font-size: 1.1rem;
+}

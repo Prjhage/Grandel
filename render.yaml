@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: grandel-backend
+    root: Backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node app.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        sync: false

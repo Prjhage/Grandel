@@ -1,0 +1,40 @@
+/* Edit Listing Page CSS - Reusing base from NewListing */
+@import './NewListing.css';
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.image-preview {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    border-radius: 12px;
+    background: #fdfdfd;
+    display: inline-block;
+}
+
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.listing-submit-btn {
+    background-color: #ff385c;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.listing-submit-btn:hover {
+    background-color: #e31c5f;
+}

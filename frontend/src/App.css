@@ -1,0 +1,46 @@
+.main-content {
+  flex: 1;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  min-height: 80vh;
+  /* Ensure footer stays down during loading */
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+  }
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #717171;
+}
