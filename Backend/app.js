@@ -25,7 +25,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle Preflight Requests explicitly
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
