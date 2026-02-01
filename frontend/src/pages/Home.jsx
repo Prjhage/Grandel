@@ -65,7 +65,8 @@ const Home = ({ currUser }) => {
             window.location.reload();
         } catch (err) {
             console.error("Seeding error:", err);
-            alert("Failed to seed database. Check if Backend is running.");
+            const msg = err.response?.data || err.message || "Unknown error";
+            alert(`Seeding Failed: ${msg}`);
             setLoading(false);
         }
     };

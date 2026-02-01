@@ -37,17 +37,19 @@ const serviceAccount = {
 
 // Prevent Firebase re-initialization on dev reloads
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+  } catch (e) {
+    console.error("Firebase initialization failed (check .env):", e.message);
+  }
 }
 // =================================================
 
 const dburl = process.env.ATLASDB_URL;
 if (!dburl) {
   console.error("FATAL ERROR: ATLASDB_URL is not defined. Check your Render Environment Variables.");
-} else {
-  console.log("ATLASDB_URL detected:", dburl.substring(0, 15) + "...");
 }
 
 const store = MongoStore.create({
@@ -108,12 +110,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // For parsing application/json
 
 // Root Route - Always redirect to Frontend (for browser visits)
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
   const redirectURL = process.env.FRONTEND_URL || 'http://localhost:5173';
   res.redirect(redirectURL);
 });
 
-// API Route for Featured Listings (Dedicated)
+// API Route for Featured Listings
 app.get("/api/featured", async (req, res) => {
   try {
     const Listing = require("./models/listing.js");

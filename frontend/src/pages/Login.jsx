@@ -76,15 +76,15 @@ const Login = ({ onLogin, showFlash }) => {
 
                 <form className="login-form needs-validation" onSubmit={handleSubmit} noValidate>
                     <div className="form-group">
-                        <label htmlFor="username" className="form-label">Name</label>
+                        <label htmlFor="email" className="form-label">Email</label>
                         <input
-                            type="username"
-                            name="username"
-                            placeholder="Name"
+                            type="email"
+                            name="email"
+                            placeholder="Email"
                             required
-                            id="username"
-                            value={formData.username}
-                            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                            id="email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         />
                     </div>
 
