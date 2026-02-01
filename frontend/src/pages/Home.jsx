@@ -57,6 +57,19 @@ const Home = ({ currUser }) => {
         setActiveFAQ(activeFAQ === index ? null : index);
     };
 
+    const handleSeedDB = async () => {
+        try {
+            setLoading(true);
+            const res = await axios.get('/seed-db');
+            alert(res.data);
+            window.location.reload();
+        } catch (err) {
+            console.error("Seeding error:", err);
+            alert("Failed to seed database. Check if Backend is running.");
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="home-page page-fade">
             {/* Hero Section */}
@@ -221,6 +234,9 @@ const Home = ({ currUser }) => {
                         <div className="empty-listings">
                             <p>No featured listings found.</p>
                             <Link to="/listings" className="btn-primary-custom" style={{ color: '#6a11cb' }}>Browse All Listings</Link>
+                            <div className="mt-3">
+                                <button onClick={handleSeedDB} className="btn btn-sm btn-outline-secondary">Seed Database (Populate Data)</button>
+                            </div>
                         </div>
                     )}
 
