@@ -38,6 +38,7 @@ body {
         opacity: 0;
         transform: translateY(8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -70,6 +71,7 @@ body {
     .listing-details-container {
         flex-direction: column;
     }
+
     .listing-actions {
         margin-top: 1rem;
         margin-top: 0;
@@ -182,6 +184,7 @@ input:-webkit-autofill:active {
 }
 
 @media (hover: hover) {
+
     .btn-success:hover,
     .add-btn:hover,
     .edit-btn:hover {
@@ -255,6 +258,7 @@ input:-webkit-autofill:active {
     0% {
         background-position: 0% 0;
     }
+
     100% {
         background-position: 200% 0;
     }
@@ -327,6 +331,7 @@ input:-webkit-autofill:active {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -338,6 +343,7 @@ input:-webkit-autofill:active {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -371,36 +377,49 @@ input:-webkit-autofill:active {
     .card-img-top {
         height: 18rem !important;
     }
+
     .listing-card {
         margin: 0.5rem 0;
     }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 991.98px) {
     .navbar {
         height: auto !important;
         padding: 0.5rem 0;
+        position: relative;
     }
+
     .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 2000;
         background-color: #fff;
-        margin-top: 1rem;
+        margin-top: 0;
         padding: 1rem;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        width: 100%;
     }
+
     .navbar-nav {
         text-align: center;
     }
+
     .nav-link {
         display: block;
         padding: 0.5rem 0;
     }
+
     .nav-btn {
         display: block;
         width: 100%;
         margin: 0.5rem 0;
         text-align: center;
     }
+
     .filters-wrapper {
         flex-direction: row;
         align-items: center;
@@ -408,18 +427,22 @@ input:-webkit-autofill:active {
         gap: 10px;
         padding: 10px 15px;
     }
+
     #filters {
         width: 100%;
         padding-right: 0;
     }
+
     .scroll-right {
         display: none !important;
     }
+
     .tax-toggle {
         margin-left: 0;
         width: 100%;
         justify-content: space-between;
     }
+
     .f-info-links {
         display: flex;
         flex-direction: column;
@@ -489,12 +512,15 @@ input:-webkit-autofill:active {
     0% {
         transform: scale(1);
     }
+
     30% {
         transform: scale(1.5);
     }
+
     60% {
         transform: scale(0.9);
     }
+
     100% {
         transform: scale(1);
     }
@@ -524,6 +550,7 @@ input:-webkit-autofill:active {
         transform: scale(0.6);
         opacity: 0.6;
     }
+
     100% {
         transform: scale(2);
         opacity: 0;
@@ -798,6 +825,7 @@ input:-webkit-autofill:active {
         opacity: 0;
         transform: translateY(14px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -948,6 +976,7 @@ input:-webkit-autofill:active {
         align-items: flex-start;
         padding: 1rem;
     }
+
     .listing-g-card {
         max-width: 100%;
         padding: 1.25rem;
@@ -955,12 +984,15 @@ input:-webkit-autofill:active {
         border-radius: 16px;
         max-height: none;
     }
+
     .lf-row {
         flex-direction: column;
     }
+
     .listing-header h2 {
         font-size: 1.3rem;
     }
+
     .listing-submit-btn {
         font-size: 1rem;
         padding: 0.8rem;
@@ -971,6 +1003,7 @@ input:-webkit-autofill:active {
     .listing-icon {
         font-size: 1.6rem;
     }
+
     .listing-header h2 {
         font-size: 1.2rem;
     }
@@ -980,6 +1013,7 @@ input:-webkit-autofill:active {
     .form-row {
         flex-direction: column;
     }
+
     .form-row .half {
         width: 100%;
     }
@@ -989,56 +1023,69 @@ input:-webkit-autofill:active {
     .listing-card {
         width: 100% !important;
     }
+
     .col-8.offset-2 {
         width: 100% !important;
         margin-left: 0 !important;
         padding-left: 1.2rem;
         padding-right: 1.2rem;
     }
+
     .card.col-5 {
         width: 100% !important;
         margin-left: 0 !important;
         margin-bottom: 1.5rem !important;
     }
+
     .btns .offset-3,
     .btns .offset-5 {
         margin-left: 0 !important;
     }
+
     .btns {
         display: flex;
         justify-content: space-between;
         gap: 1rem;
     }
+
     .btns .btn {
         flex: 1;
         min-width: 0;
     }
+
     #map {
         height: 280px;
     }
+
     .f-info {
         padding: 1.5rem 0;
     }
+
     h3 {
         font-size: 1.5rem;
     }
+
     input,
     select,
     textarea,
     .form-control {
         font-size: 16px !important;
     }
+
     .create-card {
         max-height: none;
         overflow-y: visible;
     }
+
     #map {
         margin-bottom: 2rem;
     }
+
     .btn-sm {
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
     }
+
     .alert {
         width: 90%;
         min-width: 0;
@@ -1117,6 +1164,7 @@ input:-webkit-autofill:active {
 }
 
 @media (max-width: 768px) {
+
     /* ✅ Image fix – NO cropping */
     .nearby-section img,
     .whats-new-card img {
@@ -1131,6 +1179,7 @@ input:-webkit-autofill:active {
         padding: 6px;
         display: block;
     }
+
     /* ✅ 2 cards per row (Around this place) */
     .nearby-list {
         display: grid;
@@ -1139,12 +1188,14 @@ input:-webkit-autofill:active {
         padding: 0;
         margin: 0;
     }
+
     .nearby-list li {
         list-style: none;
         margin: 0;
         padding: 0;
         border: none;
     }
+
     .nearby-list li a {
         display: flex;
         flex-direction: column;
@@ -1155,6 +1206,7 @@ input:-webkit-autofill:active {
         background: #ffffff;
         text-align: left;
     }
+
     /* ✅ 2 items per row for AI card lists */
     .whats-new-card ul {
         display: grid;
@@ -1162,6 +1214,7 @@ input:-webkit-autofill:active {
         gap: 12px;
         padding-left: 0;
     }
+
     .whats-new-card li {
         list-style: none;
         font-size: 0.9rem;
@@ -1169,13 +1222,16 @@ input:-webkit-autofill:active {
 }
 
 @media (max-width: 480px) {
+
     .nearby-section img,
     .whats-new-card img {
         max-height: 100px;
     }
+
     .nearby-list {
         gap: 10px;
     }
+
     .nearby-list li a {
         padding: 8px;
         font-size: 0.88rem;
@@ -1230,49 +1286,73 @@ input:-webkit-autofill:active {
 
 
 /* =========================
-   IMAGE GALLERY
+   IMAGE GALLERY (CAROUSEL)
 ========================= */
-
-.listing-gallery {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 6px;
-    padding: 6px;
-    background: #f7f7f7;
-}
-
-.listing-gallery .main-image {
+/* 
+.listing-gallery-container {
+    position: relative;
     width: 100%;
-    height: 420px;
-    object-fit: cover;
-    border-radius: 14px;
+    background: #000;
+    overflow: hidden;
 }
 
-.gallery-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 6px;
+.listing-image-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Firefox */
+height: 480px;
 }
 
-.gallery-grid img {
+.listing-image-carousel::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.carousel-item-wrapper {
+    flex: 0 0 100%;
     width: 100%;
-    height: 137px;
-    object-fit: cover;
-    border-radius: 12px;
-    transition: transform 0.25s ease;
+    height: 100%;
+    scroll-snap-align: start;
 }
 
-.gallery-grid img:hover {
-    transform: scale(1.03);
+.carousel-item-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    cursor: pointer;
+    object-position: center;
 }
 
+.image-count-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(34, 34, 34, 0.75);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+}
 
+*/
 /* =========================
    CARD BODY
 ========================= */
 
 .show-card .card-body {
     padding: 1.5rem 1.8rem;
+}
+
+/* Reduce padding for main card body to fix spacing */
+.listing-main-card .card-body {
+    padding: 1rem 2.5rem;
 }
 
 .show-card .card-text {
@@ -1282,12 +1362,7 @@ input:-webkit-autofill:active {
 }
 
 
-/* =========================
-   AMENITIES SECTION
-========================= */
 
-
-/* .amenities-section {} */
 
 .amenities-section h4 {
     font-size: 1.25rem;
@@ -1352,21 +1427,14 @@ a.btn.w-100:hover {
 ========================= */
 
 @media (max-width: 768px) {
-    .listing-gallery {
-        grid-template-columns: 1fr;
-    }
-    .listing-gallery .main-image {
+    .listing-image-carousel {
         height: 260px;
     }
-    .gallery-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    .gallery-grid img {
-        height: 90px;
-    }
+
     .amenities-grid {
         grid-template-columns: 1fr;
     }
+
     .show-card .card-body {
         padding: 1.2rem;
     }
@@ -1677,9 +1745,11 @@ a.btn.w-100:hover {
     .listing-layout {
         grid-template-columns: 1fr;
     }
+
     .listing-sidebar {
         order: -1;
     }
+
     .reserve-card {
         position: static;
         max-width: 100%;
@@ -1882,6 +1952,7 @@ a.btn.w-100:hover {
     .host-wrapper {
         flex-direction: column;
     }
+
     .host-card {
         width: 100%;
     }
@@ -1920,6 +1991,7 @@ a.btn.w-100:hover {
         transform: scale(0.95);
         opacity: 0;
     }
+
     to {
         transform: scale(1);
         opacity: 1;
@@ -1978,11 +2050,13 @@ a.btn.w-100:hover {
         z-index: 1200;
         animation: slideUpFade 0.35s ease;
     }
+
     .mobile-price {
         font-size: 0.95rem;
         font-weight: 600;
         color: #222;
     }
+
     .mobile-reserve-btn {
         background: linear-gradient(135deg, #384cff, #2b3ac9);
         color: #fff;
@@ -1994,16 +2068,19 @@ a.btn.w-100:hover {
         cursor: pointer;
         transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
+
     .mobile-reserve-btn:active {
         transform: scale(0.96);
         box-shadow: 0 6px 14px rgba(255, 56, 92, 0.45);
     }
+
     /* Entry animation */
     @keyframes slideUpFade {
         from {
             opacity: 0;
             transform: translateY(16px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -2095,36 +2172,43 @@ a.btn.w-100:hover {
 /* ================= MOBILE CARD COMPACT VIEW ================= */
 
 @media (max-width: 768px) {
+
     /* 2 cards per row */
     .nearby-section .col-sm-6,
     .whats-new-card .col-sm-6 {
         width: 50%;
     }
+
     /* Scale entire card slightly */
     .nearby-section .card,
     .whats-new-card .card {
         transform: scale(0.94);
         transform-origin: top center;
     }
+
     /* Reduce image height slightly */
     .nearby-section .card-img-top,
     .whats-new-card .card-img-top {
         height: 110px !important;
     }
+
     /* Reduce text size */
     .nearby-section .card-title,
     .whats-new-card small,
     .whats-new-card .fw-bold {
         font-size: 0.8rem;
     }
+
     .nearby-section .card-text {
         font-size: 0.75rem;
     }
+
     /* Reduce card padding */
     .nearby-section .card-body,
     .whats-new-card .card-body {
         padding: 0.4rem;
     }
+
     /* Image Modal Styles */
     .image-modal {
         position: fixed;
@@ -2139,9 +2223,11 @@ a.btn.w-100:hover {
         z-index: 10000;
         cursor: pointer;
     }
+
     .image-modal.active {
         display: flex;
     }
+
     .image-modal img {
         max-width: 90%;
         max-height: 90%;
@@ -2149,6 +2235,7 @@ a.btn.w-100:hover {
         border-radius: 8px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     }
+
     .image-modal .close-modal {
         position: absolute;
         top: 20px;
@@ -2158,14 +2245,17 @@ a.btn.w-100:hover {
         cursor: pointer;
         z-index: 10001;
     }
+
     .image-modal .close-modal:hover {
         color: #fe424d;
     }
+
     /* Make images clickable */
     .listing-gallery img {
         cursor: pointer;
         transition: transform 0.2s ease;
     }
+
     .listing-gallery img:hover {
         transform: scale(1.02);
     }
@@ -2234,4 +2324,11 @@ a.btn.w-100:hover {
 
 body.book-open {
     overflow: hidden;
+}
+
+/* Hide chatbot icon when mobile reserve drawer is open */
+@media (max-width: 768px) {
+    body.mobile-reserve-open .chatbot-toggle {
+        display: none !important;
+    }
 }

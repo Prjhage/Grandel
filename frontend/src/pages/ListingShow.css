@@ -1,67 +1,52 @@
 /* Listing Show Page CSS */
 
 /* Image Gallery */
-/* Image Gallery Grid */
-/* Image Gallery Grid (Original) */
-.listing-gallery {
-    display: grid;
-    grid-template-columns: 2.2fr 1fr !important;
-    gap: 8px;
-    padding: 8px;
-    background: #f7f7f7;
-    margin-bottom: 24px;
-    border-radius: 18px;
+/* Image Gallery Carousel */
+.listing-gallery-container {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    background: #000;
     overflow: hidden;
-    height: 440px;
-    /* Standardize height */
-    align-items: stretch;
-}
-
-.listing-gallery .main-image {
-    width: 100%;
-    height: 100%;
-    /* Fill container height */
-    object-fit: cover;
-    border-radius: 14px;
-    cursor: pointer;
-}
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr) !important;
-    grid-auto-rows: 1fr;
-    gap: 8px;
-    height: 100%;
-}
-
-.gallery-grid img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    min-height: 0;
-    /* Critical for grid sizing */
     border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.25s ease;
 }
 
-/* Handle spanning for odd number of images to look "Proper" */
-/* If 1 or 2 sub-images: they take full column width */
-.gallery-grid img:first-child:nth-last-child(1),
-.gallery-grid img:first-child:nth-last-child(2),
-.gallery-grid img:first-child:nth-last-child(2)~img {
-    grid-column: span 2;
+.listing-image-carousel {
+    display: flex;
+    height: 100%;
+    /* 🔥 REQUIRED */
 }
 
-/* If 3 sub-images: 3rd one spans full width at the bottom */
-.gallery-grid img:nth-child(3):last-child {
-    grid-column: span 2;
+.carousel-item-wrapper {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    /* 🔥 MOST IMPORTANT */
 }
 
-/* If 4 sub-images: they naturally fill 2x2 */
+.carousel-item-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* This prevents cropping and shows the full image */
+    object-position: center;
+    display: block;
+}
 
-.gallery-grid img:hover {
-    transform: scale(1.03);
+.image-count-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(34, 34, 34, 0.75);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    /* Added to ensure it stays above the images */
 }
 
 @media (max-width: 768px) {
@@ -73,33 +58,12 @@
         margin-top: 1rem !important;
     }
 
-    .listing-gallery {
-        grid-template-columns: 1fr !important;
-        padding: 4px;
-        margin-bottom: 16px;
-        height: auto !important;
+    .listing-gallery-container {
+        height: 260px;
     }
 
-    .listing-gallery .main-image {
-        height: 240px;
-        border-radius: 12px;
-    }
-
-    .gallery-grid {
-        display: none;
-    }
-
-    .gallery-grid.show-all-mobile {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px;
-        margin-top: 15px;
-    }
-
-    .gallery-grid.show-all-mobile img {
-        grid-column: auto !important;
-        height: 120px;
-        border-radius: 8px;
+    .listing-image-carousel {
+        height: 260px;
     }
 }
 
@@ -167,6 +131,11 @@
 .amenities-grid .amenity-item i {
     color: #ff385c;
     font-size: 1.2rem;
+}
+
+/* Reduce padding for main card body to fix spacing */
+.listing-main-card .card-body {
+    padding: 1rem 2.5rem;
 }
 
 /* Sidebar Sticky Wrapper (Original) */

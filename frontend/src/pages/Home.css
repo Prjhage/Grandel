@@ -682,7 +682,9 @@
     }
 
 
-    .section-title {
+    .section-title,
+    .video-section h2,
+    .faq-section h2 {
         font-size: 2rem;
     }
 
@@ -724,6 +726,12 @@
 
     .cta-section h2 {
         font-size: 1.8rem;
+    }
+
+    .cta-section {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
     }
 
     .hero-section {
@@ -977,5 +985,17 @@
 
     .listing-button {
         display: none;
+    }
+
+    .cta-section {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        border-radius: 0;
+        margin-bottom: 0 !important;
+    }
+
+    .home-page {
+        padding-bottom: 0 !important;
     }
 }

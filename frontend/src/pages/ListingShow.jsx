@@ -30,11 +30,28 @@ const ListingShow = ({ currUser, showFlash }) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [travelCompanion, setTravelCompanion] = useState(location.state?.listing?.travelCompanion || { places: [], food: [] });
     const [nearbyPlaces, setNearbyPlaces] = useState(location.state?.listing?.nearbyPlaces || []);
-    const [showAllPhotos, setShowAllPhotos] = useState(false);
 
     useEffect(() => {
         fetchListing();
     }, [id]);
+
+    // Toggle body class when mobile reserve drawer is open to hide chatbot icon
+    useEffect(() => {
+        if (showMobileReserve) {
+            document.body.classList.add('mobile-reserve-open');
+        } else {
+            document.body.classList.remove('mobile-reserve-open');
+        }
+        return () => document.body.classList.remove('mobile-reserve-open');
+    }, [showMobileReserve]);
+
+    // Close navbar on route change (mobile)
+    useEffect(() => {
+        const navBar = document.querySelector('.navbar-collapse');
+        if (navBar && navBar.classList.contains('show')) {
+            navBar.classList.remove('show');
+        }
+    }, [location]);
 
     const fetchListing = async () => {
         try {
@@ -74,15 +91,12 @@ const ListingShow = ({ currUser, showFlash }) => {
 
     const calculatePrice = () => {
         if (!listing) return 0;
-
         const basePrice = listing.price;
         const freeGuests = listing.freeGuests || 3;
         const extraGuestCharge = listing.extraGuestChargePerNight || 500;
         const petCharge = listing.petChargePerNight || 300;
-
         const payingGuests = guests.adult + guests.child;
         const extraGuests = Math.max(0, payingGuests - freeGuests);
-
         return basePrice + (extraGuests * extraGuestCharge) + (guests.animals * petCharge);
     };
 
@@ -159,6 +173,12 @@ const ListingShow = ({ currUser, showFlash }) => {
     // Only show review section if we have owner data to avoid flicker
     const canReview = currUser && !isOwner && ownerId;
 
+    // Combine all images for the carousel
+    const allImages = [];
+    if (listing.image?.url) allImages.push(listing.image);
+    if (listing.images?.length) allImages.push(...listing.images);
+    if (allImages.length === 0) allImages.push({ url: '/images/fallback.jpg' });
+
     return (
         <div className="container mt-3 page-fade listing-show-page">
             <div className="row">
@@ -167,61 +187,51 @@ const ListingShow = ({ currUser, showFlash }) => {
                     <div className="listing-rating-summary mb-3 d-flex align-items-center gap-2">
                         <span className="fw-bold">★ {listing.avgRating?.toFixed(1) || 'N/A'}</span>
                         <span className="text-muted">·</span>
-                        <span className="text-decoration-underline fw-medium">{listing.reviews?.length || 0} reviews</span>
+                        <span
+                            className="text-decoration-underline fw-medium"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })}
+                        >
+                            {listing.reviews?.length || 0} reviews
+                        </span>
                         {listing.location && (
                             <>
                                 <span className="text-muted">·</span>
-                                <span className="text-decoration-underline fw-medium">{listing.location}, {listing.country}</span>
+                                <span
+                                    className="text-decoration-underline fw-medium"
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' })}
+                                >
+                                    {listing.location}, {listing.country}
+                                </span>
                             </>
                         )}
                     </div>
 
                     {/* Image Gallery */}
                     <div className="card show-card listing-main-card">
-                        <div className="listing-gallery">
-                            <img
-                                src={listing.image?.url || '/images/fallback.jpg'}
-                                className="main-image"
-                                alt={listing.title}
-                                onClick={() => setSelectedImage(listing.image?.url)}
-                            />
-
-                            {/* Mobile View All Button */}
-                            <div className="d-md-none mt-2">
-                                {listing.images && listing.images.length > 0 && !showAllPhotos && (
-                                    <button className="btn btn-outline-dark w-100" onClick={() => setShowAllPhotos(true)}>
-                                        View All Photos
-                                    </button>
-                                )}
-                            </div>
-
-                            {listing.images && listing.images.length > 0 && (
-                                <div className={`gallery-grid ${showAllPhotos ? 'show-all-mobile' : ''}`}>
-                                    {(showAllPhotos ? listing.images : listing.images.slice(0, 5)).map((img, idx) => (
+                        <div className="listing-gallery-container">
+                            <div className="listing-image-carousel">
+                                {allImages.map((img, idx) => (
+                                    <div key={idx} className="carousel-item-wrapper">
                                         <img
-                                            key={idx}
                                             src={img.url}
-                                            alt={`Gallery ${idx + 1}`}
+                                            alt={`View ${idx + 1}`}
                                             onClick={() => setSelectedImage(img.url)}
                                         />
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Mobile Hide Button */}
-                            <div className="d-md-none mt-2">
-                                {showAllPhotos && (
-                                    <button className="btn btn-outline-dark w-100" onClick={() => setShowAllPhotos(false)}>
-                                        Hide Photos
-                                    </button>
-                                )}
+                                    </div>
+                                ))}
                             </div>
+                            <div className="image-count-badge">
+                                <i className="fa-solid fa-camera me-1"></i> {allImages.length} Photos
+                            </div>
+
                         </div>
 
                         {/* Listing Details */}
                         <div className="card-body">
-                            <div className="listing-details-container m-3">
-                                <div className="listing-info info-card p-2 ">
+                            <div className="listing-details-container">
+                                <div className="listing-info w-100">
                                     <p className="card-text">{listing.description}</p>
                                     <p className="card-text">{listing.category}</p>
                                     <p className="card-text">
@@ -310,7 +320,7 @@ const ListingShow = ({ currUser, showFlash }) => {
 
                     {/* All Reviews */}
                     {listing.reviews && listing.reviews.length > 0 && typeof listing.reviews[0] === 'object' && (
-                        <div className="mt-4">
+                        <div className="mt-4" id="reviews-section">
                             <h4 className="mb-4">All Reviews</h4>
                             <div className="row">
                                 {listing.reviews.map((review) => (
@@ -409,7 +419,7 @@ const ListingShow = ({ currUser, showFlash }) => {
                     )}
 
                     {/* Map */}
-                    <h3>Where you'll be</h3>
+                    <h3 id="map-section">Where you'll be</h3>
                     <div className="listing-map col-12 mt-5 px-0">
                         <iframe
                             src={`https://www.google.com/maps?q=${encodeURIComponent(`${listing.title}, ${listing.location}, ${listing.country}`)}&z=14&output=embed`}

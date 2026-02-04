@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from '../config/axios';
 import SkeletonCard from '../components/SkeletonCard';
 import './Home.css';
@@ -9,6 +9,7 @@ const Home = ({ currUser }) => {
     const [loading, setLoading] = useState(true);
     const [activeFAQ, setActiveFAQ] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         // Scroll Reveal Animation
@@ -33,6 +34,14 @@ const Home = ({ currUser }) => {
 
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Close navbar on route change (mobile)
+    useEffect(() => {
+        const navBar = document.querySelector('.navbar-collapse');
+        if (navBar && navBar.classList.contains('show')) {
+            navBar.classList.remove('show');
+        }
+    }, [location]);
 
     useEffect(() => {
         const fetchListings = async () => {
