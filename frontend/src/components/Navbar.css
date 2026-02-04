@@ -299,6 +299,12 @@
             font-size: 1.2rem;
             display: flex;
             align-items: center;
+            gap: 2px;
+        }
+
+        .navbar-brand-grand,
+        .navbar-brand-el {
+            font-size: 1.3rem;
         }
 
         .btn-search-init {
@@ -323,8 +329,8 @@
         .navbar>.container-fluid {
             position: relative;
             justify-content: space-between;
-            padding-left: 5px;
-            padding-right: 5px;
+            padding-left: 3px;
+            padding-right: 3px;
         }
 
         .navbar-toggler {
