@@ -45,14 +45,6 @@ const ListingShow = ({ currUser, showFlash }) => {
         return () => document.body.classList.remove('mobile-reserve-open');
     }, [showMobileReserve]);
 
-    // Close navbar on route change (mobile)
-    useEffect(() => {
-        const navBar = document.querySelector('.navbar-collapse');
-        if (navBar && navBar.classList.contains('show')) {
-            navBar.classList.remove('show');
-        }
-    }, [location]);
-
     const fetchListing = async () => {
         try {
             const res = await axios.get(`/listings/${id}`);

@@ -35,14 +35,6 @@ const Home = ({ currUser }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Close navbar on route change (mobile)
-    useEffect(() => {
-        const navBar = document.querySelector('.navbar-collapse');
-        if (navBar && navBar.classList.contains('show')) {
-            navBar.classList.remove('show');
-        }
-    }, [location]);
-
     useEffect(() => {
         const fetchListings = async () => {
             try {

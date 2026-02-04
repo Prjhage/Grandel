@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = ({ currUser, onLogout }) => {
@@ -7,7 +7,9 @@ const Navbar = ({ currUser, onLogout }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const searchContainerRef = useRef(null);
     const searchInputRef = useRef(null);
+    const navbarCollapseRef = useRef(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -20,6 +22,16 @@ const Navbar = ({ currUser, onLogout }) => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
+    }, []);
+
+    useEffect(() => {
+        // Close the navbar when the route changes on mobile
+        if (navbarCollapseRef.current && navbarCollapseRef.current.classList.contains('show')) {
+            // This will trigger the Bootstrap collapse animation to close
+            const bsCollapse = new window.bootstrap.Collapse(navbarCollapseRef.current, { toggle: false });
+            bsCollapse.hide();
+            setIsMenuOpen(false);
+        }
     }, []);
 
     const handleSearchToggle = (e) => {
@@ -121,7 +133,7 @@ const Navbar = ({ currUser, onLogout }) => {
                 </div>
 
                 {/* NAV CONTENT */}
-                <div className="collapse navbar-collapse" id="mainNavbar">
+                <div className="collapse navbar-collapse" id="mainNavbar" ref={navbarCollapseRef}>
                     {/* LEFT */}
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
