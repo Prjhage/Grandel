@@ -167,7 +167,7 @@ const Home = ({ currUser }) => {
             {/* How It Works Section */}
             <section className="how-it-works">
                 <div className="how-it-works-container">
-                    <h2 className="section-title reveal light">How It Works</h2>
+                    <h2 className="section-title reveal">How It Works</h2>
                     <div className="steps-grid">
                         <div className="step-card reveal">
                             <div className="step-number">1</div>
@@ -235,7 +235,7 @@ const Home = ({ currUser }) => {
                     ) : (
                         <div className="empty-listings">
                             <p>No featured listings found.</p>
-                            <Link to="/listings" className="btn-primary-custom" style={{ color: '#6a11cb' }}>Browse All Listings</Link>
+                            <Link to="/listings" className="btn-primary-custom">Browse All Listings</Link>
                             <div className="mt-3">
                                 <button onClick={handleSeedDB} className="btn btn-sm btn-outline-secondary">Seed Database (Populate Data)</button>
                             </div>

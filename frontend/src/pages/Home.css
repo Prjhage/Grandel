@@ -9,11 +9,13 @@
 .hero-section {
     background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
     color: white;
-    padding: 140px 20px 100px;
+    padding: 150px 20px 100px;
+    align-items: center;
     text-align: center;
     position: relative;
     overflow: hidden;
-    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    min-height: 90vh;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }
 
 .hero-section {
@@ -68,7 +70,7 @@
 }
 
 .btn-primary-custom {
-    background: linear-gradient(135deg, #005af5, #ff385c);
+    background: #f64f4f !important;
     color: white;
     padding: 15px 40px;
     border: none;
@@ -118,7 +120,7 @@
 
 .features-section {
     padding: 100px 20px;
-    background-color: #f8f9fa;
+    background-color: #f3f4f6;
 }
 
 .features-container {
@@ -169,6 +171,7 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
 }
 
 .feature-card:hover {
@@ -204,8 +207,8 @@
 
 .how-it-works {
     padding: 100px 20px;
-    background-color: #0f172a;
-    color: white;
+    background-color: #fff5f7;
+    color: #333;
 }
 
 .how-it-works-container {
@@ -221,14 +224,14 @@
 }
 
 .step-card {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+    background: #fff;
+    color: #333;
     padding: 40px 30px;
     border-radius: 20px;
     text-align: center;
     position: relative;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #eee;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
@@ -263,7 +266,7 @@
 }
 
 .step-card p {
-    color: #cbd5e1;
+    color: #666;
     line-height: 1.6;
 }
 
@@ -271,7 +274,7 @@
 
 .video-section {
     padding: 100px 20px;
-    background: #f8f9fa;
+    background: #f0f4f8;
     color: #333;
 }
 
@@ -381,6 +384,7 @@
 .faq-section {
     padding: 100px 20px;
     background-color: #fff;
+    border-top: 1px solid #f0f0f0;
 }
 
 .faq-container {
@@ -491,13 +495,13 @@
         width: 100vw;
         margin-left: calc(50% - 50vw);
         margin-right: calc(50% - 50vw);
-        margin-top: -24px;
+        margin-top: 0;
         display: flex;
         justify-content: center;
         align-items: center;
         position: relative;
         overflow: hidden;
-        padding: 60px 20px 40px;
+        padding: 40px 20px 40px;
     }
 
     /* Animated Clouds */
@@ -810,7 +814,7 @@
 
 .featured-listings-section {
     padding: 100px 20px;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
 }
 
 .featured-listings-container {
