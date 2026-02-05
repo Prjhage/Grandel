@@ -333,6 +333,7 @@
     .card-actions-wrapper {
         flex-direction: column;
         align-items: stretch;
+        gap: 0.5rem;
     }
 
     .status-badge {
@@ -352,5 +353,36 @@
 
     .guest-counts {
         justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .host-dashboard {
+        padding-left: 15px;
+        padding-right: 15px;
+        margin-top: 1rem;
+    }
+
+    .booking-card {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .booking-details {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .detail-group p {
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .guest-badge {
+        font-size: 0.8rem;
     }
 }

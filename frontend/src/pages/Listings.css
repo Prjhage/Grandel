@@ -1,9 +1,6 @@
 /* Wrapper */
 
-.listings-page {
-    margin-left: 5px;
-    margin-right: 5px;
-}
+.listings-page {}
 
 .filters-wrapper {
     display: flex;
@@ -385,12 +382,12 @@
 }
 
 .card-body {
-    padding: 0.75rem 0 !important;
+    padding: 0 !important;
     flex: 1;
 }
 
 .card-text {
-    margin-bottom: 0.2rem !important;
+    /* margin-bottom: 0.2rem !important; */
     line-height: 1.4;
 }
 
@@ -451,9 +448,9 @@
         height: 150px !important;
     }
 
-    .card-body {
+    /* .card-body {
         padding: 0.5rem !important;
-    }
+    } */
 
     .card-text {
         font-size: 0.85rem;

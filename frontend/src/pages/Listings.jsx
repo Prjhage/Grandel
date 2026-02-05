@@ -157,7 +157,7 @@ const Listings = ({ currUser }) => {
             )}
 
             {/* Listings Grid */}
-            <div className="row row-cols-lg-4 row-cols-md-2 row-cols-2 mt-3 gy-4">
+            <div className="row row-cols-lg-4 row-cols-md-2 row-cols-2 gy-4 mt-lg-3 mt-2">
                 {loading ? (
                     // Show 8 skeletons while loading
                     [...Array(8)].map((_, i) => (

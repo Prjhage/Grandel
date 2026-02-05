@@ -7,10 +7,10 @@
 }
 
 @media (max-width: 768px) {
-  .main-content {
+  /* .main-content {
     padding-bottom: 1rem;
     padding-top: 1rem;
-  }
+  } */
 }
 
 .d-flex {

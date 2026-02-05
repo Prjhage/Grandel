@@ -501,7 +501,7 @@
         align-items: center;
         position: relative;
         overflow: hidden;
-        padding: 40px 20px 40px;
+        padding: 60px 20px 100px;
     }
 
     /* Animated Clouds */
@@ -736,6 +736,10 @@
         width: 100vw;
         margin-left: calc(50% - 50vw);
         margin-right: calc(50% - 50vw);
+    }
+
+    .video-iframe {
+        height: 200px;
     }
 
     .hero-section {
@@ -997,9 +1001,28 @@
         margin-right: calc(50% - 50vw);
         border-radius: 0;
         margin-bottom: 0 !important;
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .features-section,
+    .how-it-works,
+    .video-section,
+    .stats-section,
+    .faq-section,
+    .featured-listings-section {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        padding-top: 40px;
+        padding-bottom: 40px;
     }
 
     .home-page {
         padding-bottom: 0 !important;
+    }
+
+    body:has(.home-page) .chatbot-toggle {
+        bottom: 20px;
     }
 }

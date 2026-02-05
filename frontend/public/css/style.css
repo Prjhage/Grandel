@@ -845,16 +845,17 @@ input:-webkit-autofill:active {
     backdrop-filter: blur(6px); */
     display: flex;
     justify-content: center;
-    align-items: center;
-    /* z-index: 9999; */
+    align-items: flex-start;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 .listing-g-card {
     width: 100%;
-    max-width: 560px;
+    max-width: 720px;
     background: #ffffff;
     border-radius: 18px;
-    padding: 1.6rem;
+    padding: 1.6rem 1rem;
     box-shadow: 0 22px 45px rgba(0, 0, 0, 0.28);
     max-height: 90vh;
     overflow-y: auto;
@@ -954,13 +955,13 @@ input:-webkit-autofill:active {
 @media (max-width: 768px) {
     .listing-overlay {
         align-items: flex-start;
-        padding: 1rem;
+        padding-top: 1rem;
     }
 
     .listing-g-card {
         max-width: 100%;
         padding: 1.25rem;
-        margin-top: 1.5rem;
+        margin-top: 0;
         border-radius: 16px;
         max-height: none;
     }
@@ -1332,7 +1333,7 @@ height: 480px;
 
 /* Reduce padding for main card body to fix spacing */
 .listing-main-card .card-body {
-    padding: 1rem 2.5rem;
+    padding: 1rem 1rem;
 }
 
 .show-card .card-text {

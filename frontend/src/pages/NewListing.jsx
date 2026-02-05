@@ -182,7 +182,7 @@ const NewListing = ({ currUser, showFlash }) => {
     };
 
     return (
-        <div className="listing-overlay">
+        <div className="listing-overlay"  >
             <div className="listing-g-card">
                 <div className="listing-header">
                     <i className="fa-solid fa-house listing-icon"></i>
