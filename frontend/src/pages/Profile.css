@@ -360,4 +360,86 @@
     .grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
+
+    /* AI Plan Modal - Mobile Optimizations */
+    .ai-modal-content {
+        max-height: 95vh;
+        margin: 0.5rem;
+    }
+
+    .ai-modal-content .modal-header h5 {
+        font-size: 1rem;
+    }
+
+    .ai-modal-content .modal-body {
+        padding: 1rem;
+    }
+
+    /* Weather Info - Mobile */
+    .ai-modal-content .alert {
+        font-size: 0.8rem;
+        padding: 0.6rem;
+        margin-bottom: 1rem !important;
+        word-break: break-word;
+    }
+
+    .ai-modal-content .alert strong {
+        font-size: 0.85rem;
+    }
+
+    /* Section Titles - Smaller */
+    .ai-modal-content h5 {
+        font-size: 0.95rem !important;
+        margin-bottom: 0.7rem !important;
+    }
+
+    .ai-modal-content h6 {
+        font-size: 0.8rem !important;
+    }
+
+    /* Places and Food - 2 Images per Row */
+    .ai-modal-content .row.g-3 {
+        margin: 0 !important;
+        gap: 0.6rem !important;
+    }
+
+    .ai-modal-content .col-md-4,
+    .ai-modal-content .col-md-3 {
+        width: calc(50% - 0.3rem) !important;
+        flex: 0 0 calc(50% - 0.3rem) !important;
+        max-width: calc(50% - 0.3rem) !important;
+        padding: 0 !important;
+    }
+
+    /* Image Cards - Smaller */
+    .ai-modal-content .card img {
+        height: 100px !important;
+    }
+
+    .ai-modal-content .card-body {
+        padding: 0.5rem !important;
+    }
+
+    .ai-modal-content .card-body h6 {
+        font-size: 0.75rem !important;
+        margin: 0 !important;
+    }
+
+    /* Day Plan - Smaller Text */
+    .ai-modal-content .list-group-item {
+        font-size: 0.8rem;
+        padding: 0.6rem;
+    }
+
+    /* Budget Section - Smaller Text */
+    .ai-modal-content .list-group-flush .list-group-item {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    /* Modal Close Button */
+    .ai-modal-content .btn-close {
+        font-size: 1.5rem;
+        padding: 0.25rem;
+    }
 }

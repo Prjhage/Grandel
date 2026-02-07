@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../config/axios';
+import { useHostDashboardCache } from '../components/HostDashboardCacheContext';
 import './HostDashboard.css';
 
 const HostDashboard = ({ currUser, showFlash }) => {
@@ -12,6 +13,9 @@ const HostDashboard = ({ currUser, showFlash }) => {
     });
     const [loading, setLoading] = useState(true);
 
+    // Use the cache context
+    const { getCachedData, setCachedData } = useHostDashboardCache();
+
     useEffect(() => {
         if (currUser) {
             fetchHostBookings();
@@ -20,13 +24,30 @@ const HostDashboard = ({ currUser, showFlash }) => {
 
     const fetchHostBookings = async () => {
         try {
+            // Check cache first
+            const cachedData = getCachedData();
+
+            if (cachedData) {
+                // Use cached data - no loading state needed
+                setBookings(cachedData.bookings);
+                setLoading(false);
+                return;
+            }
+
+            // No cache - fetch from API
             const res = await axios.get('/profile/host');
-            setBookings({
+            const fetchedBookings = {
                 upcoming: res.data.upcoming || [],
                 confirmed: res.data.confirmed || [],
                 completed: res.data.completed || [],
                 cancelled: res.data.cancelled || []
-            });
+            };
+
+            setBookings(fetchedBookings);
+
+            // Cache the results
+            setCachedData(fetchedBookings);
+
             setLoading(false);
         } catch (err) {
             console.error('Error fetching host bookings:', err);

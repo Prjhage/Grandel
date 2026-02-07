@@ -6,6 +6,8 @@ import Flash from './components/Flash';
 import Chatbot from './components/Chatbot';
 import ScrollToTop from './components/ScrollToTop';
 import { ListingCacheProvider } from './components/ListingCacheContext';
+import { ProfileCacheProvider } from './components/ProfileCacheContext';
+import { HostDashboardCacheProvider } from './components/HostDashboardCacheContext';
 import Home from './pages/Home';
 import Listings from './pages/Listings';
 import ListingShow from './pages/ListingShow';
@@ -62,33 +64,37 @@ function App() {
 
   return (
     <ListingCacheProvider>
-      <div className="d-flex flex-column min-vh-100">
-        <ScrollToTop />
-        <Navbar currUser={currUser} onLogout={handleLogout} />
+      <ProfileCacheProvider>
+        <HostDashboardCacheProvider>
+          <div className="d-flex flex-column min-vh-100">
+            <ScrollToTop />
+            <Navbar currUser={currUser} onLogout={handleLogout} />
 
-        <div className="container flex-grow-1 main-content">
-          <Flash message={flash?.message} type={flash?.type} onClose={() => setFlash(null)} />
+            <div className="container flex-grow-1 main-content">
+              <Flash message={flash?.message} type={flash?.type} onClose={() => setFlash(null)} />
 
-          <Routes>
-            <Route path="/" element={<Home currUser={currUser} />} />
-            <Route path="/listings" element={<Listings currUser={currUser} />} />
-            <Route path="/listings/new" element={<NewListing currUser={currUser} showFlash={showFlash} />} />
-            <Route path="/listings/:id" element={<ListingShow currUser={currUser} showFlash={showFlash} />} />
-            <Route path="/listings/:id/edit" element={<EditListing currUser={currUser} showFlash={showFlash} />} />
-            <Route path="/listings/:id/book" element={<BookingNew currUser={currUser} showFlash={showFlash} />} />
-            <Route path="/login" element={<Login onLogin={handleLogin} showFlash={showFlash} />} />
-            <Route path="/signup" element={<Signup onLogin={handleLogin} showFlash={showFlash} />} />
-            <Route path="/profile" element={<Profile currUser={currUser} showFlash={showFlash} />} />
-            <Route path="/profile/host" element={<HostDashboard currUser={currUser} showFlash={showFlash} />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="*" element={<div>404 Not Found</div>} />
-          </Routes>
-        </div>
+              <Routes>
+                <Route path="/" element={<Home currUser={currUser} />} />
+                <Route path="/listings" element={<Listings currUser={currUser} />} />
+                <Route path="/listings/new" element={<NewListing currUser={currUser} showFlash={showFlash} />} />
+                <Route path="/listings/:id" element={<ListingShow currUser={currUser} showFlash={showFlash} />} />
+                <Route path="/listings/:id/edit" element={<EditListing currUser={currUser} showFlash={showFlash} />} />
+                <Route path="/listings/:id/book" element={<BookingNew currUser={currUser} showFlash={showFlash} />} />
+                <Route path="/login" element={<Login onLogin={handleLogin} showFlash={showFlash} />} />
+                <Route path="/signup" element={<Signup onLogin={handleLogin} showFlash={showFlash} />} />
+                <Route path="/profile" element={<Profile currUser={currUser} showFlash={showFlash} />} />
+                <Route path="/profile/host" element={<HostDashboard currUser={currUser} showFlash={showFlash} />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="*" element={<div>404 Not Found</div>} />
+              </Routes>
+            </div>
 
-        <Chatbot currUser={currUser} />
-        <Footer />
-      </div>
+            <Chatbot currUser={currUser} />
+            <Footer />
+          </div>
+        </HostDashboardCacheProvider>
+      </ProfileCacheProvider>
     </ListingCacheProvider>
   );
 }

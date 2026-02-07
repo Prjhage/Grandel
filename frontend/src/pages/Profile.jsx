@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../config/axios';
+import { useProfileCache } from '../components/ProfileCacheContext';
 import './Profile.css';
 
 const Profile = ({ currUser, showFlash }) => {
@@ -11,6 +12,9 @@ const Profile = ({ currUser, showFlash }) => {
     const [loading, setLoading] = useState(true);
     const [selectedBooking, setSelectedBooking] = useState(null);
 
+    // Use the cache context
+    const { getCachedData, setCachedData } = useProfileCache();
+
     useEffect(() => {
         if (currUser) {
             fetchProfileData();
@@ -19,10 +23,31 @@ const Profile = ({ currUser, showFlash }) => {
 
     const fetchProfileData = async () => {
         try {
+            // Check cache first
+            const cachedData = getCachedData();
+
+            if (cachedData) {
+                // Use cached data - no loading state needed
+                setWishlistListings(cachedData.wishlistListings || []);
+                setBookings(cachedData.bookings || []);
+                setMyListings(cachedData.myListings || []);
+                setLoading(false);
+                return;
+            }
+
+            // No cache - fetch from API
             const res = await axios.get('/profile');
-            setWishlistListings(res.data.wishlistListings || []);
-            setBookings(res.data.bookings || []);
-            setMyListings(res.data.myListings || []);
+            const fetchedWishlist = res.data.wishlistListings || [];
+            const fetchedBookings = res.data.bookings || [];
+            const fetchedMyListings = res.data.myListings || [];
+
+            setWishlistListings(fetchedWishlist);
+            setBookings(fetchedBookings);
+            setMyListings(fetchedMyListings);
+
+            // Cache the results
+            setCachedData(fetchedWishlist, fetchedBookings, fetchedMyListings);
+
             setLoading(false);
         } catch (err) {
             console.error('Error fetching profile data:', err);
