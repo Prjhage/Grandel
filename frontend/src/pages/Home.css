@@ -487,7 +487,6 @@
         display: block;
     }
 
-
     /* Mobile hero section */
     .mobile-hero-section {
         background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
@@ -501,7 +500,7 @@
         align-items: center;
         position: relative;
         overflow: hidden;
-        padding: 60px 20px 100px;
+        padding: 45px 20px 100px;
     }
 
     /* Animated Clouds */
