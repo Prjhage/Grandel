@@ -59,6 +59,17 @@ module.exports.showListings = async (req, res) => {
     return res.status(404).json({ success: false, message: "Listing you requested for does not exist!" });
   }
 
+  // Ensure original images without Cloudinary transformations
+  if (listing.image && listing.image.url) {
+    listing.image.url = listing.image.url.replace(/\/upload\/[a-z0-9_,]+\//, '/upload/');
+  }
+  if (listing.images && listing.images.length > 0) {
+    listing.images = listing.images.map(img => ({
+      ...img.toObject(),
+      url: img.url.replace(/\/upload\/[a-z0-9_,]+\//, '/upload/')
+    }));
+  }
+
   let nearbyPlaces = [];
 
   if (listing.geometry && listing.geometry.coordinates) {
@@ -341,6 +352,16 @@ module.exports.updateListings = async (req, res) => {
 
   /* ================= MAIN IMAGE UPDATE ================= */
   if (req.files && req.files["listing[image]"]) {
+    // Delete old main image from Cloudinary if it exists
+    if (listing.image && listing.image.filename) {
+      try {
+        const { cloudinary } = require("../cloudConfig");
+        await cloudinary.uploader.destroy(listing.image.filename);
+      } catch (err) {
+        console.error("Error deleting old main image:", err);
+      }
+    }
+
     const mainImage = req.files["listing[image]"][0];
     listing.image = {
       url: mainImage.path,
@@ -355,8 +376,8 @@ module.exports.updateListings = async (req, res) => {
       filename: file.filename,
     }));
 
-    // Append new images (do not remove old ones)
-    listing.images.push(...extraImages);
+    // Replace all additional images instead of appending
+    listing.images = extraImages;
   }
 
   /* ================= SAVE ================= */

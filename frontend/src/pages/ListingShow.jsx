@@ -28,12 +28,34 @@ const ListingShow = ({ currUser, showFlash }) => {
     const [showGuestDropdown, setShowGuestDropdown] = useState(false);
     const [showMobileReserve, setShowMobileReserve] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [travelCompanion, setTravelCompanion] = useState(location.state?.listing?.travelCompanion || { places: [], food: [] });
     const [nearbyPlaces, setNearbyPlaces] = useState(location.state?.listing?.nearbyPlaces || []);
 
     useEffect(() => {
         fetchListing();
+        setCurrentImageIndex(0); // Reset to first image when listing changes
     }, [id]);
+
+    // Keyboard navigation for carousel
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!listing) return;
+            const allImages = [];
+            if (listing.image?.url) allImages.push(listing.image);
+            if (listing.images?.length) allImages.push(...listing.images);
+            if (allImages.length === 0) return;
+
+            if (e.key === 'ArrowLeft') {
+                handlePrevImage(allImages);
+            } else if (e.key === 'ArrowRight') {
+                handleNextImage(allImages);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [listing, currentImageIndex]);
 
     // Toggle body class when mobile reserve drawer is open to hide chatbot icon
     useEffect(() => {
@@ -150,6 +172,12 @@ const ListingShow = ({ currUser, showFlash }) => {
             showFlash('Failed to delete listing', 'error');
         }
     };
+    const handleNextImage = (allImages) => {
+        setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+    };
+    const handlePrevImage = (allImages) => {
+        setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+    };
 
     if (loading) {
         return <div className="container mt-5"><h3>Loading...</h3></div>;
@@ -204,41 +232,71 @@ const ListingShow = ({ currUser, showFlash }) => {
                     <div className="card show-card listing-main-card">
                         <div className="listing-gallery-container">
                             <div className="listing-image-carousel">
-                                {allImages.map((img, idx) => (
-                                    <div key={idx} className="carousel-item-wrapper">
-                                        <img
-                                            src={img.url}
-                                            alt={`View ${idx + 1}`}
-                                            onClick={() => setSelectedImage(img.url)}
-                                        />
-                                    </div>
-                                ))}
+                                <div className="carousel-item-wrapper">
+                                    <img
+                                        key={currentImageIndex}
+                                        src={allImages[currentImageIndex].url}
+                                        alt={`View ${currentImageIndex + 1}`}
+                                        onClick={() => setSelectedImage(allImages[currentImageIndex].url)}
+                                    />
+                                </div>
                             </div>
+
+                            {/* Navigation Arrows - Only show if more than 1 image */}
+                            {allImages.length > 1 && (
+                                <>
+                                    <button
+                                        className="carousel-nav-btn prev"
+                                        onClick={() => handlePrevImage(allImages)}
+                                        aria-label="Previous image"
+                                    >
+                                        <i className="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button
+                                        className="carousel-nav-btn next"
+                                        onClick={() => handleNextImage(allImages)}
+                                        aria-label="Next image"
+                                    >
+                                        <i className="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </>
+                            )}
+
                             <div className="image-count-badge">
-                                <i className="fa-solid fa-camera me-1"></i> {allImages.length} Photos
+                                <i className="fa-solid fa-camera me-1"></i> {currentImageIndex + 1} / {allImages.length}
                             </div>
 
                         </div>
 
                         {/* Listing Details */}
-                        <div className="card-body">
-                            <div className="listing-details-container">
-                                <div className="listing-info w-100">
-                                    <p className="card-text">{listing.description}</p>
-                                    <p className="card-text">{listing.category}</p>
-                                    <p className="card-text">
-                                        Location: {listing.location}, {listing.country}
-                                    </p>
+                        <div className="card-body pt-0">
+                            <div className="listing-info-subcard">
+                                <div className="subcard-header">
+                                    <h5 className="subcard-title mb-3">About this place</h5>
+                                    <p className="card-text description-text">{listing.description}</p>
+                                </div>
+
+                                <div className="subcard-details mb-3">
+                                    <div className="detail-item">
+                                        <i className="fa-solid fa-tags me-2"></i>
+                                        <span>{listing.category}</span>
+                                    </div>
+                                    <div className="detail-item mt-2">
+                                        <i className="fa-solid fa-location-dot me-2"></i>
+                                        <span>{listing.location}, {listing.country}</span>
+                                    </div>
                                 </div>
 
                                 {isOwner && (
-                                    <div className="listing-actions">
-                                        <Link to={`/listings/${listing._id}/edit`} className="btn btn-warning edit-btn">
-                                            Edit
-                                        </Link>
-                                        <button className="btn btn-danger" onClick={handleDeleteListing}>
-                                            Delete
-                                        </button>
+                                    <div className="subcard-actions mt-4 pt-3 border-top">
+                                        <div className="d-flex gap-2">
+                                            <Link to={`/listings/${listing._id}/edit`} className="btn btn-warning flex-grow-1 edit-btn">
+                                                <i className="fa-solid fa-pen-to-square me-1"></i> Edit
+                                            </Link>
+                                            <button className="btn btn-outline-danger" onClick={handleDeleteListing}>
+                                                <i className="fa-solid fa-trash-can me-1"></i> Delete
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                             </div>

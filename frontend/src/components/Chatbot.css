@@ -3,7 +3,8 @@
 .chatbot-container {
     position: fixed;
     bottom: 85px;
-    right: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 380px;
     height: 550px;
     background: white;
@@ -18,12 +19,12 @@
 
 @keyframes slideIn {
     from {
-        transform: translateY(20px);
+        transform: translateX(-50%) translateY(20px);
         opacity: 0;
     }
 
     to {
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
         opacity: 1;
     }
 }
@@ -268,7 +269,8 @@
         width: 90vw;
         height: 70vh;
         bottom: 75px;
-        right: 15px;
+        left: 50%;
+        transform: translateX(-50%);
         border-radius: 12px;
         max-width: 380px;
         max-height: 500px;
@@ -314,7 +316,8 @@
         width: 95vw;
         height: 65vh;
         bottom: 75px;
-        right: 15px;
+        left: 50%;
+        transform: translateX(-50%);
         max-width: 100%;
         max-height: 450px;
     }

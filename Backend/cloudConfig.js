@@ -13,6 +13,7 @@ const storage = new CloudinaryStorage({
         folder: "wanderlust_DEV",
         allowedFormats: ["jpg", "png", "jpeg"],
         allowed_formats: ["jpg", "png", "jpeg"],
+        // No transformation - store original image as-is
     },
 });
 module.exports = { cloudinary, storage };

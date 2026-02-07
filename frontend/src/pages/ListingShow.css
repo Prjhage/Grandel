@@ -5,32 +5,51 @@
 .listing-gallery-container {
     position: relative;
     width: 100%;
-    height: 480px;
+    height: 500px;
+    /* The "One Frame" approach */
     background: #000;
-    overflow: hidden;
     border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .listing-image-carousel {
-    display: flex;
+    width: 100%;
     height: 100%;
-    /* 🔥 REQUIRED */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .carousel-item-wrapper {
-    flex: 0 0 100%;
     width: 100%;
     height: 100%;
-    /* 🔥 MOST IMPORTANT */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .carousel-item-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    /* This prevents cropping and shows the full image */
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
     object-position: center;
     display: block;
+    cursor: pointer;
+    animation: fadeIn 0.4s ease-in-out;
+    /* Smooth transition */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0.2;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .image-count-badge {
@@ -49,21 +68,77 @@
     /* Added to ensure it stays above the images */
 }
 
+/* Carousel Navigation Arrows */
+.carousel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-nav-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav-btn.prev {
+    left: 16px;
+}
+
+.carousel-nav-btn.next {
+    right: 16px;
+}
+
+.carousel-nav-btn i {
+    font-size: 18px;
+    color: #222;
+}
+
 @media (max-width: 768px) {
     .listing-show-page.container {
-        padding-left: 10px !important;
-        padding-right: 10px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
         padding-bottom: 0px !important;
         /* Eliminated gap */
         margin-top: 1rem !important;
     }
 
-    .listing-gallery-container {
-        height: 260px;
+
+
+    .carousel-nav-btn {
+        width: 32px;
+        height: 32px;
     }
 
-    .listing-image-carousel {
-        height: 260px;
+    .carousel-nav-btn i {
+        font-size: 14px;
+    }
+
+    .carousel-nav-btn.prev {
+        left: 8px;
+    }
+
+    .carousel-nav-btn.next {
+        right: 8px;
+    }
+
+    .listing-gallery-container {
+        height: 300px;
+    }
+
+    .carousel-item-wrapper {
+        height: 100%;
     }
 }
 
@@ -133,9 +208,71 @@
     font-size: 1.2rem;
 }
 
+/* Listing Main Card - Override Bootstrap's overflow:hidden */
+.listing-main-card {
+    padding: 0 !important;
+    overflow: visible !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* Listing Info Subcard Styles */
+.listing-info-subcard {
+    background: #fdfdfd;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.subcard-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #222;
+}
+
+.description-text {
+    line-height: 1.6;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.detail-item {
+    font-size: 0.9rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+
+.detail-item i {
+    color: #ff385c;
+    width: 18px;
+}
+
+.subcard-actions .btn {
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-btn {
+    background: #FFB300 !important;
+    border: none;
+    color: #222 !important;
+}
+
+.edit-btn:hover {
+    background: #FFA000 !important;
+}
+
 /* Reduce padding for main card body to fix spacing */
 .listing-main-card .card-body {
-    padding: 1rem 2.5rem;
+    padding: 0 1.5rem 1.5rem 1.5rem;
 }
 
 /* Sidebar Sticky Wrapper (Original) */
@@ -581,6 +718,40 @@
     .amenities-grid {
         grid-template-columns: 1fr;
         gap: 0.6rem;
+    }
+
+    .listing-info-subcard {
+        padding: 1rem;
+        margin-top: 0.75rem;
+        border-radius: 12px;
+    }
+
+    .subcard-title {
+        font-size: 1rem;
+    }
+
+    .description-text {
+        font-size: 0.85rem;
+    }
+
+    .subcard-actions .d-flex {
+        flex-direction: row;
+        /* Keep side-by-side */
+        gap: 8px;
+    }
+
+    .subcard-actions .btn {
+        flex: 1;
+        /* Equal width */
+    }
+
+    .listing-main-card .card-body {
+        padding: 0 10px 15px 10px;
+    }
+
+    .host-sidebar-card {
+        margin-bottom: 2rem !important;
+        /* Spacing from footer/next elements */
     }
 
     h3 {
