@@ -377,10 +377,14 @@
 
     /* Weather Info - Mobile */
     .ai-modal-content .alert {
+        position: relative !important;
+        top: auto !important;
+        z-index: auto !important;
         font-size: 0.8rem;
         padding: 0.6rem;
         margin-bottom: 1rem !important;
         word-break: break-word;
+        display: block;
     }
 
     .ai-modal-content .alert strong {
