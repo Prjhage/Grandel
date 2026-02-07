@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword } from 'firebase/auth';
 import axios from '../config/axios';
+import { useProfileCache } from '../components/ProfileCacheContext';
 import '../config/firebase';
 import './Auth.css';
 
 const Signup = ({ onLogin, showFlash }) => {
+    const { clearCache } = useProfileCache();
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -56,6 +58,7 @@ const Signup = ({ onLogin, showFlash }) => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.data.success) {
+                clearCache(); // Force fresh fetch on profile page
                 onLogin(res.data.user);
                 showFlash('Account created successfully!', 'success');
                 navigate('/listings');

@@ -97,10 +97,15 @@
 
     @media (max-width: 991px) {
         .navbar-search-section {
+            display: none !important;
             order: 3;
             width: 100%;
             margin-top: 10px;
             padding: 0 10px;
+        }
+
+        .navbar-search-section.is-listings-index {
+            display: flex !important;
         }
 
         .navbar-search-section.home-search {

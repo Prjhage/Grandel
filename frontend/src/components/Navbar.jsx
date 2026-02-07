@@ -10,6 +10,9 @@ const Navbar = ({ currUser, onLogout }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // Check if current page is Listings Index page (/listings) - for mobile search visibility
+    const isListingsIndexPage = location.pathname === '/listings';
+
     const handleNavClose = () => {
         if (navbarCollapseRef.current && navbarCollapseRef.current.classList.contains('show')) {
             const bsCollapse = new window.bootstrap.Collapse(navbarCollapseRef.current, { toggle: false });
@@ -44,7 +47,7 @@ const Navbar = ({ currUser, onLogout }) => {
                 </Link>
 
                 {/* Global Advanced Search Bar */}
-                <div className={`navbar-search-section ${location.pathname === '/' ? 'home-search' : ''}`}>
+                <div className={`navbar-search-section ${location.pathname === '/' ? 'home-search' : ''} ${isListingsIndexPage ? 'is-listings-index' : ''}`}>
                     <AdvancedSearchBar />
                 </div>
 

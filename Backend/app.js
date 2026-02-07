@@ -1,4 +1,28 @@
-require("dotenv").config();
+const fs = require('fs');
+const path = require('path');
+const logFile = fs.createWriteStream(path.join(__dirname, 'debug.log'), { flags: 'a' });
+const logStdout = process.stdout;
+
+console.log = function (d) {
+  logFile.write(`[LOG] ${new Date().toISOString()} ${d}\n`);
+  logStdout.write(d + '\n');
+};
+console.error = function (d) {
+  logFile.write(`[ERR] ${new Date().toISOString()} ${d}\n`);
+  logStdout.write(d + '\n');
+};
+console.warn = function (d) {
+  logFile.write(`[WRN] ${new Date().toISOString()} ${d}\n`);
+  logStdout.write(d + '\n');
+};
+
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  require("dotenv").config({ path: envPath });
+  console.log(`Loaded .env from ${envPath}`);
+} else {
+  console.error(`ERROR: .env not found at ${envPath}`);
+}
 
 const express = require("express");
 const app = express();
@@ -14,11 +38,7 @@ const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
 const cleanFrontendURL = frontendURL.replace(/\/$/, "");
 
 const corsOptions = {
-  origin: [
-    cleanFrontendURL,
-    "https://grandel.vercel.app", // Explicitly allow your Vercel app
-    "http://localhost:5173"       // Allow local development
-  ],
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -46,27 +66,9 @@ const Listing = require("./models/listing.js");
 // =================================================
 // FIREBASE ADMIN SDK INITIALIZATION
 // =================================================
-const admin = require("firebase-admin");
-
-// Construct the service account object from environment variables
-// Ensure these variables are set in your .env file
-const serviceAccount = {
-  project_id: process.env.FIREBASE_PROJECT_ID,
-  // The private key from .env needs to have its newlines restored
-  private_key: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n") : undefined,
-  client_email: process.env.FIREBASE_CLIENT_EMAIL,
-};
-
-// Prevent Firebase re-initialization on dev reloads
-if (!admin.apps.length) {
-  try {
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
-  } catch (e) {
-    console.error("Firebase initialization failed (check .env):", e.message);
-  }
-}
+// Initialized in config/firebaseAdmin.js
+require("./config/firebaseAdmin");
+// =================================================
 // =================================================
 
 const dburl = process.env.ATLASDB_URL;
@@ -207,6 +209,6 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });

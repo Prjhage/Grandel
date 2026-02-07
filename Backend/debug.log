@@ -1,0 +1,192 @@
+[LOG] 2026-02-07T16:32:45.997Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:32:46.092Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:32:46.190Z Server is running on port 8080
+[LOG] 2026-02-07T16:32:47.179Z Connected to DB
+[LOG] 2026-02-07T16:34:07.974Z [2026-02-07T16:34:07.974Z] GET / from Origin: undefined
+[LOG] 2026-02-07T16:35:13.083Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:35:13.137Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  enable debug logging with { debug: true }[0m
+[LOG] 2026-02-07T16:35:13.218Z Server is running on port 8080
+[LOG] 2026-02-07T16:35:15.544Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:35:15.593Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:35:15.666Z Server is running on http://127.0.0.1:8080
+[LOG] 2026-02-07T16:35:16.708Z Connected to DB
+[LOG] 2026-02-07T16:35:22.472Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:35:22.521Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:35:22.605Z Server is running on http://127.0.0.1:8080
+[LOG] 2026-02-07T16:35:23.865Z Connected to DB
+[LOG] 2026-02-07T16:36:51.803Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:36:51.870Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:36:51.950Z Server is running on http://127.0.0.1:8080
+[LOG] 2026-02-07T16:36:52.983Z Connected to DB
+[LOG] 2026-02-07T16:40:33.342Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:40:33.397Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-07T16:40:33.482Z Server is running on http://127.0.0.1:8080
+[LOG] 2026-02-07T16:40:38.123Z Connected to DB
+[LOG] 2026-02-07T16:41:04.896Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:41:04.990Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-07T16:41:05.098Z Server is running on http://127.0.0.1:8080
+[LOG] 2026-02-07T16:41:10.096Z Connected to DB
+[LOG] 2026-02-07T16:41:21.996Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:41:21.998Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T16:41:24.349Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:41:24.483Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com[0m
+[LOG] 2026-02-07T16:41:24.609Z Server is running on http://127.0.0.1:8080
+[LOG] 2026-02-07T16:41:26.678Z Connected to DB
+[LOG] 2026-02-07T16:42:17.176Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: 📡 add observability to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:42:17.181Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T16:42:19.002Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:42:19.080Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-07T16:42:19.470Z Server is running on http://127.0.0.1:8080
+[LOG] 2026-02-07T16:42:20.730Z Connected to DB
+[LOG] 2026-02-07T16:46:33.482Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:46:33.484Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T16:46:34.929Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:46:34.978Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:46:35.045Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T16:46:36.064Z Connected to DB
+[LOG] 2026-02-07T16:51:45.781Z [2026-02-07T16:51:45.781Z] POST /login from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:51:47.063Z Login attempt started. Body: {"idToken":"MISSING","email":"Prajwal Hage","password":"***"}
+[LOG] 2026-02-07T16:51:47.131Z Email/Password login attempt for: Prajwal Hage
+[LOG] 2026-02-07T16:51:47.371Z User not found by email, checking username...
+[LOG] 2026-02-07T16:51:47.630Z User has no hash/salt (legacy/social?), logging in directly.
+[LOG] 2026-02-07T16:51:48.350Z [2026-02-07T16:51:48.350Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:51:48.403Z [2026-02-07T16:51:48.403Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:52:00.652Z [2026-02-07T16:52:00.652Z] POST /login from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:52:00.734Z Login attempt started. Body: {"idToken":"MISSING","email":"Prajwal Hage","password":"***"}
+[LOG] 2026-02-07T16:52:00.855Z Email/Password login attempt for: Prajwal Hage
+[LOG] 2026-02-07T16:52:01.030Z User not found by email, checking username...
+[LOG] 2026-02-07T16:52:01.084Z User has no hash/salt (legacy/social?), logging in directly.
+[LOG] 2026-02-07T16:52:03.780Z [2026-02-07T16:52:03.780Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:52:04.090Z [2026-02-07T16:52:04.090Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:52:14.721Z [2026-02-07T16:52:14.721Z] GET /profile from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:52:14.766Z [2026-02-07T16:52:14.766Z] GET /profile from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:55:07.614Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: 📡 add observability to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:55:07.617Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T16:55:09.102Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:55:09.154Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit[0m
+[LOG] 2026-02-07T16:55:09.257Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T16:55:10.313Z Connected to DB
+[LOG] 2026-02-07T16:55:14.583Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild[0m
+[LOG] 2026-02-07T16:55:14.585Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T16:55:15.991Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:55:16.042Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:55:16.113Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T16:55:16.798Z Connected to DB
+[LOG] 2026-02-07T16:55:52.158Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-07T16:55:52.161Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T16:55:53.568Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:55:53.622Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 📡 add observability to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:55:53.720Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T16:55:55.091Z Connected to DB
+[LOG] 2026-02-07T16:56:00.056Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }[0m
+[LOG] 2026-02-07T16:56:00.059Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T16:56:01.510Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T16:56:01.585Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T16:56:01.673Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T16:56:02.662Z Connected to DB
+[LOG] 2026-02-07T16:57:20.761Z [2026-02-07T16:57:20.761Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:57:20.783Z [2026-02-07T16:57:20.783Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:57:20.979Z [2026-02-07T16:57:20.979Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:57:21.599Z [2026-02-07T16:57:21.599Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:57:35.515Z [2026-02-07T16:57:35.515Z] POST /login from Origin: http://localhost:5174
+[LOG] 2026-02-07T16:57:35.518Z Login attempt started. Body: {"idToken":"MISSING","email":"Prajwal Hage","password":"***"}
+[LOG] 2026-02-07T16:57:35.519Z Email/Password login attempt for: Prajwal Hage
+[LOG] 2026-02-07T16:57:35.566Z User not found by email, checking username...
+[LOG] 2026-02-07T16:57:35.620Z User has no hash/salt (legacy/social?), logging in directly.
+[LOG] 2026-02-07T17:03:08.944Z [2026-02-07T17:03:08.944Z] GET /listings/697d0383dbcfd9f951d279b0 from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:03:09.244Z Nearby places sent to UI:
+[LOG] 2026-02-07T17:03:09.255Z Nearby places:
+[LOG] 2026-02-07T17:03:09.287Z TravelCompanion:
+[LOG] 2026-02-07T17:03:09.550Z [2026-02-07T17:03:09.550Z] GET /listings/697d0383dbcfd9f951d279b0 from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:03:09.718Z Nearby places sent to UI:
+[LOG] 2026-02-07T17:03:09.720Z Nearby places:
+[LOG] 2026-02-07T17:03:09.721Z TravelCompanion:
+[LOG] 2026-02-07T17:03:42.094Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-07T17:03:42.097Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T17:03:43.535Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T17:03:43.586Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`[0m
+[LOG] 2026-02-07T17:03:43.679Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T17:03:44.711Z Connected to DB
+[LOG] 2026-02-07T17:07:20.395Z [2026-02-07T17:07:20.395Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:07:20.409Z [2026-02-07T17:07:20.409Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:07:20.773Z DB Disconnected
+[LOG] 2026-02-07T17:07:21.244Z [2026-02-07T17:07:21.244Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:07:21.779Z [2026-02-07T17:07:21.779Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:07:55.402Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T17:07:55.409Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T17:07:57.083Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T17:07:57.133Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild[0m
+[LOG] 2026-02-07T17:07:57.233Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T17:07:58.172Z Connected to DB
+[LOG] 2026-02-07T17:56:25.762Z [2026-02-07T17:56:25.762Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:56:25.764Z Diagnostic: /current-user request. Session user: Prajwal Hage
+[LOG] 2026-02-07T17:56:25.776Z [2026-02-07T17:56:25.776Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:56:26.020Z [2026-02-07T17:56:26.020Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:56:26.021Z Diagnostic: /current-user request. Session user: Prajwal Hage
+[LOG] 2026-02-07T17:56:26.160Z [2026-02-07T17:56:26.160Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:56:48.308Z [2026-02-07T17:56:48.308Z] GET /profile/host from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:56:48.916Z [2026-02-07T17:56:48.916Z] GET /profile/host from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:56:59.166Z [2026-02-07T17:56:59.166Z] GET /profile from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:56:59.168Z Diagnostic: /profile for user: Prajwal Hage (ID: 6951024e01be4a4d6e22d95d)
+[LOG] 2026-02-07T17:57:00.448Z Diagnostic: Success for Prajwal Hage - Wishlist: 4, Bookings: 2, MyListings: 4
+[LOG] 2026-02-07T17:57:00.743Z [2026-02-07T17:57:00.743Z] GET /profile from Origin: http://localhost:5174
+[LOG] 2026-02-07T17:57:00.748Z Diagnostic: /profile for user: Prajwal Hage (ID: 6951024e01be4a4d6e22d95d)
+[LOG] 2026-02-07T17:57:01.050Z Diagnostic: Success for Prajwal Hage - Wishlist: 4, Bookings: 2, MyListings: 4
+[LOG] 2026-02-07T17:58:33.408Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-07T17:58:33.412Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T17:58:36.263Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T17:58:36.466Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`[0m
+[LOG] 2026-02-07T17:58:36.718Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T17:58:37.660Z Connected to DB
+[LOG] 2026-02-07T17:58:57.143Z [dotenv@17.2.3] injecting env (16) from .env [2m-- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-07T17:58:57.149Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-07T17:59:00.094Z Firebase Admin initialized successfully.
+[LOG] 2026-02-07T17:59:00.204Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`[0m
+[LOG] 2026-02-07T17:59:00.352Z Server is running on http://localhost:8080
+[LOG] 2026-02-07T17:59:10.674Z Connected to DB
+[LOG] 2026-02-07T18:04:20.942Z [2026-02-07T18:04:20.941Z] GET /listings/6986f569e9700db6c2bed354 from Origin: http://localhost:5174
+[ERR] 2026-02-07T18:04:22.215Z Overpass API Error:
+[LOG] 2026-02-07T18:04:22.219Z Nearby places sent to UI:
+[LOG] 2026-02-07T18:04:22.222Z Nearby places:
+[LOG] 2026-02-07T18:04:22.223Z TravelCompanion:
+[LOG] 2026-02-07T18:04:22.451Z [2026-02-07T18:04:22.451Z] GET /listings/6986f569e9700db6c2bed354 from Origin: http://localhost:5174
+[ERR] 2026-02-07T18:04:24.671Z Overpass API Error:
+[LOG] 2026-02-07T18:04:24.671Z Nearby places sent to UI:
+[LOG] 2026-02-07T18:04:24.671Z Nearby places:
+[LOG] 2026-02-07T18:04:24.672Z TravelCompanion:
+[LOG] 2026-02-07T18:08:26.318Z [2026-02-07T18:08:26.318Z] GET /api/featured from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:08:26.651Z [2026-02-07T18:08:26.650Z] GET /api/featured from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:08:34.610Z [2026-02-07T18:08:34.610Z] GET /listings/697d0383dbcfd9f951d279b0 from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:08:34.766Z Nearby places sent to UI:
+[LOG] 2026-02-07T18:08:34.767Z Nearby places:
+[LOG] 2026-02-07T18:08:34.768Z TravelCompanion:
+[LOG] 2026-02-07T18:08:34.930Z [2026-02-07T18:08:34.930Z] GET /listings/697d0383dbcfd9f951d279b0 from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:08:35.086Z Nearby places sent to UI:
+[LOG] 2026-02-07T18:08:35.087Z Nearby places:
+[LOG] 2026-02-07T18:08:35.087Z TravelCompanion:
+[LOG] 2026-02-07T18:08:42.147Z [2026-02-07T18:08:42.147Z] GET /api/featured from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:08:42.451Z [2026-02-07T18:08:42.451Z] GET /api/featured from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:09:37.214Z [2026-02-07T18:09:37.214Z] GET /listings/697da5921aca92fe515a9d48 from Origin: http://localhost:5174
+[ERR] 2026-02-07T18:09:38.851Z Overpass API Error:
+[LOG] 2026-02-07T18:09:38.855Z Nearby places sent to UI:
+[LOG] 2026-02-07T18:09:38.858Z Nearby places:
+[LOG] 2026-02-07T18:09:38.858Z TravelCompanion:
+[LOG] 2026-02-07T18:09:39.183Z [2026-02-07T18:09:39.183Z] GET /listings/697da5921aca92fe515a9d48 from Origin: http://localhost:5174
+[ERR] 2026-02-07T18:09:41.630Z Overpass API Error:
+[LOG] 2026-02-07T18:09:41.637Z Nearby places sent to UI:
+[LOG] 2026-02-07T18:09:41.640Z Nearby places:
+[LOG] 2026-02-07T18:09:41.648Z TravelCompanion:
+[LOG] 2026-02-07T18:10:02.150Z [2026-02-07T18:10:02.150Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:10:02.383Z [2026-02-07T18:10:02.383Z] GET /listings from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:10:02.527Z [2026-02-07T18:10:02.527Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:10:02.627Z [2026-02-07T18:10:02.627Z] GET /current-user from Origin: http://localhost:5174
+[LOG] 2026-02-07T18:10:13.647Z [2026-02-07T18:10:13.647Z] GET /listings/697da5921aca92fe515a9d48 from Origin: http://localhost:5174
+[ERR] 2026-02-07T18:10:16.409Z Overpass API Error:
+[LOG] 2026-02-07T18:10:16.409Z Nearby places sent to UI:
+[LOG] 2026-02-07T18:10:16.410Z Nearby places:
+[LOG] 2026-02-07T18:10:16.411Z TravelCompanion:
+[LOG] 2026-02-07T18:10:16.548Z [2026-02-07T18:10:16.548Z] GET /listings/697da5921aca92fe515a9d48 from Origin: http://localhost:5174
+[ERR] 2026-02-07T18:10:18.658Z Overpass API Error:
+[LOG] 2026-02-07T18:10:18.659Z Nearby places sent to UI:
+[LOG] 2026-02-07T18:10:18.661Z Nearby places:
+[LOG] 2026-02-07T18:10:18.663Z TravelCompanion:

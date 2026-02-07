@@ -65,14 +65,18 @@ module.exports.firebaseRegister = async (req, res, next) => {
     }
 };
 
+
 module.exports.firebaseLogin = async (req, res, next) => {
     try {
         const { idToken, email, password } = req.body;
+        console.log(`Login attempt started. Body: ${JSON.stringify({ idToken: idToken ? "PROVIDED" : "MISSING", email, password: password ? "***" : "MISSING" })}`);
 
         if (idToken) {
             // Firebase Auth flow
+            console.log("Verifying Firebase ID token...");
             const decodedToken = await admin.auth().verifyIdToken(idToken);
             const { uid } = decodedToken;
+            console.log(`Token verified. UID: ${uid}, Email: ${decodedToken.email}`);
 
             // Find user in local database
             const user = await User.findOne({
@@ -80,6 +84,7 @@ module.exports.firebaseLogin = async (req, res, next) => {
             });
 
             if (!user) {
+                console.log("User not found in local DB for Firebase login.");
                 return res
                     .status(404)
                     .json({ message: "User not found. Please sign up first." });
@@ -89,11 +94,16 @@ module.exports.firebaseLogin = async (req, res, next) => {
             if (!user.firebaseUid) {
                 user.firebaseUid = uid;
                 await user.save();
+                console.log("Updated legacy user with Firebase UID.");
             }
 
             // Log the user in to create a session
             req.login(user, (err) => {
-                if (err) return next(err);
+                if (err) {
+                    console.log(`req.login failed: ${err.message}`);
+                    return next(err);
+                }
+                console.log("Firebase login successful.");
                 const redirectUrl = res.locals.redirectUrl || "/listings";
                 return res.status(200).json({
                     success: true,
@@ -104,23 +114,25 @@ module.exports.firebaseLogin = async (req, res, next) => {
             });
         } else if (email && password) {
             // Fallback for existing users without Firebase Auth
+            console.log(`Email/Password login attempt for: ${email}`);
             // Try to find user by email first, then by username if email fails
             let user = await User.findOne({ email });
 
             if (!user) {
+                console.log("User not found by email, checking username...");
                 // If not found by email, try by username (for legacy accounts)
                 user = await User.findOne({ username: email });
             }
 
             if (!user) {
+                console.log("User not found.");
                 return res
                     .status(404)
                     .json({ message: "User not found. Please sign up first." });
             }
 
-
             if (!user.hash || !user.salt) {
-
+                console.log("User has no hash/salt (legacy/social?), logging in directly.");
                 req.login(user, (err) => {
                     if (err) return next(err);
                     const redirectUrl = res.locals.redirectUrl || "/listings";
@@ -132,18 +144,22 @@ module.exports.firebaseLogin = async (req, res, next) => {
                     });
                 });
             } else {
+                console.log("Authenticating with passport local...");
+                req.body.username = user.username; // Passport local strategy expects username
 
-                req.body.username = user.username;
-
-                passport.authenticate("local", (err, authenticatedUser) => {
-                    if (err) return next(err);
+                passport.authenticate("local", (err, authenticatedUser, info) => {
+                    if (err) {
+                        console.log(`Passport error: ${err.message}`);
+                        return next(err);
+                    }
                     if (!authenticatedUser) {
+                        logToFile(`Authentication failed. Info: ${JSON.stringify(info)}`);
                         return res.status(401).json({ message: "Invalid credentials." });
                     }
 
                     req.login(authenticatedUser, (err) => {
                         if (err) return next(err);
-
+                        logToFile("Passport login successful.");
                         const redirectUrl = res.locals.redirectUrl || "/listings";
                         return res.status(200).json({
                             success: true,
@@ -155,9 +171,11 @@ module.exports.firebaseLogin = async (req, res, next) => {
                 })(req, res, next);
             }
         } else {
+            logToFile("Invalid login request: Missing credentials.");
             return res.status(400).json({ message: "Invalid login request." });
         }
     } catch (e) {
+        console.log(`Login Exception: ${e.message}`);
         console.error("Firebase Login Error:", e);
         res
             .status(401)
@@ -193,21 +211,29 @@ module.exports.getWishlist = async (req, res) => {
 };
 
 module.exports.profile = async (req, res) => {
-    const wishlistListings = await Listing.find({
-        _id: { $in: req.user.wishlist || [] },
-    });
+    try {
+        // Fetch fresh user data to ensure wishlist and other properties are up to date
+        const user = await User.findById(req.user._id);
 
-    const bookings = await Booking.find({ user: req.user._id }).populate(
-        "listing",
-    );
-    const myListings = await Listing.find({ Owner: req.user._id });
+        const wishlistListings = await Listing.find({
+            _id: { $in: user.wishlist || [] },
+        });
 
-    res.json({
-        user: req.user,
-        wishlistListings,
-        bookings,
-        myListings,
-    });
+        const bookings = await Booking.find({ user: user._id }).populate(
+            "listing",
+        );
+        const myListings = await Listing.find({ Owner: user._id });
+
+        res.json({
+            user: user,
+            wishlistListings,
+            bookings,
+            myListings,
+        });
+    } catch (err) {
+        console.error("Profile Controller Error:", err);
+        res.status(500).json({ message: "Internal server error" });
+    }
 };
 
 module.exports.updateProfilePhoto = async (req, res) => {

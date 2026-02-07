@@ -107,8 +107,8 @@
 
 @media (max-width: 768px) {
     .listing-show-page.container {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
         padding-bottom: 80px !important;
         /* Space for bottom bar */
         margin-top: 0 !important;

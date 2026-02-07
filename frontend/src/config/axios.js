@@ -42,7 +42,8 @@ axiosInstance.interceptors.response.use(
             // Handle specific error codes
             if (error.response.status === 401) {
                 // Unauthorized - redirect to login
-                window.location.href = '/login';
+                console.warn("⚠️ 401 Unauthorized caught - redirect disabled for debugging");
+                // window.location.href = '/login';
             }
         }
         return Promise.reject(error);

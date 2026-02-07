@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import axios from '../config/axios';
+import { useProfileCache } from '../components/ProfileCacheContext';
 import '../config/firebase';
 import './Auth.css';
 
 const Login = ({ onLogin, showFlash }) => {
+    const { clearCache } = useProfileCache();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -42,9 +44,16 @@ const Login = ({ onLogin, showFlash }) => {
             const payload = token ? { ...formData, token, idToken: token } : formData;
             const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 
+            console.log("🚀 Login Attempt Details:");
+            console.log("- URL:", axios.defaults.baseURL + "/login");
+            console.log("- Payload Keys:", Object.keys(payload));
+            console.log("- Authorization Header:", config.headers?.Authorization ? "PRESENT" : "MISSING");
+
             const res = await axios.post('/login', payload, config);
+            console.log("✅ Login Response received:", res.status);
 
             if (res.data.success) {
+                clearCache(); // Force fresh fetch on profile page
                 onLogin(res.data.user);
                 showFlash('Logged in successfully!', 'success');
                 navigate('/listings');

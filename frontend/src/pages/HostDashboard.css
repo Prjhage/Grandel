@@ -371,26 +371,82 @@
     }
 
     .booking-card {
-        padding: 1rem;
+        padding: 0.85rem;
+        margin-bottom: 1rem;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .card-body {
+        padding: 0.5rem;
     }
 
     .card-title {
-        font-size: 1.1rem;
-        margin-bottom: 0.8rem;
+        font-size: 1rem;
+        margin-bottom: 0.7rem;
     }
 
     .booking-details {
         grid-template-columns: 1fr;
-        gap: 0.8rem;
-        margin-bottom: 1rem;
+        gap: 0.6rem;
+        margin-bottom: 0.8rem;
     }
 
     .detail-group p {
-        font-size: 0.9rem;
-        margin-bottom: 0.25rem;
+        font-size: 0.8rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .guest-counts-wrapper {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+    }
+
+    .guest-counts {
+        justify-content: flex-start;
+        gap: 0.4rem;
     }
 
     .guest-badge {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .card-actions-wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .status-badge {
+        justify-content: center;
+        width: auto;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.65rem;
+        height: min-content;
+    }
+
+    .btn-group-custom {
+        flex-direction: row;
+        width: auto;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .btn-custom {
+        justify-content: center;
+        width: auto;
+        padding: 0.25rem 0.6rem;
+        font-size: 0.7rem;
+        min-height: unset;
+    }
+
+    .tab-content {
+        padding: 0;
     }
 }

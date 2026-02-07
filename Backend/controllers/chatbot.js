@@ -5,9 +5,14 @@ const User = require("../models/user.js");
 require("dotenv").config();
 
 // 🔑 Initialize Groq
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+let groq;
+if (process.env.GROQ_API_KEY) {
+  groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY,
+  });
+} else {
+  console.warn("Warning: GROQ_API_KEY is missing. Chatbot feature will be disabled.");
+}
 
 module.exports.chatWithSupport = async (req, res) => {
   try {
@@ -153,15 +158,20 @@ IMPORTANT: ONLY mention features that actually exist in Grandel. Don't make up f
 `;
 
     // 🚀 Call Groq API
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: message },
-      ],
-      model: "llama-3.3-70b-versatile",
-      temperature: 0.6,
-      max_tokens: 500,
-    });
+    let chatCompletion;
+    if (groq) {
+      chatCompletion = await groq.chat.completions.create({
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message },
+        ],
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.6,
+        max_tokens: 500,
+      });
+    } else {
+      console.warn("Chatbot request skipped: Groq is not initialized.");
+    }
 
     let reply =
       "I'm having trouble connecting right now. Please try again in a moment! 🌐";

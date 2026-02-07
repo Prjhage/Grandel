@@ -8,13 +8,13 @@ router.post("/firebase-login", verifyFirebaseToken, async (req, res) => {
     const { uid, email } = req.firebaseUser;
 
     // 1. Check if user exists by Firebase UID
-    let user = await User.findOne({ firebaseUID: uid });
+    let user = await User.findOne({ firebaseUid: uid });
 
     // 2. If not found, check by email (to link existing accounts)
     if (!user) {
       user = await User.findOne({ email: email });
       if (user) {
-        user.firebaseUID = uid;
+        user.firebaseUid = uid;
         await user.save();
       }
     }
@@ -28,7 +28,7 @@ router.post("/firebase-login", verifyFirebaseToken, async (req, res) => {
         username += Math.floor(Math.random() * 10000);
       }
 
-      user = new User({ username, email, firebaseUID: uid });
+      user = new User({ username, email, firebaseUid: uid });
       await user.save();
     }
 
