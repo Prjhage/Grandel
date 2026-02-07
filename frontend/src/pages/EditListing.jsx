@@ -16,25 +16,6 @@ const amenitiesList = [
     'Lift'
 ];
 
-const categories = [
-    { value: 'trending', label: '🔥 Trending' },
-    { value: 'rooms', label: '🛏 Rooms' },
-    { value: 'iconic', label: '🏙 Iconic Cities' },
-    { value: 'mountain', label: '🏔 Mountain' },
-    { value: 'castles', label: '🏰 Castles' },
-    { value: 'pools', label: '🏊 Amazing Pools' },
-    { value: 'camping', label: '🏕 Camping' },
-    { value: 'farms', label: '🚜 Farms' },
-    { value: 'arctic', label: '❄ Arctic' },
-    { value: 'domes', label: '🧊 Domes' },
-    { value: 'boats', label: '🚤 Boats' },
-    { value: 'forest', label: '🌲 Forest' },
-    { value: 'lakefront', label: '🌊 Lakefront' },
-    { value: 'beach', label: '🏖 Beach' },
-    { value: 'urban', label: '🏙 Urban' },
-    { value: 'countryside', label: '🏡 Countryside' }
-];
-
 const EditListing = ({ currUser, showFlash }) => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -43,17 +24,13 @@ const EditListing = ({ currUser, showFlash }) => {
         title: '',
         description: '',
         price: '',
-        category: '',
         country: '',
         location: '',
         amenities: [],
-        maxGuests: 5,
-        maxAdults: 5,
-        maxChildren: 5,
-        freeGuests: 3,
         petsAllowed: false,
         petChargePerNight: 300,
-        extraGuestChargePerNight: 500
+        numRooms: 1,
+        guestsPerRoom: 2
     });
     const [validated, setValidated] = useState(false);
     const [mainImage, setMainImage] = useState(null);
@@ -71,17 +48,13 @@ const EditListing = ({ currUser, showFlash }) => {
                     title: listing.title || '',
                     description: listing.description || '',
                     price: listing.price || '',
-                    category: listing.category || '',
                     country: listing.country || '',
                     location: listing.location || '',
                     amenities: listing.amenities || [],
-                    maxGuests: listing.maxGuests || 5,
-                    maxAdults: listing.maxAdults || 5,
-                    maxChildren: listing.maxChildren || 5,
-                    freeGuests: listing.freeGuests || 3,
                     petsAllowed: listing.petsAllowed || false,
                     petChargePerNight: listing.petChargePerNight || 300,
-                    extraGuestChargePerNight: listing.extraGuestChargePerNight || 500
+                    numRooms: listing.numRooms || 1,
+                    guestsPerRoom: listing.guestsPerRoom || 2
                 });
 
                 if (listing.image && listing.image.url) {
@@ -145,16 +118,12 @@ const EditListing = ({ currUser, showFlash }) => {
         data.append('listing[title]', formData.title);
         data.append('listing[description]', formData.description);
         data.append('listing[price]', formData.price);
-        data.append('listing[category]', formData.category);
         data.append('listing[country]', formData.country);
         data.append('listing[location]', formData.location);
-        data.append('listing[maxGuests]', formData.maxGuests);
-        data.append('listing[maxAdults]', formData.maxAdults);
-        data.append('listing[maxChildren]', formData.maxChildren);
-        data.append('listing[freeGuests]', formData.freeGuests);
         data.append('listing[petsAllowed]', formData.petsAllowed);
         data.append('listing[petChargePerNight]', formData.petChargePerNight);
-        data.append('listing[extraGuestChargePerNight]', formData.extraGuestChargePerNight);
+        data.append('listing[numRooms]', formData.numRooms);
+        data.append('listing[guestsPerRoom]', formData.guestsPerRoom);
 
         formData.amenities.forEach(amenity => {
             data.append('listing[amenities]', amenity);
@@ -267,9 +236,9 @@ const EditListing = ({ currUser, showFlash }) => {
                         </div>
                     </div>
 
-                    {/* Price & Category */}
+                    {/* Price */}
                     <div className="lf-row">
-                        <div className="lf-group half">
+                        <div className="lf-group">
                             <label>Price per night</label>
                             <input
                                 type="number"
@@ -280,16 +249,6 @@ const EditListing = ({ currUser, showFlash }) => {
                                 value={formData.price}
                                 onChange={handleChange}
                             />
-                        </div>
-
-                        <div className="lf-group half">
-                            <label>Category</label>
-                            <select name="category" required value={formData.category} onChange={handleChange}>
-                                <option value="" disabled>Select category</option>
-                                {categories.map(cat => (
-                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
-                                ))}
-                            </select>
                         </div>
                     </div>
 
@@ -320,61 +279,31 @@ const EditListing = ({ currUser, showFlash }) => {
                         <small className="text-muted">Changing location will refresh AI travel suggestions</small>
                     </div>
 
-                    {/* Guest & Pet Settings */}
+                    {/* Room & Pet Settings */}
                     <div className="lf-group">
-                        <h4>Guest & Pet Settings</h4>
+                        <h4>Room & Pet Settings</h4>
 
                         <div className="lf-row">
                             <div className="lf-group half">
-                                <label>Maximum Total Guests</label>
+                                <label>Number of Rooms</label>
                                 <input
                                     type="number"
-                                    name="maxGuests"
+                                    name="numRooms"
                                     min="1"
-                                    max="20"
                                     required
-                                    value={formData.maxGuests}
+                                    value={formData.numRooms}
                                     onChange={handleChange}
                                 />
                             </div>
 
                             <div className="lf-group half">
-                                <label>Maximum Adults</label>
+                                <label>Max Guests per Room</label>
                                 <input
                                     type="number"
-                                    name="maxAdults"
+                                    name="guestsPerRoom"
                                     min="1"
-                                    max="20"
                                     required
-                                    value={formData.maxAdults}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="lf-row">
-                            <div className="lf-group half">
-                                <label>Maximum Children</label>
-                                <input
-                                    type="number"
-                                    name="maxChildren"
-                                    min="0"
-                                    max="20"
-                                    required
-                                    value={formData.maxChildren}
-                                    onChange={handleChange}
-                                />
-                            </div>
-
-                            <div className="lf-group half">
-                                <label>Free Guests</label>
-                                <input
-                                    type="number"
-                                    name="freeGuests"
-                                    min="0"
-                                    max="20"
-                                    required
-                                    value={formData.freeGuests}
+                                    value={formData.guestsPerRoom}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -405,18 +334,6 @@ const EditListing = ({ currUser, showFlash }) => {
                                     onChange={handleChange}
                                 />
                             </div>
-                        </div>
-
-                        <div className="lf-group">
-                            <label>Extra Guest Charge per Night (₹)</label>
-                            <input
-                                type="number"
-                                name="extraGuestChargePerNight"
-                                min="0"
-                                required
-                                value={formData.extraGuestChargePerNight}
-                                onChange={handleChange}
-                            />
                         </div>
                     </div>
 

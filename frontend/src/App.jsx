@@ -70,7 +70,7 @@ function App() {
             <ScrollToTop />
             <Navbar currUser={currUser} onLogout={handleLogout} />
 
-            <div className="container flex-grow-1 main-content">
+            <div className="flex-grow-1 main-content">
               <Flash message={flash?.message} type={flash?.type} onClose={() => setFlash(null)} />
 
               <Routes>

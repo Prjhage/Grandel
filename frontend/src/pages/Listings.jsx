@@ -5,76 +5,42 @@ import SkeletonCard from '../components/SkeletonCard';
 import { useListingCache } from '../components/ListingCacheContext';
 import './Listings.css';
 
-const categories = [
-    { name: 'Trending', icon: 'fa-fire', value: 'trending' },
-    { name: 'Rooms', icon: 'fa-bed', value: 'rooms' },
-    { name: 'Iconic Cities', icon: 'fa-mountain-city', value: 'iconic' },
-    { name: 'Mountain', icon: 'fa-mountain', value: 'mountain' },
-    { name: 'Castles', icon: 'fa-fort-awesome', iconClass: 'fa-brands', value: 'castles' },
-    { name: 'Amazing Pools', icon: 'fa-person-swimming', value: 'pools' },
-    { name: 'Camping', icon: 'fa-campground', value: 'camping' },
-    { name: 'Farms', icon: 'fa-tractor', value: 'farms' },
-    { name: 'Arctic', icon: 'fa-snowman', value: 'arctic' },
-    { name: 'Domes', icon: 'fa-igloo', value: 'domes' },
-    { name: 'Boats', icon: 'fa-ship', value: 'boats' },
-    { name: 'Forest', icon: 'fa-tree', value: 'forest' },
-    { name: 'Lakefront', icon: 'fa-water', value: 'lakefront' },
-    { name: 'Beach', icon: 'fa-umbrella-beach', value: 'beach' },
-    { name: 'Urban', icon: 'fa-city', value: 'urban' },
-    { name: 'Countryside', icon: 'fa-house-chimney', value: 'countryside' },
-];
-
 const Listings = ({ currUser }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [showTax, setShowTax] = useState(false);
     const [userWishlist, setUserWishlist] = useState([]);
 
     // Use the cache context
     const { getCachedData, setCachedData } = useListingCache();
 
-    const category = searchParams.get('category') || '';
     const sort = searchParams.get('sort') || '';
-    const q = searchParams.get('q') || '';
 
     useEffect(() => {
         fetchListings();
-    }, [category, sort, q]);
+    }, [searchParams]);
 
     const fetchListings = async () => {
         try {
-            // Current filters
-            const currentFilters = { category, sort, q };
+            const currentFilters = Object.fromEntries(searchParams.entries());
+            currentFilters.sort = sort;
 
-            // Check cache first
             const cachedData = getCachedData(currentFilters);
-
             if (cachedData) {
-                // Use cached data - no loading state needed
                 setListings(cachedData.listings);
                 setUserWishlist(cachedData.userWishlist);
                 setLoading(false);
                 return;
             }
 
-            // No cache or filters don't match - fetch from API
             setLoading(true);
-            const params = new URLSearchParams();
-            if (category) params.append('category', category);
-            if (sort) params.append('sort', sort);
-            if (q) params.append('q', q);
-
-            const res = await axios.get(`/listings?${params.toString()}`);
+            const res = await axios.get('/listings', { params: searchParams });
             const fetchedListings = res.data.allListings || [];
             const fetchedWishlist = res.data.userWishlist || [];
 
             setListings(fetchedListings);
             setUserWishlist(fetchedWishlist);
-
-            // Cache the results
             setCachedData(fetchedListings, fetchedWishlist, currentFilters);
-
             setLoading(false);
         } catch (err) {
             console.error('Error fetching listings:', err);
@@ -85,90 +51,47 @@ const Listings = ({ currUser }) => {
     const handleSortChange = (e) => {
         const newSort = e.target.value;
         const params = new URLSearchParams(searchParams);
-        if (newSort) {
-            params.set('sort', newSort);
-        } else {
-            params.delete('sort');
-        }
-        setSearchParams(params);
-    };
-
-    const handleCategoryClick = (catValue) => {
-        const params = new URLSearchParams(searchParams);
-        if (catValue) {
-            params.set('category', catValue);
-        } else {
-            params.delete('category');
-        }
+        if (newSort) params.set('sort', newSort);
+        else params.delete('sort');
         setSearchParams(params);
     };
 
     const toggleWishlist = async (listingId) => {
+        // ... (existing logic)
         if (!currUser) {
             alert('Please login to save to wishlist');
             return;
         }
-
-        // Add burst class for animation
         const btn = document.querySelector(`.listing-card[data-id="${listingId}"] .wishlist-btn`);
         if (btn) {
             btn.classList.add('burst');
             setTimeout(() => btn.classList.remove('burst'), 600);
         }
-
         try {
-            // Toggle wishlist via API
             await axios.post(`/wishlist/${listingId}`);
-
             const isSaved = userWishlist.includes(listingId);
-            if (isSaved) {
-                setUserWishlist(userWishlist.filter(id => id !== listingId));
-            } else {
-                setUserWishlist([...userWishlist, listingId]);
-            }
+            if (isSaved) setUserWishlist(userWishlist.filter(id => id !== listingId));
+            else setUserWishlist([...userWishlist, listingId]);
         } catch (err) {
             console.error('Error toggling wishlist:', err);
         }
     };
 
+
     return (
-        <div className="listings-page page-fade">
+        <div className="container listings-page page-fade">
+
             {/* Filters Wrapper */}
-            <div className="filters-wrapper">
-                <div id="filters">
-                    <div className="filters-inner">
-                        {categories.map((cat) => (
-                            <div
-                                key={cat.value}
-                                className={`filter ${category === cat.value ? 'active' : ''}`}
-                                onClick={() => handleCategoryClick(cat.value)}
-                            >
-                                <div>
-                                    <i className={`${cat.iconClass || 'fa-solid'} ${cat.icon}`} style={{ fontSize: '1.2rem' }}></i>
-                                </div>
-                                <p style={{ fontSize: '0.75rem' }}>{cat.name}</p>
-                            </div>
-                        ))}
+            <div className="filters-wrapper justify-content-end">
+                <div className="d-flex align-items-center">
+                    <div className="sort-dropdown">
+                        <select id="sortSelect" className="form-select" value={sort} onChange={handleSortChange}>
+                            <option value="">Sort by</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Average Rating</option>
+                        </select>
                     </div>
-                </div>
-
-                {/* Sort Dropdown */}
-                <div className="sort-dropdown">
-                    <select id="sortSelect" className="form-select" value={sort} onChange={handleSortChange}>
-                        <option value="">Sort by</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                        <option value="rating">Average Rating</option>
-                    </select>
-                </div>
-
-                {/* Tax Icon */}
-                <div
-                    className={`tax-icon ${showTax ? 'active' : ''}`}
-                    title="Display total after taxes"
-                    onClick={() => setShowTax(!showTax)}
-                >
-                    <i className="fa-solid fa-calculator"></i>
                 </div>
             </div>
 
@@ -193,7 +116,7 @@ const Listings = ({ currUser }) => {
                     ))
                 ) : (
                     listings.map((listing) => {
-                        const price = showTax ? listing.price * 1.18 : listing.price;
+                        const price = listing.price;
                         const avgRating = listing.avgRating || 0;
                         const reviewCount = listing.reviews?.length || 0;
 
@@ -249,7 +172,6 @@ const Listings = ({ currUser }) => {
                                         </p>
                                         <p className="card-text">
                                             <span className="price-val">₹{Math.round(price).toLocaleString('en-IN')}</span>/night
-                                            {showTax && <i className="tax-info"> +18% GST</i>}
                                         </p>
                                     </div>
                                 </div>

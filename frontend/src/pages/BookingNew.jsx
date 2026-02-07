@@ -17,11 +17,17 @@ const BookingNew = ({ currUser, showFlash }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Guest data from query params
+    const roomsDataSearch = searchParams.get('roomsData');
+    const rooms = roomsDataSearch ? JSON.parse(roomsDataSearch) : [{ adults: 1, children: 0, infants: 0 }];
+    const animals = parseInt(searchParams.get('animals')) || 0;
+
     const guests = {
-        adults: parseInt(searchParams.get('adults')) || 1,
-        children: parseInt(searchParams.get('children')) || 0,
-        infants: parseInt(searchParams.get('infants')) || 0,
-        animals: parseInt(searchParams.get('animals')) || 0
+        rooms: rooms,
+        adults: rooms.reduce((acc, r) => acc + r.adults, 0),
+        children: rooms.reduce((acc, r) => acc + r.children, 0),
+        infants: rooms.reduce((acc, r) => acc + r.infants, 0),
+        animals: animals,
+        numRooms: rooms.length
     };
 
     useEffect(() => {
@@ -47,25 +53,18 @@ const BookingNew = ({ currUser, showFlash }) => {
         if (end <= start) return null;
 
         const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-        const EXTRA_GUEST_PRICE = listing.extraGuestChargePerNight || 500;
         const PET_PRICE = listing.petChargePerNight || 300;
-        const FREE_GUESTS = listing.freeGuests || 3;
 
-        const payingGuests = guests.adults + guests.children;
-        const extraGuests = Math.max(0, payingGuests - FREE_GUESTS);
-
-        const baseTotal = nights * listing.price;
-        const extraGuestCost = extraGuests * EXTRA_GUEST_PRICE * nights;
+        const baseTotal = nights * listing.price * guests.numRooms;
         const petCost = guests.animals * PET_PRICE * nights;
 
-        const subtotal = baseTotal + extraGuestCost + petCost;
+        const subtotal = baseTotal + petCost;
         const gst = Math.round(subtotal * 0.18);
         const total = subtotal + gst;
 
         return {
             nights,
             baseTotal,
-            extraGuestCost,
             petCost,
             subtotal,
             gst,
@@ -91,6 +90,7 @@ const BookingNew = ({ currUser, showFlash }) => {
                 children: guests.children,
                 infants: guests.infants,
                 animals: guests.animals,
+                numRooms: guests.numRooms,
                 acceptGuestTerms: true
             });
             showFlash('Booking is Done!', 'success');
@@ -104,7 +104,7 @@ const BookingNew = ({ currUser, showFlash }) => {
     if (loading) return <div className="text-center py-5"><div className="spinner-border text-primary"></div></div>;
 
     return (
-        <div className="booking-page-wrapper">
+        <div className="container booking-page-wrapper">
             {isSubmitting && (
                 <div className="booking-loading-overlay">
                     <div className="loading-house">
@@ -128,14 +128,20 @@ const BookingNew = ({ currUser, showFlash }) => {
 
                 <div className="booking-info card border-0 bg-light p-3 mb-4">
                     <p><b>Listing:</b> <span>{listing.title}</span></p>
-                    <p><b>Price per night:</b> <span>₹{listing.price.toLocaleString('en-IN')}</span></p>
+                    <p><b>Price per room:</b> <span>₹{listing.price.toLocaleString('en-IN')} / night</span></p>
                     <p><b>Guest:</b> <span>{currUser?.username}</span></p>
                 </div>
 
                 <div className="guest-summary-box mb-4">
-                    <strong>Guests:</strong> {guests.adults} Adults, {guests.children} Children
-                    {guests.infants > 0 && `, ${guests.infants} Infants`}
-                    {guests.animals > 0 && `, ${guests.animals} Pets`}
+                    <h6 className="fw-bold mb-2">Guest Allocation:</h6>
+                    {guests.rooms.map((room, idx) => (
+                        <div key={idx} className="small text-muted mb-1">
+                            <b>Room {idx + 1}:</b> {room.adults} Adult{room.adults > 1 ? 's' : ''}
+                            {room.children > 0 && `, ${room.children} Child${room.children > 1 ? 'ren' : ''}`}
+                            {room.infants > 0 && `, ${room.infants} Infant${room.infants > 1 ? 's' : ''}`}
+                        </div>
+                    ))}
+                    {guests.animals > 0 && <div className="small text-muted mt-2 border-top pt-1"><b>Total Pets:</b> {guests.animals}</div>}
                 </div>
 
                 <form onSubmit={handleConfirm}>
@@ -169,20 +175,9 @@ const BookingNew = ({ currUser, showFlash }) => {
                                 <span>{priceInfo.nights}</span>
                             </div>
                             <div className="price-row d-flex justify-content-between mb-2">
-                                <span>₹{listing.price.toLocaleString('en-IN')} × {priceInfo.nights} nights</span>
+                                <span>₹{listing.price.toLocaleString('en-IN')} × {guests.numRooms} room{guests.numRooms > 1 ? 's' : ''} × {priceInfo.nights} night{priceInfo.nights > 1 ? 's' : ''}</span>
                                 <span>₹{priceInfo.baseTotal.toLocaleString('en-IN')}</span>
                             </div>
-                            {priceInfo.extraGuestCost > 0 && (
-                                <div className="price-row d-flex justify-content-between mb-2">
-                                    <div className="d-flex flex-column">
-                                        <span>Extra guests charge</span>
-                                        <small className="text-muted" style={{ fontSize: '0.75rem' }}>
-                                            ₹{(listing.extraGuestChargePerNight || 500).toLocaleString('en-IN')} × {Math.max(0, (guests.adults + guests.children) - (listing.freeGuests || 3))} guests × {priceInfo.nights} nights
-                                        </small>
-                                    </div>
-                                    <span>₹{priceInfo.extraGuestCost.toLocaleString('en-IN')}</span>
-                                </div>
-                            )}
                             {priceInfo.petCost > 0 && (
                                 <div className="price-row d-flex justify-content-between mb-2">
                                     <div className="d-flex flex-column">
@@ -209,7 +204,7 @@ const BookingNew = ({ currUser, showFlash }) => {
                                 <span className="text-primary-custom">₹{priceInfo.total.toLocaleString('en-IN')}</span>
                             </div>
                             <p className="text-muted small mt-2">
-                                ℹ First {listing.freeGuests || 3} guests stay free. Extra guests and pets incur additional charges.
+                                ℹ Base price is per room. Max {listing.guestsPerRoom} guests allowed per room.
                             </p>
                         </div>
                     )}
@@ -256,8 +251,8 @@ const BookingNew = ({ currUser, showFlash }) => {
                             <p>Your booking is confirmed only after successful payment and host approval.</p>
                             <h5>2. Token Amount Policy</h5>
                             <p>A token amount may be charged to reserve the property. This amount is adjusted in the final bill.</p>
-                            <h5>3. Guest Count Policy</h5>
-                            <p>The first {listing.freeGuests || 3} guests stay free. Additional guests and pets may incur extra charges.</p>
+                            <h5>3. Guest & Room Policy</h5>
+                            <p>Base price is per room. The max number of guests allowed per room is {listing.guestsPerRoom || 2}.</p>
                             <h5>4. Pets & Animals</h5>
                             <p>Pets are allowed only if declared during booking and may incur a cleaning or service fee.</p>
                             <h5>5. Cancellation Policy</h5>

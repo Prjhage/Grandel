@@ -74,21 +74,34 @@ const Home = ({ currUser }) => {
 
     return (
         <div className="home-page page-fade">
-            {/* Hero Section */}
+            {/* Hero Section - Desktop Only */}
             <section className="hero-section">
                 <div className="hero-content">
-                    <h1>Welcome to Grandel</h1>
-                    <p>Discover unique places to stay and create unforgettable travel experiences</p>
-                    <div className="hero-buttons">
-                        <Link to="/listings" className="btn-primary-custom">Explore Listings</Link>
-                        {!currUser ? (
-                            <Link to="/signup" className="btn-secondary-custom">Become a Host</Link>
-                        ) : (
-                            <Link to="/listings/new" className="btn-secondary-custom">Create Listing</Link>
-                        )}
+                    <div className="hero-text-center">
+                        <h1>
+                            Welcome to <span>Grandel</span>
+                        </h1>
+                        <p>Discover unique places to stay and create unforgettable travel experiences around the world</p>
+                        <div className="hero-buttons">
+                            <Link to="/listings" className="btn-primary-custom">Explore Listings</Link>
+                            {!currUser ? (
+                                <Link to="/signup" className="btn-secondary-custom">Become a Host</Link>
+                            ) : (
+                                <Link to="/listings/new" className="btn-secondary-custom">Create Listing</Link>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Decorative Elements */}
+                    <div className="hero-decoration">
+                        <div className="decoration-orb orb-1"></div>
+                        <div className="decoration-orb orb-2"></div>
+                        <div className="decoration-orb orb-3"></div>
                     </div>
                 </div>
             </section>
+
+            {/* Mobile Hero Section */}
             <section className="mobile-hero-section">
                 <div className="house-wrapper">
 

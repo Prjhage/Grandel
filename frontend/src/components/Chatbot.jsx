@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from '../config/axios';
 import './Chatbot.css';
 
 const Chatbot = ({ currUser }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+
     const [messages, setMessages] = useState([
         {
             sender: 'bot',
@@ -115,7 +119,10 @@ const Chatbot = ({ currUser }) => {
 
             {/* Toggle Button */}
             {!isOpen && (
-                <button className="chatbot-toggle" onClick={toggleChatbot}>
+                <button
+                    className={`chatbot-toggle ${isHomePage ? 'home-theme' : ''}`}
+                    onClick={toggleChatbot}
+                >
                     <span className="chatbot-toggle-icon">💬</span>
                 </button>
             )}

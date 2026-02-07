@@ -194,7 +194,7 @@ const HostDashboard = ({ currUser, showFlash }) => {
     }
 
     return (
-        <div className="host-dashboard">
+        <div className="container host-dashboard">
             <h3>🏠 Host Dashboard</h3>
 
             <ul className="nav dashboard-tabs">

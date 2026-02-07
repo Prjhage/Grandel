@@ -32,6 +32,12 @@ const bookingSchema = new Schema(
       min: 1,
     },
 
+    numRooms: {
+      type: Number,
+      default: 1,
+      min: 1,
+    },
+
     // 👥 Guests (NEW – includes animals)
     guests: {
       adults: {

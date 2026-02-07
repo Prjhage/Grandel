@@ -16,25 +16,6 @@ const amenitiesList = [
     'Lift'
 ];
 
-const categories = [
-    { value: 'trending', label: '🔥 Trending' },
-    { value: 'rooms', label: '🛏 Rooms' },
-    { value: 'iconic', label: '🏙 Iconic Cities' },
-    { value: 'mountain', label: '🏔 Mountain' },
-    { value: 'castles', label: '🏰 Castles' },
-    { value: 'pools', label: '🏊 Amazing Pools' },
-    { value: 'camping', label: '🏕 Camping' },
-    { value: 'farms', label: '🚜 Farms' },
-    { value: 'arctic', label: '❄ Arctic' },
-    { value: 'domes', label: '🧊 Domes' },
-    { value: 'boats', label: '🚤 Boats' },
-    { value: 'forest', label: '🌲 Forest' },
-    { value: 'lakefront', label: '🌊 Lakefront' },
-    { value: 'beach', label: '🏖 Beach' },
-    { value: 'urban', label: '🏙 Urban' },
-    { value: 'countryside', label: '🏡 Countryside' }
-];
-
 const compressImage = (file) => {
     return new Promise((resolve) => {
         if (!file || !file.type.startsWith('image/')) {
@@ -78,17 +59,13 @@ const NewListing = ({ currUser, showFlash }) => {
         title: '',
         description: '',
         price: '',
-        category: '',
         country: '',
         location: '',
         amenities: [],
-        maxGuests: 5,
-        maxAdults: 5,
-        maxChildren: 5,
-        freeGuests: 3,
         petsAllowed: false,
         petChargePerNight: 300,
-        extraGuestChargePerNight: 500,
+        numRooms: 1,
+        guestsPerRoom: 2,
         acceptHostTerms: false
     });
     const [validated, setValidated] = useState(false);
@@ -137,16 +114,12 @@ const NewListing = ({ currUser, showFlash }) => {
         data.append('listing[title]', formData.title);
         data.append('listing[description]', formData.description);
         data.append('listing[price]', formData.price);
-        data.append('listing[category]', formData.category);
         data.append('listing[country]', formData.country);
         data.append('listing[location]', formData.location);
-        data.append('listing[maxGuests]', formData.maxGuests);
-        data.append('listing[maxAdults]', formData.maxAdults);
-        data.append('listing[maxChildren]', formData.maxChildren);
-        data.append('listing[freeGuests]', formData.freeGuests);
         data.append('listing[petsAllowed]', formData.petsAllowed);
         data.append('listing[petChargePerNight]', formData.petChargePerNight);
-        data.append('listing[extraGuestChargePerNight]', formData.extraGuestChargePerNight);
+        data.append('listing[numRooms]', formData.numRooms);
+        data.append('listing[guestsPerRoom]', formData.guestsPerRoom);
         data.append('listing[acceptHostTerms]', formData.acceptHostTerms);
 
         formData.amenities.forEach(amenity => {
@@ -182,7 +155,7 @@ const NewListing = ({ currUser, showFlash }) => {
     };
 
     return (
-        <div className="listing-overlay"  >
+        <div className="container listing-overlay">
             <div className="listing-g-card">
                 <div className="listing-header">
                     <i className="fa-solid fa-house listing-icon"></i>
@@ -262,9 +235,9 @@ const NewListing = ({ currUser, showFlash }) => {
                         </div>
                     </div>
 
-                    {/* Price & Category */}
+                    {/* Price */}
                     <div className="lf-row">
-                        <div className="lf-group half">
+                        <div className="lf-group">
                             <label>Price per night</label>
                             <input
                                 type="number"
@@ -276,17 +249,6 @@ const NewListing = ({ currUser, showFlash }) => {
                                 onChange={handleChange}
                             />
                             <div className="invalid-feedback">Price should be at least 1.</div>
-                        </div>
-
-                        <div className="lf-group half">
-                            <label>Category</label>
-                            <select name="category" required value={formData.category} onChange={handleChange}>
-                                <option value="" disabled>Select category</option>
-                                {categories.map(cat => (
-                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
-                                ))}
-                            </select>
-                            <div className="invalid-feedback">Please select a category.</div>
                         </div>
                     </div>
 
@@ -318,70 +280,37 @@ const NewListing = ({ currUser, showFlash }) => {
                         <div className="invalid-feedback">Location is required.</div>
                     </div>
 
-                    {/* Guest & Pet Settings */}
+                    {/* Room & Pet Settings */}
                     <div className="lf-group">
-                        <h4>Guest & Pet Settings</h4>
-                        <p className="text-muted">Configure guest limits and pet policies for your listing</p>
+                        <h4>Room & Pet Settings</h4>
+                        <p className="text-muted">Configure room count and pet policies for your listing</p>
 
                         <div className="lf-row">
                             <div className="lf-group half">
-                                <label>Maximum Total Guests</label>
+                                <label>Number of Rooms</label>
                                 <input
                                     type="number"
-                                    name="maxGuests"
+                                    name="numRooms"
                                     min="1"
-                                    max="20"
                                     required
-                                    value={formData.maxGuests}
+                                    value={formData.numRooms}
                                     onChange={handleChange}
                                 />
-                                <div className="invalid-feedback">Min 1, max 20.</div>
-                                <small className="text-muted">Total guests allowed (adults + children)</small>
+                                <div className="invalid-feedback">Min 1.</div>
                             </div>
 
                             <div className="lf-group half">
-                                <label>Maximum Adults</label>
+                                <label>Max Guests per Room</label>
                                 <input
                                     type="number"
-                                    name="maxAdults"
+                                    name="guestsPerRoom"
                                     min="1"
-                                    max="20"
                                     required
-                                    value={formData.maxAdults}
+                                    value={formData.guestsPerRoom}
                                     onChange={handleChange}
                                 />
-                                <div className="invalid-feedback">Min 1, max 20.</div>
-                            </div>
-                        </div>
-
-                        <div className="lf-row">
-                            <div className="lf-group half">
-                                <label>Maximum Children</label>
-                                <input
-                                    type="number"
-                                    name="maxChildren"
-                                    min="0"
-                                    max="20"
-                                    required
-                                    value={formData.maxChildren}
-                                    onChange={handleChange}
-                                />
-                                <div className="invalid-feedback">Max 20.</div>
-                            </div>
-
-                            <div className="lf-group half">
-                                <label>Free Guests</label>
-                                <input
-                                    type="number"
-                                    name="freeGuests"
-                                    min="0"
-                                    max="20"
-                                    required
-                                    value={formData.freeGuests}
-                                    onChange={handleChange}
-                                />
-                                <div className="invalid-feedback">Max 20.</div>
-                                <small className="text-muted">Number of guests included in base price</small>
+                                <div className="invalid-feedback">Min 1.</div>
+                                <small className="text-muted">Max people allowed in one room</small>
                             </div>
                         </div>
 
@@ -411,20 +340,6 @@ const NewListing = ({ currUser, showFlash }) => {
                                 />
                                 <div className="invalid-feedback">Should be at least 0.</div>
                             </div>
-                        </div>
-
-                        <div className="lf-group">
-                            <label>Extra Guest Charge per Night (₹)</label>
-                            <input
-                                type="number"
-                                name="extraGuestChargePerNight"
-                                min="0"
-                                required
-                                value={formData.extraGuestChargePerNight}
-                                onChange={handleChange}
-                            />
-                            <div className="invalid-feedback">Should be at least 0.</div>
-                            <small className="text-muted">Charge for each additional guest beyond free guests</small>
                         </div>
                     </div>
 

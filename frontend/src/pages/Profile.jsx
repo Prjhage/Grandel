@@ -142,7 +142,7 @@ const Profile = ({ currUser, showFlash }) => {
     };
 
     return (
-        <div className="profile-container">
+        <div className="container profile-container">
             {/* User Header */}
             <div className="profile-header">
                 <div className="avatar-upload" onClick={() => document.getElementById('avatar-input').click()}>

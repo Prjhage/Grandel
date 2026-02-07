@@ -1,28 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from '../config/axios';
+import AdvancedSearchBar from './AdvancedSearchBar';
 import './Navbar.css';
 
 const Navbar = ({ currUser, onLogout }) => {
-    const [isSearchActive, setIsSearchActive] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const searchContainerRef = useRef(null);
-    const searchInputRef = useRef(null);
     const navbarCollapseRef = useRef(null);
     const navigate = useNavigate();
     const location = useLocation();
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
-                setIsSearchActive(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
 
     const handleNavClose = () => {
         if (navbarCollapseRef.current && navbarCollapseRef.current.classList.contains('show')) {
@@ -36,22 +22,8 @@ const Navbar = ({ currUser, onLogout }) => {
         handleNavClose();
     }, [location]);
 
-    const handleSearchToggle = (e) => {
-        e.stopPropagation();
-        setIsSearchActive(true);
-        setTimeout(() => {
-            if (searchInputRef.current) {
-                searchInputRef.current.focus();
-            }
-        }, 100);
-    };
-
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const query = formData.get('q');
-        navigate(`/listings?q=${query}`);
-        handleNavClose();
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
     };
 
     const handleLogoutAndClose = () => {
@@ -60,7 +32,7 @@ const Navbar = ({ currUser, onLogout }) => {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top" style={{ height: '70px' }}>
+        <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top" style={{ height: '85px' }}>
             <div className="container-fluid" style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
                 {/* LOGO */}
                 <Link className="navbar-brand fw-bold" to="/" onClick={handleNavClose}>
@@ -71,32 +43,9 @@ const Navbar = ({ currUser, onLogout }) => {
                     <i className="fa-solid fa-house navbar-brand-icon"></i>
                 </Link>
 
-                {/* SEARCH (MOVED) */}
-                <div className={`search-wrapper mobile-center-search ${isMenuOpen ? 'menu-open' : ''}`}>
-                    <div className={`search-container ${isSearchActive ? 'active' : ''}`} id="searchContainer" ref={searchContainerRef}>
-                        <button
-                            className="btn-search-init"
-                            id="searchToggle"
-                            aria-label="Open Search"
-                            onClick={handleSearchToggle}
-                        >
-                            <i className="fa-solid fa-magnifying-glass"></i>
-                        </button>
-
-                        <form className="search-form" role="search" id="searchForm" onSubmit={handleSearchSubmit}>
-                            <div className="search-input-group">
-                                <i className="fa-solid fa-magnifying-glass search-inner-icon"></i>
-                                <input
-                                    className="form-control search-input"
-                                    type="search"
-                                    name="q"
-                                    placeholder="Where are you going?"
-                                    ref={searchInputRef}
-                                />
-                                <button className="btn-search-submit" type="submit">Search</button>
-                            </div>
-                        </form>
-                    </div>
+                {/* Global Advanced Search Bar */}
+                <div className={`navbar-search-section ${location.pathname === '/' ? 'home-search' : ''}`}>
+                    <AdvancedSearchBar />
                 </div>
 
                 <div className="d-flex align-items-center ms-auto d-lg-none">

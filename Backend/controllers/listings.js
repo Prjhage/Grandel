@@ -7,14 +7,33 @@ const { getNearbyPlaces } = require("../services/nearbyPlacesService");
 const amenityIcons = require("../utils/amenities.js");
 
 module.exports.index = async (req, res) => {
-  const { q, category, sort } = req.query;
+  let { q, sort, startDate, endDate, rooms, guests, lat, lng, category } = req.query;
   const query = {};
 
+  // 1. Category Filtering
   if (category) {
-    query.category = { $regex: new RegExp(`^${category}$`, "i") };
+    query.category = category;
   }
 
-  if (q) {
+  // 2. Geospatial Search (Nearby)
+  // If q is provided and is NOT "Current Location", the user likely typed a new destination.
+  // In that case, we should ignore lat/lng coordinates.
+  const isGeolocationSearch = q === 'Current Location' || (!q && lat && lng);
+
+  if (isGeolocationSearch && lat && lng) {
+    query.geometry = {
+      $near: {
+        $geometry: {
+          type: "Point",
+          coordinates: [parseFloat(lng), parseFloat(lat)],
+        },
+        $maxDistance: 50000, // 50km radius
+      },
+    };
+  }
+
+  // 3. Text Search (title, location, country)
+  if (q && q !== 'Current Location') {
     query.$or = [
       { title: { $regex: q, $options: "i" } },
       { location: { $regex: q, $options: "i" } },
@@ -22,7 +41,63 @@ module.exports.index = async (req, res) => {
     ];
   }
 
+  // 3. Capacity Filtering (Rooms & Total Guests)
+  const reqRooms = parseInt(rooms) || 0;
+  const reqGuests = parseInt(guests) || 0;
+
+  if (reqRooms > 1) { // Default is 1, so only filter if user specifically wants more
+    query.numRooms = { $gte: reqRooms };
+  }
+
+  if (reqGuests > 1) { // Default is 1
+    query.$expr = {
+      $gte: [
+        {
+          $multiply: [
+            { $ifNull: ["$numRooms", 1] },
+            { $ifNull: ["$guestsPerRoom", 2] }
+          ]
+        },
+        reqGuests
+      ]
+    };
+  }
+
   let allListings = await Listing.find(query);
+
+  // 3. Date Availability & Strict Capacity Filtering
+  if ((startDate && endDate) || reqRooms > 0 || reqGuests > 0) {
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
+
+    // Fetch relevant bookings for these dates
+    let overlappingBookings = [];
+    if (start && end) {
+      overlappingBookings = await Booking.find({
+        status: { $in: ["confirmed", "pending"] },
+        $or: [
+          { startDate: { $lt: end }, endDate: { $gt: start } }
+        ]
+      });
+    }
+
+    allListings = allListings.filter(listing => {
+      // Precise guest capacity check: reqGuests must be <= listing.numRooms * listing.guestsPerRoom
+      if (reqGuests > listing.numRooms * listing.guestsPerRoom) return false;
+
+      // Date check
+      if (start && end) {
+        const listingBookings = overlappingBookings.filter(b => b.listing.toString() === listing._id.toString());
+        const bookedRoomsCount = listingBookings.reduce((sum, b) => sum + (b.numRooms || 1), 0);
+        const availableRooms = listing.numRooms - bookedRoomsCount;
+
+        // Must have at least the requested rooms available
+        const roomsToChecks = reqRooms > 0 ? reqRooms : 1;
+        if (availableRooms < roomsToChecks) return false;
+      }
+      return true;
+    });
+  }
 
   // Sort listings based on sort parameter
   if (sort === "price-low") {
@@ -180,15 +255,11 @@ module.exports.createListings = async (req, res) => {
       // Don't fail the whole request, just proceed without geometry or with fallback
     }
 
-    /* ---------------- AMENITIES ---------------- */
-    // Ensure amenities always stored as array
-    if (typeof req.body.listing.amenities === 'string') {
-      newListing.amenities = [req.body.listing.amenities];
-    } else if (Array.isArray(req.body.listing.amenities)) {
-      newListing.amenities = req.body.listing.amenities;
-    } else {
-      newListing.amenities = [];
-    }
+    newListing.amenities = req.body.listing.amenities || [];
+
+    // Room and Guest Configuration
+    newListing.numRooms = req.body.listing.numRooms || 1;
+    newListing.guestsPerRoom = req.body.listing.guestsPerRoom || 2;
 
     // Boolean conversions (if not already handled)
     newListing.petsAllowed = String(req.body.listing.petsAllowed) === "true";
@@ -332,19 +403,14 @@ module.exports.updateListings = async (req, res) => {
   listing.title = req.body.listing.title;
   listing.description = req.body.listing.description;
   listing.price = req.body.listing.price;
-  listing.category = req.body.listing.category;
   listing.country = req.body.listing.country;
   listing.location = req.body.listing.location;
 
   /* ================= GUEST AND PET SETTINGS UPDATE ================= */
-  listing.maxGuests = req.body.listing.maxGuests || 5;
-  listing.maxAdults = req.body.listing.maxAdults || 5;
-  listing.maxChildren = req.body.listing.maxChildren || 5;
   listing.petsAllowed = String(req.body.listing.petsAllowed) === "true";
   listing.petChargePerNight = req.body.listing.petChargePerNight || 300;
-  listing.extraGuestChargePerNight =
-    req.body.listing.extraGuestChargePerNight || 500;
-  listing.freeGuests = req.body.listing.freeGuests || 3;
+  listing.numRooms = req.body.listing.numRooms || 1;
+  listing.guestsPerRoom = req.body.listing.guestsPerRoom || 2;
 
   /* ================= AMENITIES UPDATE ================= */
   // If no amenities selected → empty array
@@ -400,12 +466,7 @@ module.exports.getListingsData = async (req, res) => {
   res.json(allListings);
 };
 
+
 module.exports.filterData = async (req, res) => {
-  const { category } = req.query;
-  if (category) {
-    const listings = await Listing.find({ category });
-    res.json(listings);
-  } else {
-    res.json([]);
-  }
+  return module.exports.index(req, res);
 };

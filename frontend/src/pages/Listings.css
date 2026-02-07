@@ -1,6 +1,7 @@
 /* Wrapper */
-
-.listings-page {}
+.listings-page {
+    padding-bottom: 2rem;
+}
 
 .filters-wrapper {
     display: flex;
@@ -133,13 +134,8 @@
     transform: translateY(-1px);
 }
 
-.sort-dropdown select:focus {
-    outline: none;
-    border-color: #222;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
-}
+/* Room & Guest Dropdown (Now handled in AdvancedSearchBar) */
 
-/* Tax icon */
 .tax-icon {
     margin-left: 2rem;
     cursor: pointer;
@@ -414,6 +410,65 @@
         justify-content: space-between;
         gap: 10px;
         padding: 10px 15px;
+    }
+
+    .search-bar-wrapper {
+        padding: 0 10px;
+    }
+
+    .advanced-search-bar {
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 15px;
+        align-items: stretch;
+    }
+
+    .search-divider {
+        display: none;
+    }
+
+    .search-section {
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .search-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .date-input-group {
+        justify-content: space-between;
+    }
+
+    .search-action-btn {
+        margin: 10px 0 0 0;
+        justify-content: center;
+        padding: 15px;
+    }
+
+    .calendar-dropdown {
+        min-width: 0;
+        width: 100vw;
+        left: 0;
+        transform: none;
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        border-radius: 20px 20px 0 0 !important;
+        overflow-y: auto;
+        max-height: 80vh;
+    }
+
+    .calendar-months-container {
+        flex-direction: column;
+    }
+
+    .month-divider {
+        display: none;
+    }
+
+    .guest-section {
+        max-width: none;
     }
 
     #filters {

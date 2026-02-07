@@ -1,4 +1,4 @@
-/* Hero Section */
+/* Hero Section - Modern Desktop Design */
 
 * {
     margin: 0px;
@@ -7,87 +7,192 @@
 }
 
 .hero-section {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     color: white;
-    padding: 150px 20px 100px;
-    align-items: center;
-    text-align: center;
+    padding: 0;
     position: relative;
     overflow: hidden;
     min-height: 90vh;
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-}
-
-.hero-section {
-    display: block;
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
 .mobile-hero-section {
     display: none;
 }
 
+/* Animated Background Shapes */
 .hero-section::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"></path></svg>'); */
-    background-size: cover;
-    opacity: 0.5;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -200px;
+    right: -200px;
+    animation: float 20s ease-in-out infinite;
+}
+
+.hero-section::after {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 107, 107, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    bottom: -100px;
+    left: -100px;
+    animation: float 15s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+        transform: translate(30px, -30px) rotate(120deg);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) rotate(240deg);
+    }
 }
 
 .hero-content {
     position: relative;
-    z-index: 1;
-    max-width: 800px;
+    z-index: 2;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    text-align: center;
+}
+
+.hero-text-center {
+    max-width: 900px;
     margin: 0 auto;
 }
 
 .hero-section h1 {
-    font-size: 4rem;
-    font-weight: 700;
+    font-size: 5.5rem;
+    font-weight: 800;
     margin-bottom: 1.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    letter-spacing: -1px;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     animation: slideDown 0.8s ease-out;
 }
 
+.hero-section h1 span {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 .hero-section p {
-    font-size: 1.5rem;
-    margin-bottom: 2.5rem;
-    opacity: 0.95;
+    font-size: 1.4rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    line-height: 1.6;
     animation: slideUp 0.8s ease-out 0.2s backwards;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-buttons {
     display: flex;
-    gap: 15px;
+    gap: 20px;
     justify-content: center;
     flex-wrap: wrap;
     animation: fadeIn 1s ease-out 0.5s backwards;
 }
 
+/* Decorative Orbs */
+.hero-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.decoration-orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    filter: blur(40px);
+}
+
+.decoration-orb.orb-1 {
+    width: 500px;
+    height: 500px;
+    top: 10%;
+    left: 5%;
+    animation: floatOrb 15s ease-in-out infinite;
+}
+
+.decoration-orb.orb-2 {
+    width: 400px;
+    height: 400px;
+    bottom: 15%;
+    right: 10%;
+    animation: floatOrb 12s ease-in-out infinite reverse;
+    background: radial-gradient(circle, rgba(255, 182, 193, 0.15) 0%, transparent 70%);
+}
+
+.decoration-orb.orb-3 {
+    width: 350px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: floatOrb 18s ease-in-out infinite;
+    background: radial-gradient(circle, rgba(173, 216, 230, 0.15) 0%, transparent 70%);
+}
+
+@keyframes floatOrb {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(40px, -40px);
+    }
+}
+
 .btn-primary-custom {
-    background: #f64f4f !important;
+    background: #ff6b6b !important;
     color: white;
-    padding: 15px 40px;
+    padding: 18px 45px;
     border: none;
     border-radius: 50px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
     transition: all 0.3s ease;
     display: inline-block;
-    box-shadow: 0 4px 15px rgba(97, 0, 241, 0.2);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
 }
 
 .btn-primary-custom:hover {
-    background: linear-gradient(135deg, #ff385c, #005af5);
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 25px rgba(204, 56, 56, 0.25);
+    background: linear-gradient(135deg, #ff5252, #ff6b6b) !important;
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
     color: white;
 }
 
@@ -97,12 +202,13 @@
 }
 
 .btn-secondary-custom {
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
     color: white;
-    padding: 15px 40px;
-    border: 2px solid white;
+    padding: 18px 45px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
     border-radius: 50px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
@@ -111,9 +217,10 @@
 }
 
 .btn-secondary-custom:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
     color: white;
-    transform: translateY(-3px);
+    transform: translateY(-4px);
 }
 
 /* Features Section */
@@ -121,9 +228,11 @@
 .features-section {
     padding: 100px 20px;
     background-color: #f3f4f6;
+    width: 100%;
 }
 
 .features-container {
+
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -209,6 +318,7 @@
     padding: 100px 20px;
     background-color: #fff5f7;
     color: #333;
+    width: 100%;
 }
 
 .how-it-works-container {
@@ -276,6 +386,7 @@
     padding: 100px 20px;
     background: #f0f4f8;
     color: #333;
+    width: 100%;
 }
 
 .video-container {
@@ -353,6 +464,7 @@
     color: white;
     padding: 60px 20px;
     border-bottom: none;
+    width: 100%;
 }
 
 .stats-container {
@@ -385,6 +497,7 @@
     padding: 100px 20px;
     background-color: #fff;
     border-top: 1px solid #f0f0f0;
+    width: 100%;
 }
 
 .faq-container {
@@ -462,6 +575,7 @@
     color: white;
     padding: 100px 20px;
     text-align: center;
+    width: 100%;
 }
 
 .cta-section h2 {
@@ -491,9 +605,7 @@
     .mobile-hero-section {
         background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
         min-height: 85vh;
-        width: 100vw;
-        margin-left: calc(50% - 50vw);
-        margin-right: calc(50% - 50vw);
+        width: 100%;
         margin-top: 0;
         display: flex;
         justify-content: center;
@@ -732,21 +844,20 @@
     }
 
     .cta-section {
-        width: 100vw;
-        margin-left: calc(50% - 50vw);
-        margin-right: calc(50% - 50vw);
+        width: 100%;
     }
 
     .video-iframe {
         height: 200px;
     }
 
+    /* Mobile Hero - Revert to Simple Layout */
     .hero-section {
-        clip-path: none;
-        padding-bottom: 60px;
-        width: 100vw;
-        margin-left: calc(50% - 50vw);
-        margin-right: calc(50% - 50vw);
+        display: none !important;
+    }
+
+    .mobile-hero-section {
+        display: block !important;
     }
 
     body {
@@ -818,6 +929,7 @@
 .featured-listings-section {
     padding: 100px 20px;
     background-color: #ffffff;
+    width: 100%;
 }
 
 .featured-listings-container {
@@ -1010,15 +1122,14 @@
     .stats-section,
     .faq-section,
     .featured-listings-section {
-        width: 100vw;
-        margin-left: calc(50% - 50vw);
-        margin-right: calc(50% - 50vw);
+        width: 100%;
         padding-top: 40px;
         padding-bottom: 40px;
     }
 
     .home-page {
         padding-bottom: 0 !important;
+        overflow-x: hidden;
     }
 
     body:has(.home-page) .chatbot-toggle {

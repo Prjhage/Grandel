@@ -8,6 +8,10 @@ const listingSchema = new Schema({
     required: true,
   },
   description: String,
+  category: {
+    type: String,
+    enum: ["beach", "urban", "mountain", "castles", "pools", "forest", "camping", "arctic", "lakefront", "domes", "iconic", "rooms", "trending", "countryside"],
+  },
   image: {
     url: String,
     filename: String,
@@ -25,28 +29,6 @@ const listingSchema = new Schema({
   price: Number,
   location: String,
   country: String,
-  category: {
-    type: String,
-    enum: [
-      "trending",
-      "rooms",
-      "iconic",
-      "mountain",
-      "castles",
-      "pools",
-      "camping",
-      "farms",
-      "arctic",
-      "domes",
-      "boats",
-      "forest",
-      "lakefront",
-      "beach",
-      "urban",
-      "countryside",
-    ],
-    index: true,
-  },
   reviews: [
     {
       type: Schema.Types.ObjectId,
@@ -70,25 +52,18 @@ const listingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  // Room and Guest Configuration
+  numRooms: {
+    type: Number,
+    default: 1,
+    min: 1,
+  },
+  guestsPerRoom: {
+    type: Number,
+    default: 2,
+    min: 1,
+  },
   // Guest and Pet Settings (Host-controlled)
-  maxGuests: {
-    type: Number,
-    default: 5,
-    min: 1,
-    max: 20,
-  },
-  maxAdults: {
-    type: Number,
-    default: 5,
-    min: 1,
-    max: 20,
-  },
-  maxChildren: {
-    type: Number,
-    default: 5,
-    min: 0,
-    max: 20,
-  },
   petsAllowed: {
     type: Boolean,
     default: false,
@@ -96,16 +71,6 @@ const listingSchema = new Schema({
   petChargePerNight: {
     type: Number,
     default: 300,
-    min: 0,
-  },
-  extraGuestChargePerNight: {
-    type: Number,
-    default: 500,
-    min: 0,
-  },
-  freeGuests: {
-    type: Number,
-    default: 3,
     min: 0,
   },
   geometry: {
@@ -140,6 +105,8 @@ listingSchema.post("findOneAndDelete", async function (listing) {
     await Booking.deleteMany({ listing: listing._id });
   }
 });
+listingSchema.index({ geometry: "2dsphere" });
+
 const Listing = mongoose.model("Listing", listingSchema);
 
 module.exports = Listing;

@@ -85,7 +85,7 @@ const Signup = ({ onLogin, showFlash }) => {
     };
 
     return (
-        <div className="login-overlay">
+        <div className="container login-overlay">
             <div className="login-card">
                 <div className="login-header">
                     <i className="fa-solid fa-house fa-bounce" style={{ color: '#005af5', fontSize: '3rem' }}></i>
