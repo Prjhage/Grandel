@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import axios from '../config/axios';
 import SkeletonCard from '../components/SkeletonCard';
+import { useListingCache } from '../components/ListingCacheContext';
 import './Listings.css';
 
 const categories = [
@@ -30,6 +31,9 @@ const Listings = ({ currUser }) => {
     const [showTax, setShowTax] = useState(false);
     const [userWishlist, setUserWishlist] = useState([]);
 
+    // Use the cache context
+    const { getCachedData, setCachedData } = useListingCache();
+
     const category = searchParams.get('category') || '';
     const sort = searchParams.get('sort') || '';
     const q = searchParams.get('q') || '';
@@ -40,6 +44,21 @@ const Listings = ({ currUser }) => {
 
     const fetchListings = async () => {
         try {
+            // Current filters
+            const currentFilters = { category, sort, q };
+
+            // Check cache first
+            const cachedData = getCachedData(currentFilters);
+
+            if (cachedData) {
+                // Use cached data - no loading state needed
+                setListings(cachedData.listings);
+                setUserWishlist(cachedData.userWishlist);
+                setLoading(false);
+                return;
+            }
+
+            // No cache or filters don't match - fetch from API
             setLoading(true);
             const params = new URLSearchParams();
             if (category) params.append('category', category);
@@ -47,8 +66,15 @@ const Listings = ({ currUser }) => {
             if (q) params.append('q', q);
 
             const res = await axios.get(`/listings?${params.toString()}`);
-            setListings(res.data.allListings || []);
-            setUserWishlist(res.data.userWishlist || []);
+            const fetchedListings = res.data.allListings || [];
+            const fetchedWishlist = res.data.userWishlist || [];
+
+            setListings(fetchedListings);
+            setUserWishlist(fetchedWishlist);
+
+            // Cache the results
+            setCachedData(fetchedListings, fetchedWishlist, currentFilters);
+
             setLoading(false);
         } catch (err) {
             console.error('Error fetching listings:', err);
