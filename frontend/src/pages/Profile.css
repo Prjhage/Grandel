@@ -348,6 +348,26 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .profile-container {
+        margin: 1rem auto;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .profile-header {
+        padding: 0 1rem;
+        gap: 0.8rem;
+    }
+
+    .profile-tabs {
+        padding: 0 1rem;
+        gap: 0.5rem;
+    }
+
+    .tab-panel {
+        padding: 0 1rem;
+    }
+
     .primary-actions {
         grid-template-columns: 1fr;
     }

@@ -109,9 +109,21 @@
     .listing-show-page.container {
         padding-left: 0 !important;
         padding-right: 0 !important;
-        padding-bottom: 0px !important;
-        /* Eliminated gap */
-        margin-top: 1rem !important;
+        padding-bottom: 80px !important;
+        /* Space for bottom bar */
+        margin-top: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .listing-main-card .card-body {
+        padding: 0 15px 15px 15px !important;
+    }
+
+    /* Titles and Header Info Padding */
+    .listing-show-page h2,
+    .listing-rating-summary {
+        padding: 0 15px;
     }
 
 
