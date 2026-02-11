@@ -148,7 +148,7 @@ const Signup = ({ onLogin, showFlash }) => {
                 {/* Left Side - Form Section */}
                 <div className="auth-form-section">
                     <div className="login-header">
-                        <i className="fa-solid fa-house" style={{ color: '#6C3CE0', fontSize: '2.5rem' }}></i>
+                        <i className="fa-solid fa-house" style={{ color: '#6C3CE0', fontSize: '2rem' }}></i>
                         <h2>Hello, Friend!</h2>
                     </div>
 
