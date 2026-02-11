@@ -28,6 +28,18 @@
     }
 }
 
+@keyframes slideInMobile {
+    from {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
 .chatbot-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -285,6 +297,7 @@
         border-radius: 12px;
         max-width: 380px;
         max-height: 500px;
+        animation: slideInMobile 0.3s ease-out;
     }
 
     .chatbot-title h4 {
@@ -331,5 +344,6 @@
         transform: translateX(-50%);
         max-width: 100%;
         max-height: 450px;
+        animation: slideInMobile 0.3s ease-out;
     }
 }
