@@ -216,31 +216,8 @@ const AdvancedSearchBar = () => {
             {/* Desktop Search Bar */}
             <div className="advanced-search-bar desktop-only">
                 <div className="search-section location-section">
-                    <label>Location</label>
-                    <div className="position-relative d-flex align-items-center">
-                        <div className="search-input-container">
-                            <input
-                                type="text"
-                                value={filters.q}
-                                onChange={(e) => handleFilterChange('q', e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && executeSearch()}
-                                onFocus={() => setIsInputFocused(true)}
-                                onBlur={() => setIsInputFocused(false)}
-                                autoComplete="off"
-                            />
-                            {!filters.q && !isInputFocused && (
-                                <div className="animated-placeholder-container">
-                                    {placeholders.map((text, idx) => (
-                                        <div
-                                            key={idx}
-                                            className={`placeholder-text ${idx === placeholderIndex ? 'active' : ''} ${idx === (placeholderIndex === 0 ? placeholders.length - 1 : placeholderIndex - 1) ? 'exit' : ''}`}
-                                        >
-                                            {text}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                    <div className="d-flex justify-content-between align-items-center mb-0">
+                        <label className="mb-0">Location</label>
                         <button
                             className="btn-near-me"
                             title="Use current location"
@@ -272,6 +249,31 @@ const AdvancedSearchBar = () => {
                             <i className="fa-solid fa-location-crosshairs me-1"></i>
                             <span>Near me</span>
                         </button>
+                    </div>
+                    <div className="position-relative d-flex align-items-center">
+                        <div className="search-input-container">
+                            <input
+                                type="text"
+                                value={filters.q}
+                                onChange={(e) => handleFilterChange('q', e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && executeSearch()}
+                                onFocus={() => setIsInputFocused(true)}
+                                onBlur={() => setIsInputFocused(false)}
+                                autoComplete="off"
+                            />
+                            {!filters.q && !isInputFocused && (
+                                <div className="animated-placeholder-container">
+                                    {placeholders.map((text, idx) => (
+                                        <div
+                                            key={idx}
+                                            className={`placeholder-text ${idx === placeholderIndex ? 'active' : ''} ${idx === (placeholderIndex === 0 ? placeholders.length - 1 : placeholderIndex - 1) ? 'exit' : ''}`}
+                                        >
+                                            {text}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
