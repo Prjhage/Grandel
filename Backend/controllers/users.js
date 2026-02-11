@@ -33,6 +33,17 @@ module.exports.firebaseRegister = async (req, res, next) => {
             return res.status(400).json({ message: "Phone number is required." });
         }
 
+        // Security check: Match session verified phone with body phone
+        if (!req.session.verifiedPhone || req.session.verifiedPhone !== phone) {
+            return res.status(403).json({
+                message: "Mobile number verification required. Please verify with OTP before signing up."
+            });
+        }
+
+        // Clear verification proof after use
+        delete req.session.verifiedPhone;
+
+
 
         const phoneHash = await bcrypt.hash(phone, 10);
         const phoneLast4 = phone.slice(-4);

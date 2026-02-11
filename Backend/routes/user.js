@@ -112,7 +112,9 @@ router.post(
     }
 
     // Find booking and verify ownership
-    const booking = await Booking.findById(id).populate("listing");
+    // ✅ Populate 'user' to get guest email for notifications
+    const booking = await Booking.findById(id).populate("listing").populate("user");
+
     if (!booking) {
       return res.status(404).json({ success: false, message: "Booking not found" });
     }
@@ -125,6 +127,36 @@ router.post(
     // Update status
     booking.status = status;
     await booking.save();
+
+    // 📧 Trigger n8n Notifications based on status
+    try {
+      const n8nService = require("../services/n8nService");
+
+      if (status === 'confirmed') {
+        // Send Guest Confirmation
+        await n8nService.sendBookingConfirmation(booking.user.email, {
+          id: booking._id,
+          listingName: booking.listing.title,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          totalPrice: booking.totalPrice,
+          location: booking.listing.location,
+          guestName: booking.user.username
+        }, 'guest_confirmation');
+
+      } else if (status === 'completed') {
+        // Send Guest "Thank You"
+        await n8nService.sendBookingConfirmation(booking.user.email, {
+          id: booking._id,
+          listingName: booking.listing.title,
+          guestName: booking.user.username,
+          location: booking.listing.location // Added location for travel guide link
+        }, 'guest_thanks');
+      }
+
+    } catch (n8nError) {
+      console.error("n8n Notification Error (Status Update):", n8nError.message);
+    }
 
     res.json({ success: true, message: `Status updated to ${status}` });
   }),

@@ -28,10 +28,15 @@ router.get(
       animals: Number(req.query.animals) || 0,
     };
 
-    // ✅ Safety: max 5 paying guests
+    // ✅ Safety: Validate against listing capacity
+    const maxGuests = listing.numRooms * listing.guestsPerRoom;
     const payingGuests = guests.adults + guests.children;
-    if (payingGuests > 5) {
-      return res.status(400).json({ success: false, message: "Maximum 5 guests allowed" });
+
+    if (payingGuests > maxGuests) {
+      return res.status(400).json({
+        success: false,
+        message: `Maximum ${maxGuests} guests allowed for this property`
+      });
     }
 
     res.json({
@@ -47,7 +52,7 @@ router.post(
   "/listings/:id/book",
   isLoggedIn,
   wrapAsync(async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
+    const listing = await Listing.findById(req.params.id).populate("Owner");
     if (!listing) {
       return res.status(404).json({ success: false, message: "Listing not found" });
     }
@@ -84,9 +89,13 @@ router.post(
 
     // ✅ Only adults + children count as guests
     const totalGuests = adultCount + childCount;
+    const maxGuests = listing.numRooms * listing.guestsPerRoom;
 
-    if (totalGuests > 5) {
-      return res.status(400).json({ success: false, message: "Maximum 5 guests allowed (excluding infants)" });
+    if (totalGuests > maxGuests) {
+      return res.status(400).json({
+        success: false,
+        message: `Maximum ${maxGuests} guests allowed (excluding infants)`
+      });
     }
 
     /* ================= PRICING ================= */
@@ -210,7 +219,50 @@ router.post(
 
     await booking.save();
 
+    // Securely trigger n8n booking confirmation
+    try {
+      const n8nService = require("../services/n8nService");
+      const user = req.user;
+
+      // 1. Send Guest Confirmation
+      n8nService.sendBookingConfirmation(user.email, {
+        id: booking._id,
+        listingName: listing.title,
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+        totalPrice: booking.totalPrice,
+        location: listing.location,
+        guestName: user.username
+      }, 'guest_confirmation');
+
+      // 2. Send Host Notification
+      if (listing.Owner && listing.Owner.email) {
+        n8nService.sendBookingConfirmation(listing.Owner.email, {
+          id: booking._id,
+          listingName: listing.title,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          totalPrice: booking.totalPrice,
+          location: listing.location,
+          guestName: user.username,
+          guestEmail: user.email,
+          guestPhone: user.phone || 'N/A'
+        }, 'host_notification');
+      }
+
+      // 3. Send Guest "Thank You" (could be scheduled in n8n)
+      n8nService.sendBookingConfirmation(user.email, {
+        id: booking._id,
+        listingName: listing.title,
+        guestName: user.username
+      }, 'guest_thanks');
+
+    } catch (n8nError) {
+      console.error("n8n Notification Error:", n8nError.message);
+    }
+
     res.json({ success: true, message: "Booking confirmed", booking });
+
   })
 );
 
