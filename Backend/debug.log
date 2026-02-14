@@ -972,3 +972,15 @@ Proj: {}
 [LOG] 2026-02-14T06:56:45.543Z [2026-02-14T06:56:45.543Z] GET /listings from Origin: http://localhost:5173
 [LOG] 2026-02-14T06:58:56.348Z [2026-02-14T06:58:56.348Z] GET /api/featured from Origin: http://localhost:5173
 [LOG] 2026-02-14T06:58:56.829Z [2026-02-14T06:58:56.829Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:09:29.089Z [2026-02-14T07:09:29.088Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:09:29.119Z [2026-02-14T07:09:29.119Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:09:29.332Z [2026-02-14T07:09:29.332Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:09:29.378Z [2026-02-14T07:09:29.378Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:09:38.597Z [2026-02-14T07:09:38.597Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:09:38.898Z [2026-02-14T07:09:38.898Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:11:34.940Z [2026-02-14T07:11:34.940Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:11:35.110Z [2026-02-14T07:11:35.110Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:11:39.645Z [2026-02-14T07:11:39.645Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:11:39.916Z [2026-02-14T07:11:39.916Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:11:57.529Z [2026-02-14T07:11:57.529Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T07:11:57.875Z [2026-02-14T07:11:57.875Z] GET /profile from Origin: http://localhost:5173
