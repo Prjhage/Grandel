@@ -37,6 +37,7 @@ router.get("/wishlist", isLoggedIn, wrapAsync(userController.getWishlist));
 
 //profile
 router.get("/profile", isLoggedIn, wrapAsync(userController.profile));
+router.put("/profile", isLoggedIn, wrapAsync(userController.updateProfile));
 
 //profile photo upload
 const multer = require("multer");

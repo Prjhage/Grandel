@@ -247,6 +247,61 @@ module.exports.profile = async (req, res) => {
     }
 };
 
+module.exports.updateProfile = async (req, res) => {
+    try {
+        const { username, email, phone } = req.body;
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        // 1. Update Username
+        if (username) user.username = username;
+
+        // 2. Update Email
+        if (email && email !== user.email) {
+            const existing = await User.findOne({ email });
+            if (existing) {
+                return res.status(409).json({ success: false, message: "Email already in use" });
+            }
+            user.email = email;
+        }
+
+        // 3. Update Phone (Requires OTP Verification proof in session)
+        if (phone) {
+            // If phone is different, check verification
+            // Note: phone arriving here should be the clean +91 version from frontend
+            if (!req.session.verifiedPhone || req.session.verifiedPhone !== phone) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Mobile number verification required. Please verify with OTP."
+                });
+            }
+
+            user.phoneHash = await bcrypt.hash(phone, 10);
+            user.phoneLast4 = phone.slice(-4);
+
+            // Clear verification proof after use
+            delete req.session.verifiedPhone;
+        }
+
+        await user.save();
+
+        // Update session user
+        req.user = user;
+
+        res.json({
+            success: true,
+            message: "Profile updated successfully",
+            user: user
+        });
+    } catch (err) {
+        console.error("Profile update error:", err);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+};
+
 module.exports.updateProfilePhoto = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);

@@ -185,9 +185,33 @@ module.exports.showListings = async (req, res) => {
     travelCompanion ? "Available" : "Not available",
   );
 
+  // 🔹 3. Host Aggregate Ratings
+  let hostReviewsCount = 0;
+  let hostAvgRating = 0;
+
+  if (listing.Owner) {
+    const hostStats = await Listing.aggregate([
+      { $match: { Owner: listing.Owner._id } },
+      {
+        $group: {
+          _id: "$Owner",
+          totalReviews: { $sum: "$ratingCount" },
+          weightedSum: { $sum: { $multiply: ["$avgRating", "$ratingCount"] } },
+        },
+      },
+    ]);
+
+    if (hostStats.length > 0) {
+      hostReviewsCount = hostStats[0].totalReviews;
+      hostAvgRating = hostReviewsCount > 0 ? hostStats[0].weightedSum / hostReviewsCount : 0;
+    }
+  }
+
   res.json({
     listing,
     avgRating: listing.avgRating,
+    hostReviewsCount,
+    hostAvgRating,
     nearbyPlaces,
     travelCompanion,
     amenityIcons,

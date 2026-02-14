@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from '../config/axios';
 import SkeletonCard from '../components/SkeletonCard';
+import { useListingCache } from '../components/ListingCacheContext';
 import './Home.css';
 
 const Home = ({ currUser }) => {
@@ -35,14 +36,24 @@ const Home = ({ currUser }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const { getCachedData, setCachedData } = useListingCache();
+
     useEffect(() => {
         const fetchListings = async () => {
             try {
-                // Fetch from the dedicated API route
+                // Check cache first using a special 'featured' key
+                const cached = getCachedData({ q: '__featured__' });
+                if (cached) {
+                    setFeaturedListings(cached.listings);
+                    setLoading(false);
+                    return;
+                }
+
                 const res = await axios.get('/api/featured');
 
                 if (res.data && Array.isArray(res.data.featuredListings)) {
                     setFeaturedListings(res.data.featuredListings);
+                    setCachedData(res.data.featuredListings, [], { q: '__featured__' });
                 }
                 setLoading(false);
             } catch (err) {

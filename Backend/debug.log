@@ -648,3 +648,264 @@
 [LOG] 2026-02-11T17:21:46.692Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit[0m
 [LOG] 2026-02-11T17:21:46.779Z Server is running on http://localhost:8080
 [LOG] 2026-02-11T17:21:47.610Z Connected to DB
+[LOG] 2026-02-12T04:46:53.168Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`[0m
+[LOG] 2026-02-12T04:46:53.171Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-12T04:46:55.744Z Firebase Admin initialized successfully.
+[LOG] 2026-02-12T04:46:55.918Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-12T04:46:56.156Z Server is running on http://localhost:8080
+[LOG] 2026-02-12T04:46:56.525Z Connected to DB
+[LOG] 2026-02-12T04:47:35.171Z [2026-02-12T04:47:35.171Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:47:35.231Z [2026-02-12T04:47:35.231Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:47:35.436Z [2026-02-12T04:47:35.436Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:47:35.755Z [2026-02-12T04:47:35.755Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:07.752Z [2026-02-12T04:48:07.752Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:07.937Z [2026-02-12T04:48:07.937Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:20.521Z [2026-02-12T04:48:20.521Z] POST /login from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:20.523Z Login attempt started. Body: {"idToken":"MISSING","email":"Prajwal Hage","password":"***"}
+[LOG] 2026-02-12T04:48:20.523Z Email/Password login attempt for: Prajwal Hage
+[LOG] 2026-02-12T04:48:20.552Z User not found by email, checking username...
+[LOG] 2026-02-12T04:48:20.593Z User has no hash/salt (legacy/social?), logging in directly.
+[LOG] 2026-02-12T04:48:25.009Z [2026-02-12T04:48:25.009Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:25.167Z [2026-02-12T04:48:25.167Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:25.240Z [2026-02-12T04:48:25.240Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:25.294Z [2026-02-12T04:48:25.294Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:32.702Z [2026-02-12T04:48:32.702Z] GET /listings/697d0383dbcfd9f951d279b0 from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:32.778Z Nearby places sent to UI:
+[LOG] 2026-02-12T04:48:32.780Z Nearby places:
+[LOG] 2026-02-12T04:48:32.781Z TravelCompanion:
+[LOG] 2026-02-12T04:48:32.854Z [2026-02-12T04:48:32.854Z] GET /listings/697d0383dbcfd9f951d279b0 from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:32.909Z Nearby places sent to UI:
+[LOG] 2026-02-12T04:48:32.910Z Nearby places:
+[LOG] 2026-02-12T04:48:32.910Z TravelCompanion:
+[LOG] 2026-02-12T04:48:55.443Z [2026-02-12T04:48:55.443Z] GET /profile/host from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:48:55.602Z [2026-02-12T04:48:55.602Z] GET /profile/host from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:50:47.621Z [2026-02-12T04:50:47.621Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:50:47.635Z [2026-02-12T04:50:47.635Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:50:47.742Z [2026-02-12T04:50:47.742Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-12T04:50:47.823Z [2026-02-12T04:50:47.823Z] GET /api/featured from Origin: http://localhost:5173
+[ERR] 2026-02-12T09:39:10.337Z Global Error Handler caught:
+[ERR] 2026-02-12T09:39:10.409Z MongoServerSelectionError: getaddrinfo ENOTFOUND ac-6viiry7-shard-00-02.nndvty1.mongodb.net
+    at Topology.selectServer (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\topology.js:326:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:555:9)
+    at process.processTimers (node:internal/timers:529:7)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:145:18)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+    at async FindCursor.next (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:342:17)
+[LOG] 2026-02-12T09:39:32.235Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-12T09:39:32.237Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-12T09:39:34.853Z Firebase Admin initialized successfully.
+[LOG] 2026-02-12T09:39:34.980Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops[0m
+[LOG] 2026-02-12T09:39:35.257Z Server is running on http://localhost:8080
+[LOG] 2026-02-12T09:39:35.275Z DB Disconnected
+[LOG] 2026-02-14T04:51:49.876Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T04:51:49.879Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T04:51:53.424Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T04:51:53.558Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  enable debug logging with { debug: true }[0m
+[LOG] 2026-02-14T04:51:53.676Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T04:51:54.777Z Connected to DB
+[LOG] 2026-02-14T04:52:39.115Z [2026-02-14T04:52:39.115Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:52:39.902Z [2026-02-14T04:52:39.902Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:52:40.203Z [2026-02-14T04:52:40.203Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:52:40.465Z [2026-02-14T04:52:40.465Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:52:48.789Z [2026-02-14T04:52:48.789Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:52:49.944Z [2026-02-14T04:52:49.944Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:53:02.631Z [2026-02-14T04:53:02.631Z] GET /logout from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:53:20.572Z [2026-02-14T04:53:20.571Z] POST /login from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:53:20.579Z Login attempt started. Body: {"idToken":"MISSING","email":"Nandu","password":"***"}
+[LOG] 2026-02-14T04:53:20.580Z Email/Password login attempt for: Nandu
+[LOG] 2026-02-14T04:53:20.913Z User not found by email, checking username...
+[LOG] 2026-02-14T04:53:21.065Z User has no hash/salt (legacy/social?), logging in directly.
+[LOG] 2026-02-14T04:53:22.050Z [2026-02-14T04:53:22.050Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T04:53:22.465Z [2026-02-14T04:53:22.465Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:00:08.916Z [2026-02-14T05:00:08.916Z] POST /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:00:28.988Z [2026-02-14T05:00:28.988Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:00:30.201Z Overpass API Error:
+[LOG] 2026-02-14T05:00:30.204Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:00:30.207Z Nearby places:
+[LOG] 2026-02-14T05:00:30.210Z TravelCompanion:
+[LOG] 2026-02-14T05:00:30.359Z [2026-02-14T05:00:30.359Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:00:31.349Z Overpass API Error:
+[LOG] 2026-02-14T05:00:31.349Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:00:31.349Z Nearby places:
+[LOG] 2026-02-14T05:00:31.350Z TravelCompanion:
+[LOG] 2026-02-14T05:02:15.850Z [2026-02-14T05:02:15.850Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:02:15.997Z [2026-02-14T05:02:15.997Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:02:16.059Z [2026-02-14T05:02:16.059Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:02:16.276Z [2026-02-14T05:02:16.276Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:06:15.930Z [2026-02-14T05:06:15.930Z] POST /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:06:33.831Z [2026-02-14T05:06:33.831Z] GET /listings/699002cc2b6a49d32a5072ba from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:06:34.818Z Overpass API Error:
+[LOG] 2026-02-14T05:06:34.827Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:06:34.834Z Nearby places:
+[LOG] 2026-02-14T05:06:34.844Z TravelCompanion:
+[LOG] 2026-02-14T05:06:35.113Z [2026-02-14T05:06:35.112Z] GET /listings/699002cc2b6a49d32a5072ba from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:06:37.107Z Overpass API Error:
+[LOG] 2026-02-14T05:06:37.108Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:06:37.108Z Nearby places:
+[LOG] 2026-02-14T05:06:37.109Z TravelCompanion:
+[LOG] 2026-02-14T05:11:03.990Z [2026-02-14T05:11:03.990Z] POST /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:11:31.785Z [2026-02-14T05:11:31.785Z] GET /listings/699003ed2b6a49d32a5072ed from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:11:35.766Z Overpass API Error:
+[LOG] 2026-02-14T05:11:35.775Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:11:35.779Z Nearby places:
+[LOG] 2026-02-14T05:11:35.782Z TravelCompanion:
+[LOG] 2026-02-14T05:11:38.415Z [2026-02-14T05:11:38.415Z] GET /listings/699003ed2b6a49d32a5072ed from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:11:41.127Z Overpass API Error:
+[LOG] 2026-02-14T05:11:41.128Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:11:41.130Z Nearby places:
+[LOG] 2026-02-14T05:11:41.130Z TravelCompanion:
+[LOG] 2026-02-14T05:17:32.915Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  enable debug logging with { debug: true }[0m
+[LOG] 2026-02-14T05:17:32.917Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T05:17:35.093Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T05:17:35.149Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-14T05:17:35.576Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T05:17:36.516Z Connected to DB
+[LOG] 2026-02-14T05:17:48.686Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }[0m
+[LOG] 2026-02-14T05:17:48.693Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T05:17:50.282Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T05:17:50.333Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 📡 add observability to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T05:17:50.426Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T05:17:51.666Z Connected to DB
+[LOG] 2026-02-14T05:18:37.492Z [2026-02-14T05:18:37.492Z] GET /listings/699003ed2b6a49d32a5072ed from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:18:39.665Z Overpass API Error:
+[LOG] 2026-02-14T05:18:39.666Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:18:39.667Z Nearby places:
+[LOG] 2026-02-14T05:18:39.667Z TravelCompanion:
+[LOG] 2026-02-14T05:23:18.684Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }[0m
+[LOG] 2026-02-14T05:23:18.686Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T05:23:19.607Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T05:23:19.670Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  enable debug logging with { debug: true }[0m
+[LOG] 2026-02-14T05:23:19.753Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T05:23:20.044Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`[0m
+[LOG] 2026-02-14T05:23:20.046Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T05:23:20.924Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T05:23:20.957Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  override existing env vars with { override: true }[0m
+[LOG] 2026-02-14T05:23:21.020Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T05:23:22.054Z Connected to DB
+[LOG] 2026-02-14T05:24:55.936Z [2026-02-14T05:24:55.936Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:24:56.277Z [2026-02-14T05:24:56.277Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:25:09.726Z [2026-02-14T05:25:09.726Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:25:10.101Z [2026-02-14T05:25:10.101Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:29:24.574Z [2026-02-14T05:29:24.574Z] PUT /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:29:25.242Z [2026-02-14T05:29:25.242Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:29:25.619Z [2026-02-14T05:29:25.619Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:29:26.364Z [2026-02-14T05:29:26.364Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:29:27.087Z [2026-02-14T05:29:27.087Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:32:55.641Z [2026-02-14T05:32:55.641Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:32:56.470Z [2026-02-14T05:32:56.470Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:41:05.154Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T05:41:05.156Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T05:41:06.430Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T05:41:06.474Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T05:41:06.537Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T05:41:07.611Z Connected to DB
+[LOG] 2026-02-14T05:44:35.873Z [2026-02-14T05:44:35.873Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:44:35.963Z [2026-02-14T05:44:35.963Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:44:36.157Z [2026-02-14T05:44:36.157Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:44:36.378Z [2026-02-14T05:44:36.378Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:44:50.225Z [2026-02-14T05:44:50.225Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:44:50.749Z [2026-02-14T05:44:50.749Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:44:57.795Z [2026-02-14T05:44:57.795Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:45:16.766Z [2026-02-14T05:45:16.766Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:45:17.766Z Overpass API Error:
+[LOG] 2026-02-14T05:45:17.767Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:45:17.768Z Nearby places:
+[LOG] 2026-02-14T05:45:17.768Z TravelCompanion:
+[LOG] 2026-02-14T05:45:17.968Z [2026-02-14T05:45:17.968Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:45:20.079Z Overpass API Error:
+[LOG] 2026-02-14T05:45:20.080Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:45:20.081Z Nearby places:
+[LOG] 2026-02-14T05:45:20.081Z TravelCompanion:
+[LOG] 2026-02-14T05:45:29.902Z [2026-02-14T05:45:29.902Z] GET /logout from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:45:47.629Z [2026-02-14T05:45:47.629Z] POST /login from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:45:47.631Z Login attempt started. Body: {"idToken":"MISSING","email":"Gajanan","password":"***"}
+[LOG] 2026-02-14T05:45:47.631Z Email/Password login attempt for: Gajanan
+[LOG] 2026-02-14T05:45:47.674Z User not found by email, checking username...
+[LOG] 2026-02-14T05:45:47.744Z User has no hash/salt (legacy/social?), logging in directly.
+[LOG] 2026-02-14T05:46:07.737Z [2026-02-14T05:46:07.737Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:46:09.967Z Overpass API Error:
+[LOG] 2026-02-14T05:46:09.968Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:46:09.968Z Nearby places:
+[LOG] 2026-02-14T05:46:09.968Z TravelCompanion:
+[LOG] 2026-02-14T05:46:10.241Z [2026-02-14T05:46:10.241Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:46:12.400Z Overpass API Error:
+[LOG] 2026-02-14T05:46:12.401Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:46:12.401Z Nearby places:
+[LOG] 2026-02-14T05:46:12.402Z TravelCompanion:
+[LOG] 2026-02-14T05:47:55.271Z [2026-02-14T05:47:55.271Z] POST /listings/6990015c2b6a49d32a5071ce/reviews from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:47:55.542Z [2026-02-14T05:47:55.542Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:47:57.651Z Overpass API Error:
+[LOG] 2026-02-14T05:47:57.653Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:47:57.654Z Nearby places:
+[LOG] 2026-02-14T05:47:57.655Z TravelCompanion:
+[LOG] 2026-02-14T05:48:19.910Z [2026-02-14T05:48:19.910Z] POST /listings/6990015c2b6a49d32a5071ce/reviews from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:48:20.252Z [2026-02-14T05:48:20.252Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T05:48:22.297Z Overpass API Error:
+[LOG] 2026-02-14T05:48:22.297Z Nearby places sent to UI:
+[LOG] 2026-02-14T05:48:22.298Z Nearby places:
+[LOG] 2026-02-14T05:48:22.298Z TravelCompanion:
+[LOG] 2026-02-14T05:48:41.561Z [2026-02-14T05:48:41.561Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:48:41.857Z [2026-02-14T05:48:41.857Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:48:47.230Z [2026-02-14T05:48:47.230Z] POST /wishlist/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:49:05.273Z [2026-02-14T05:49:05.273Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:50:30.883Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-14T05:50:30.885Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T05:50:31.876Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T05:50:31.910Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-14T05:50:31.967Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T05:50:33.004Z Connected to DB
+[LOG] 2026-02-14T05:50:58.132Z [2026-02-14T05:50:58.132Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:50:58.771Z [2026-02-14T05:50:58.771Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:50:58.820Z [2026-02-14T05:50:58.820Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:50:58.959Z [2026-02-14T05:50:58.959Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:51:21.562Z [2026-02-14T05:51:21.562Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:51:38.587Z [2026-02-14T05:51:38.587Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:51:39.020Z [2026-02-14T05:51:39.020Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:52:01.219Z [2026-02-14T05:52:01.219Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:54:32.599Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T05:54:32.601Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T05:54:33.440Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T05:54:33.468Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T05:54:33.512Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T05:54:34.555Z Connected to DB
+[LOG] 2026-02-14T05:55:01.989Z [2026-02-14T05:55:01.989Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:55:02.355Z [2026-02-14T05:55:02.355Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:55:02.403Z [2026-02-14T05:55:02.403Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:55:02.537Z [2026-02-14T05:55:02.537Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:55:19.449Z [2026-02-14T05:55:19.449Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T05:56:05.515Z [2026-02-14T05:56:05.515Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:04:15.009Z [2026-02-14T06:04:15.009Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:04:15.031Z [2026-02-14T06:04:15.031Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:04:15.182Z [2026-02-14T06:04:15.182Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:04:15.370Z [2026-02-14T06:04:15.369Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:05:48.152Z [2026-02-14T06:05:48.152Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:06:22.154Z [2026-02-14T06:06:22.154Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:08:05.586Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }[0m
+[LOG] 2026-02-14T06:08:05.587Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T06:08:06.418Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T06:08:06.469Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-14T06:08:06.524Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T06:08:07.715Z Connected to DB
+[LOG] 2026-02-14T06:08:28.434Z [2026-02-14T06:08:28.434Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:08:28.789Z [2026-02-14T06:08:28.789Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:08:28.826Z [2026-02-14T06:08:28.826Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:08:28.971Z [2026-02-14T06:08:28.971Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:32:50.182Z [2026-02-14T06:32:50.182Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:32:50.200Z [2026-02-14T06:32:50.200Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:32:50.376Z [2026-02-14T06:32:50.376Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:32:50.554Z [2026-02-14T06:32:50.554Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:33:05.273Z [2026-02-14T06:33:05.272Z] POST /api/chatbot/chat from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:33:36.939Z [2026-02-14T06:33:36.939Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T06:33:40.252Z Overpass API Error:
+[LOG] 2026-02-14T06:33:40.252Z Nearby places sent to UI:
+[LOG] 2026-02-14T06:33:40.254Z Nearby places:
+[LOG] 2026-02-14T06:33:40.255Z TravelCompanion:
+[LOG] 2026-02-14T06:33:40.780Z [2026-02-14T06:33:40.780Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T06:33:43.884Z Overpass API Error:
+[LOG] 2026-02-14T06:33:43.884Z Nearby places sent to UI:
+[LOG] 2026-02-14T06:33:43.885Z Nearby places:
+[LOG] 2026-02-14T06:33:43.885Z TravelCompanion:

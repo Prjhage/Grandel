@@ -34,6 +34,7 @@ const ListingShow = ({ currUser, showFlash }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [travelCompanion, setTravelCompanion] = useState(location.state?.listing?.travelCompanion || { places: [], food: [] });
     const [nearbyPlaces, setNearbyPlaces] = useState(location.state?.listing?.nearbyPlaces || []);
+    const [hostStats, setHostStats] = useState({ reviewsCount: 0, avgRating: 0 });
 
     useEffect(() => {
         fetchListing();
@@ -81,6 +82,10 @@ const ListingShow = ({ currUser, showFlash }) => {
             setTravelCompanion(tc);
 
             if (res.data.nearbyPlaces) setNearbyPlaces(res.data.nearbyPlaces);
+            setHostStats({
+                reviewsCount: res.data.hostReviewsCount || 0,
+                avgRating: res.data.hostAvgRating || 0
+            });
             setLoading(false);
         } catch (err) {
             console.error('Error fetching listing:', err);
@@ -696,11 +701,11 @@ const ListingShow = ({ currUser, showFlash }) => {
                             </div>
                             <div className="d-flex justify-content-between text-center border-top border-bottom py-3 mb-3">
                                 <div>
-                                    <strong className="d-block">{listing.reviews?.length || 0}</strong>
+                                    <strong className="d-block">{hostStats.reviewsCount}</strong>
                                     <small style={{ fontSize: '0.8rem' }}>Reviews</small>
                                 </div>
                                 <div className="border-start border-end px-3">
-                                    <strong className="d-block">{listing.avgRating?.toFixed(1) || 'N/A'}★</strong>
+                                    <strong className="d-block">{hostStats.avgRating?.toFixed(1) || '0.0'}★</strong>
                                     <small style={{ fontSize: '0.8rem' }}>Rating</small>
                                 </div>
                                 <div>

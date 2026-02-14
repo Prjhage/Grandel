@@ -145,10 +145,15 @@ app.get("/", (req, res) => {
 // API Route for Featured Listings
 app.get("/api/featured", async (req, res) => {
   try {
-    // Fetch top 6 featured listings (highest rated or recently added)
+    // Fetch top 6 featured listings with optimized query
     const featuredListings = await Listing.find()
       .limit(6)
-      .populate("reviews")
+      .select('title image price location reviews')
+      .populate({
+        path: 'reviews',
+        select: 'rating'
+      })
+      .lean()
       .exec();
 
     // Calculate average rating for each listing
@@ -159,7 +164,7 @@ app.get("/api/featured", async (req, res) => {
           listing.reviews.length
           : 0;
       return {
-        ...listing.toObject(),
+        ...listing,
         avgRating: avgRating,
       };
     });

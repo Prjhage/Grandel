@@ -40,6 +40,9 @@ function App() {
         const res = await axios.get('/current-user');
         if (res.data.user) {
           setCurrUser(res.data.user);
+          localStorage.setItem('grand_user_hint', 'true');
+        } else {
+          localStorage.removeItem('grand_user_hint');
         }
       } catch (err) {
         console.error("Error checking session", err);
@@ -50,12 +53,14 @@ function App() {
 
   const handleLogin = (user) => {
     setCurrUser(user);
+    localStorage.setItem('grand_user_hint', 'true');
   };
 
   const handleLogout = async () => {
     try {
       await axios.get('/logout');
       setCurrUser(null);
+      localStorage.removeItem('grand_user_hint');
       showFlash("Logged out successfully");
     } catch (err) {
       showFlash("Logout failed", "error");

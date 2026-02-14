@@ -346,6 +346,27 @@
     }
 }
 
+/* Settings Tab Styles */
+.settings-card {
+    max-width: 650px;
+    margin: 1rem auto;
+    border-radius: 20px;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+}
+
+.input-group-text i {
+    color: #ff385c;
+    font-size: 0.9rem;
+}
+
+.form-control:focus {
+    border-color: #ff385c;
+    box-shadow: 0 0 0 0.1rem rgba(255, 56, 92, 0.1);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .profile-container {
@@ -465,5 +486,57 @@
     .ai-modal-content .btn-close {
         font-size: 1.5rem;
         padding: 0.25rem;
+    }
+
+    /* Settings Tab - Mobile */
+    .settings-card {
+        margin: 0.5rem !important;
+        padding: 1.25rem !important;
+        border-radius: 16px !important;
+    }
+
+    .settings-card .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.75rem;
+    }
+
+    .settings-card h4 {
+        font-size: 1.2rem;
+    }
+
+    .settings-card .btn-outline-primary,
+    .settings-card .btn-outline-danger {
+        width: 100%;
+        text-align: center;
+        padding: 0.6rem;
+    }
+
+    .input-group-text i {
+        font-size: 0.8rem;
+    }
+
+    .form-control {
+        font-size: 0.9rem !important;
+    }
+
+    .settings-card label {
+        font-size: 0.7rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+
+    .border-dashed {
+        padding: 1rem !important;
+    }
+
+    .border-dashed .input-group {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .border-dashed .input-group>* {
+        width: 100%;
+        margin: 0 !important;
+        border-radius: 10px !important;
     }
 }

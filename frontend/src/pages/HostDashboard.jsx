@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../config/axios';
 import { useHostDashboardCache } from '../components/HostDashboardCacheContext';
+import SkeletonCard from '../components/SkeletonCard';
 import './HostDashboard.css';
 
 const HostDashboard = ({ currUser, showFlash }) => {
@@ -190,7 +191,13 @@ const HostDashboard = ({ currUser, showFlash }) => {
     }
 
     if (loading) {
-        return <div className="container mt-5"><h3>Loading...</h3></div>;
+        return (
+            <div className="container host-dashboard mt-5">
+                <div className="grid">
+                    {[1, 2, 3].map(i => <SkeletonCard key={i} />)}
+                </div>
+            </div>
+        );
     }
 
     return (

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
+import SkeletonCard from '../components/SkeletonCard';
 import './Profile.css';
 
 const Profile = ({ currUser, showFlash }) => {
@@ -11,6 +12,14 @@ const Profile = ({ currUser, showFlash }) => {
     const [myListings, setMyListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedBooking, setSelectedBooking] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [profileForm, setProfileForm] = useState({
+        username: currUser?.username || '',
+        email: currUser?.email || '',
+        phone: '' // We don't have the full phone, only last 4
+    });
+    const [otpData, setOtpData] = useState({ code: '', isSent: false, isVerified: false });
+    const [error, setError] = useState('');
 
     // Use the cache context
     const { getCachedData, setCachedData } = useProfileCache();
@@ -124,8 +133,80 @@ const Profile = ({ currUser, showFlash }) => {
     }
 
     if (loading) {
-        return <div className="container mt-5"><h3>Loading...</h3></div>;
+        return (
+            <div className="profile-container">
+                <div className="profile-tabs">
+                    <div className="tab-btn active" style={{ width: '100px', height: '38px', opacity: 0.5 }}></div>
+                    <div className="tab-btn" style={{ width: '100px', height: '38px', opacity: 0.5 }}></div>
+                </div>
+                <div className="grid">
+                    {[1, 2, 3].map(i => <SkeletonCard key={i} />)}
+                </div>
+            </div>
+        );
     }
+
+    const handleSendOtp = async () => {
+        if (!profileForm.phone || profileForm.phone.length < 10) {
+            showFlash('Please enter a valid 10-digit mobile number', 'error');
+            return;
+        }
+        try {
+            const cleanPhone = profileForm.phone.startsWith('+91') ? profileForm.phone : `+91${profileForm.phone}`;
+            const res = await axios.post('/send-otp', { phone: cleanPhone });
+            if (res.data.success) {
+                setOtpData({ ...otpData, isSent: true });
+                showFlash('OTP sent to your mobile!', 'success');
+            }
+        } catch (err) {
+            showFlash(err.response?.data?.error || 'Failed to send OTP', 'error');
+        }
+    };
+
+    const handleVerifyOtp = async () => {
+        try {
+            const cleanPhone = profileForm.phone.startsWith('+91') ? profileForm.phone : `+91${profileForm.phone}`;
+            const res = await axios.post('/verify-otp', { phone: cleanPhone, code: otpData.code });
+            if (res.data.success) {
+                setOtpData({ ...otpData, isVerified: true });
+                showFlash('Mobile number verified!', 'success');
+            }
+        } catch (err) {
+            showFlash(err.response?.data?.error || 'Invalid OTP', 'error');
+        }
+    };
+
+    const handleUpdateProfile = async (e) => {
+        e.preventDefault();
+
+        // If phone changed but not verified
+        if (profileForm.phone && !otpData.isVerified) {
+            showFlash('Please verify your new mobile number first', 'error');
+            return;
+        }
+
+        try {
+            const updateData = {
+                username: profileForm.username,
+                email: profileForm.email
+            };
+            if (otpData.isVerified) {
+                updateData.phone = profileForm.phone.startsWith('+91') ? profileForm.phone : `+91${profileForm.phone}`;
+            }
+
+            const res = await axios.put('/profile', updateData);
+            if (res.data.success) {
+                showFlash('Profile updated successfully!', 'success');
+                setEditMode(false);
+                setOtpData({ code: '', isSent: false, isVerified: false });
+                // Note: We might need a parent-level state update for currUser if not using a global store
+                // For now, let's suggest a refresh or assume user-info is refreshed elsewhere
+                window.location.reload();
+            }
+        } catch (err) {
+            showFlash(err.response?.data?.message || 'Failed to update profile', 'error');
+        }
+    };
 
     const getAvatarDisplay = () => {
         if (currUser.avatar?.url) {
@@ -184,6 +265,12 @@ const Profile = ({ currUser, showFlash }) => {
                     onClick={() => setActiveTab('mylistings')}
                 >
                     🏠 My Listings
+                </button>
+                <button
+                    className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('settings')}
+                >
+                    ⚙️ Settings
                 </button>
             </div>
 
@@ -309,6 +396,134 @@ const Profile = ({ currUser, showFlash }) => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Settings Tab */}
+            {activeTab === 'settings' && (
+                <div className="tab-panel active">
+                    <div className="settings-card card p-4 shadow-sm border-0">
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <h4 className="m-0 fw-bold">Account Settings</h4>
+                            <button
+                                className={`btn rounded-pill px-4 ${editMode ? 'btn-outline-danger' : 'btn-outline-primary'}`}
+                                onClick={() => {
+                                    setEditMode(!editMode);
+                                    if (!editMode) {
+                                        setProfileForm({
+                                            username: currUser.username,
+                                            email: currUser.email,
+                                            phone: ''
+                                        });
+                                    }
+                                }}
+                            >
+                                {editMode ? 'Cancel' : 'Edit Profile'}
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleUpdateProfile}>
+                            <div className="mb-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Username</label>
+                                <div className="input-group border rounded-3 p-1">
+                                    <span className="input-group-text bg-transparent border-0"><i className="fa-solid fa-user"></i></span>
+                                    <input
+                                        type="text"
+                                        className="form-control border-0 bg-transparent shadow-none"
+                                        value={profileForm.username}
+                                        disabled={!editMode}
+                                        onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Email Address</label>
+                                <div className="input-group border rounded-3 p-1">
+                                    <span className="input-group-text bg-transparent border-0"><i className="fa-solid fa-envelope"></i></span>
+                                    <input
+                                        type="email"
+                                        className="form-control border-0 bg-transparent shadow-none"
+                                        value={profileForm.email}
+                                        disabled={!editMode}
+                                        onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Mobile Number</label>
+                                <div className="input-group border rounded-3 p-1 mb-2">
+                                    <span className="input-group-text bg-transparent border-0"><i className="fa-solid fa-phone"></i></span>
+                                    <input
+                                        type="text"
+                                        className="form-control border-0 bg-transparent shadow-none"
+                                        value={currUser.phoneLast4 ? `**** **** ${currUser.phoneLast4}` : 'Not Set'}
+                                        disabled
+                                    />
+                                </div>
+                                {editMode && (
+                                    <div className="input-group border rounded-3 p-1">
+                                        <span className="input-group-text bg-transparent border-0">+91</span>
+                                        <input
+                                            type="tel"
+                                            className="form-control border-0 bg-transparent shadow-none"
+                                            placeholder="Enter new 10-digit number"
+                                            value={profileForm.phone}
+                                            disabled={otpData.isVerified}
+                                            onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                                        />
+                                        {!otpData.isVerified && (
+                                            <button
+                                                type="button"
+                                                className="btn btn-dark rounded-3 px-3 ms-1"
+                                                onClick={handleSendOtp}
+                                                disabled={otpData.isSent && !profileForm.phone}
+                                            >
+                                                {otpData.isSent ? 'Resend' : 'Verify'}
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {editMode && otpData.isSent && !otpData.isVerified && (
+                                <div className="mb-4 p-3 bg-light rounded-4 border-dashed">
+                                    <label className="form-label small fw-bold mb-2">Verification Code</label>
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            className="form-control rounded-3 me-2"
+                                            placeholder="6-digit OTP"
+                                            maxLength="6"
+                                            value={otpData.code}
+                                            onChange={(e) => setOtpData({ ...otpData, code: e.target.value })}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-primary rounded-3 px-4"
+                                            onClick={handleVerifyOtp}
+                                        >
+                                            Verify
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {otpData.isVerified && (
+                                <div className="alert alert-success d-flex align-items-center rounded-3 py-2 mb-4">
+                                    <i className="fa-solid fa-circle-check me-2"></i>
+                                    <span>Mobile number verified!</span>
+                                </div>
+                            )}
+
+                            {editMode && (
+                                <button type="submit" className="btn btn-dark w-100 py-3 rounded-pill fw-bold shadow-sm">
+                                    SAVE CHANGES
+                                </button>
+                            )}
+                        </form>
                     </div>
                 </div>
             )}
