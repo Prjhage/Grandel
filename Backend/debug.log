@@ -909,3 +909,66 @@
 [LOG] 2026-02-14T06:33:43.884Z Nearby places sent to UI:
 [LOG] 2026-02-14T06:33:43.885Z Nearby places:
 [LOG] 2026-02-14T06:33:43.885Z TravelCompanion:
+[LOG] 2026-02-14T06:50:06.050Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-14T06:50:06.053Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T06:50:08.240Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T06:50:08.316Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T06:50:08.413Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T06:50:09.267Z Connected to DB
+[LOG] 2026-02-14T06:51:17.082Z [2026-02-14T06:51:17.082Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:51:17.264Z [2026-02-14T06:51:17.264Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:51:17.550Z [2026-02-14T06:51:17.550Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:51:17.785Z [2026-02-14T06:51:17.785Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:52:01.413Z [2026-02-14T06:52:01.413Z] GET /listings?q=Current+Location&lat=18.6540655&lng=73.760132 from Origin: http://localhost:5173
+[ERR] 2026-02-14T06:52:01.466Z Global Error Handler caught:
+[ERR] 2026-02-14T06:52:01.467Z MongoServerError: error processing query: ns=test.listingsTree: GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T06:52:01.609Z [2026-02-14T06:52:01.609Z] GET /listings?q=Current+Location&lat=18.6540655&lng=73.760132 from Origin: http://localhost:5173
+[ERR] 2026-02-14T06:52:01.665Z Global Error Handler caught:
+[ERR] 2026-02-14T06:52:01.666Z MongoServerError: error processing query: ns=test.listingsTree: GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T06:52:03.947Z [2026-02-14T06:52:03.947Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:55:15.007Z [2026-02-14T06:55:15.007Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:55:15.017Z [2026-02-14T06:55:15.017Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:55:15.164Z [2026-02-14T06:55:15.164Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:55:15.303Z [2026-02-14T06:55:15.303Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:55:39.173Z [2026-02-14T06:55:39.173Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T06:55:41.336Z Overpass API Error:
+[LOG] 2026-02-14T06:55:41.338Z Nearby places sent to UI:
+[LOG] 2026-02-14T06:55:41.339Z Nearby places:
+[LOG] 2026-02-14T06:55:41.340Z TravelCompanion:
+[LOG] 2026-02-14T06:55:41.772Z [2026-02-14T06:55:41.772Z] GET /listings/6990015c2b6a49d32a5071ce from Origin: http://localhost:5173
+[ERR] 2026-02-14T06:55:42.889Z Overpass API Error:
+[LOG] 2026-02-14T06:55:42.890Z Nearby places sent to UI:
+[LOG] 2026-02-14T06:55:42.894Z Nearby places:
+[LOG] 2026-02-14T06:55:42.894Z TravelCompanion:
+[LOG] 2026-02-14T06:56:03.086Z [2026-02-14T06:56:03.086Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:56:03.332Z [2026-02-14T06:56:03.332Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:56:45.223Z [2026-02-14T06:56:45.223Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:56:45.543Z [2026-02-14T06:56:45.543Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:58:56.348Z [2026-02-14T06:58:56.348Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T06:58:56.829Z [2026-02-14T06:58:56.829Z] GET /api/featured from Origin: http://localhost:5173
