@@ -1235,3 +1235,15 @@ Proj: {}
 [LOG] 2026-02-14T15:07:48.864Z Nearby places:
 [LOG] 2026-02-14T15:07:48.865Z TravelCompanion:
 [LOG] 2026-02-14T15:07:54.877Z [2026-02-14T15:07:54.877Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T15:10:05.000Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T15:10:05.002Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T15:10:06.445Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T15:10:06.497Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit[0m
+[LOG] 2026-02-14T15:10:06.592Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T15:10:07.581Z Connected to DB
+[LOG] 2026-02-14T15:13:15.375Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T15:13:15.378Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T15:13:17.156Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T15:13:17.248Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T15:13:17.505Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T15:13:18.396Z Connected to DB

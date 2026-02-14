@@ -290,7 +290,8 @@
     .chatbot-container {
         width: 90vw;
         height: 70vh;
-        bottom: 75px;
+        bottom: 85px;
+        /* Align with toggle button */
         left: 50%;
         right: auto;
         transform: translateX(-50%);
@@ -488,6 +489,17 @@
         width: 50px;
         height: 50px;
         font-size: 22px;
+    }
+
+    .chatbot-toggle-wrapper {
+        bottom: 85px;
+        /* Stay above the sticky reserve bar (60px + gap) */
+    }
+
+    /* Hide chatbot when reserve form/drawer is open on mobile */
+    body.mobile-reserve-open .chatbot-toggle-wrapper,
+    body.mobile-reserve-open .chatbot-container {
+        display: none !important;
     }
 
     .chatbot-hint-bubble {
