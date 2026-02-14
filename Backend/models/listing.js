@@ -107,6 +107,6 @@ listingSchema.post("findOneAndDelete", async function (listing) {
 });
 listingSchema.index({ geometry: "2dsphere" });
 
-const Listing = mongoose.model("Listing", listingSchema);
+const Listing = mongoose.model("Listing", listingSchema, "listings");
 
 module.exports = Listing;

@@ -31,11 +31,13 @@ export const ListingCacheProvider = ({ children }) => {
             return null;
         }
 
-        // Check if filters match
+        // Check if filters match (including geolocation)
         const filtersMatch =
             cache.filters.category === currentFilters.category &&
             cache.filters.sort === currentFilters.sort &&
-            cache.filters.q === currentFilters.q;
+            cache.filters.q === currentFilters.q &&
+            cache.filters.lat === currentFilters.lat &&
+            cache.filters.lng === currentFilters.lng;
 
         if (filtersMatch) {
             return {

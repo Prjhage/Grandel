@@ -111,8 +111,14 @@ passport.deserializeUser(User.deserializeUser()); //deserialize user into the se
 
 // Database connection
 main()
-  .then(() => {
+  .then(async () => {
     console.log("Connected to DB");
+    try {
+      // Ensure all indexes (especially geospatial) are created on startup
+      await Listing.syncIndexes();
+    } catch (indexErr) {
+      console.error("Index Sync Warning:", indexErr.message);
+    }
   })
   .catch((err) => console.log("Initial DB Connection Failed:", err));
 

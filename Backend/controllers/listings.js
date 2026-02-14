@@ -16,20 +16,26 @@ module.exports.index = async (req, res) => {
   }
 
   // 2. Geospatial Search (Nearby)
-  // If q is provided and is NOT "Current Location", the user likely typed a new destination.
-  // In that case, we should ignore lat/lng coordinates.
   const isGeolocationSearch = q === 'Current Location' || (!q && lat && lng);
 
-  if (isGeolocationSearch && lat && lng) {
-    query.geometry = {
-      $near: {
-        $geometry: {
-          type: "Point",
-          coordinates: [parseFloat(lng), parseFloat(lat)],
+  if (isGeolocationSearch) {
+    if (lat && lng) {
+      query.geometry = {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lng), parseFloat(lat)],
+          },
+          $maxDistance: 50000, // 50km radius
         },
-        $maxDistance: 50000, // 50km radius
-      },
-    };
+      };
+    } else if (q === 'Current Location') {
+      console.log(`[SEARCH DEBUG] Force empty results (Current Location selected but no coords)`);
+      // If user specifically asked for "Current Location" but coordinates are missing,
+      // we must force an empty result or a specific filter that won't match "everything".
+      // We'll set a dummy query that is guaranteed to match nothing if no coords are provided.
+      query._id = null;
+    }
   }
 
   // 3. Text Search (title, location, country)

@@ -984,3 +984,254 @@ Proj: {}
 [LOG] 2026-02-14T07:11:39.916Z [2026-02-14T07:11:39.916Z] GET /listings from Origin: http://localhost:5173
 [LOG] 2026-02-14T07:11:57.529Z [2026-02-14T07:11:57.529Z] GET /profile from Origin: http://localhost:5173
 [LOG] 2026-02-14T07:11:57.875Z [2026-02-14T07:11:57.875Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T13:59:33.373Z DB Disconnected
+[LOG] 2026-02-14T14:37:12.236Z [2026-02-14T14:37:12.236Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:37:12.240Z [2026-02-14T14:37:12.240Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:37:12.360Z [2026-02-14T14:37:12.360Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:37:12.482Z [2026-02-14T14:37:12.482Z] GET /api/featured from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:37:32.541Z [2026-02-14T14:37:32.541Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:37:32.926Z [2026-02-14T14:37:32.926Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:37:57.285Z [2026-02-14T14:37:57.285Z] GET /listings?q=Current+Location&lat=18.65413&lng=73.760395 from Origin: http://localhost:5173
+[ERR] 2026-02-14T14:37:57.616Z Global Error Handler caught:
+[ERR] 2026-02-14T14:37:57.617Z MongoServerError: error processing query: ns=test.listingsTree: GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T14:38:06.817Z [2026-02-14T14:38:06.817Z] GET /listings?q=Current+Location&lat=18.65413&lng=73.760395&startDate=2026-02-19&endDate=2026-02-26&rooms=1&guests=1 from Origin: http://localhost:5173
+[ERR] 2026-02-14T14:38:06.878Z Global Error Handler caught:
+[ERR] 2026-02-14T14:38:06.879Z MongoServerError: error processing query: ns=test.listingsTree: GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T14:38:15.907Z [2026-02-14T14:38:15.907Z] GET /listings?q=Current+Location&lat=18.65413&lng=73.760395&startDate=2026-02-19&endDate=2026-02-26&rooms=3&guests=1 from Origin: http://localhost:5173
+[ERR] 2026-02-14T14:38:15.956Z Global Error Handler caught:
+[ERR] 2026-02-14T14:38:15.957Z MongoServerError: error processing query: ns=test.listingsTree: $and
+    numRooms $gte 3
+    GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T14:38:42.957Z [2026-02-14T14:38:42.957Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:38:43.438Z [2026-02-14T14:38:43.438Z] GET /profile from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:44:12.847Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T14:44:12.850Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T14:44:14.994Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T14:44:15.095Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-14T14:44:15.204Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T14:44:16.020Z Connected to DB
+[LOG] 2026-02-14T14:44:40.190Z [2026-02-14T14:44:40.190Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:44:40.576Z [2026-02-14T14:44:40.576Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:44:40.608Z [2026-02-14T14:44:40.608Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:44:40.773Z [2026-02-14T14:44:40.773Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:44:45.355Z [2026-02-14T14:44:45.355Z] GET /listings?q=Current+Location&lat=18.654076943430223&lng=73.76014078366708 from Origin: http://localhost:5173
+[ERR] 2026-02-14T14:44:45.406Z Global Error Handler caught:
+[ERR] 2026-02-14T14:44:45.407Z MongoServerError: error processing query: ns=test.listingsTree: GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T14:44:52.003Z [2026-02-14T14:44:52.003Z] GET /listings?q=Current+Location&lat=18.654076943430223&lng=73.76014078366708&startDate=2026-02-19&endDate=2026-02-26&rooms=1&guests=1 from Origin: http://localhost:5173
+[ERR] 2026-02-14T14:44:52.052Z Global Error Handler caught:
+[ERR] 2026-02-14T14:44:52.053Z MongoServerError: error processing query: ns=test.listingsTree: GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T14:45:11.985Z [2026-02-14T14:45:11.985Z] GET /listings?q=Current+Location&lat=18.654076943430223&lng=73.76014078366708&startDate=2026-02-19&endDate=2026-02-26&rooms=2&guests=2 from Origin: http://localhost:5173
+[ERR] 2026-02-14T14:45:12.025Z Global Error Handler caught:
+[ERR] 2026-02-14T14:45:12.026Z MongoServerError: error processing query: ns=test.listingsTree: $and
+    numRooms $gte 2
+    $expr {$gte: [{$multiply: [{$ifNull: ["$numRooms", {$const: 1}]}, {$ifNull: ["$guestsPerRoom", {$const: 2}]}]}, {$const: 2}]}
+    GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T14:46:15.760Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-14T14:46:15.763Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T14:46:17.303Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T14:46:17.351Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  override existing env vars with { override: true }[0m
+[LOG] 2026-02-14T14:46:17.415Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T14:46:18.458Z Connected to DB
+[LOG] 2026-02-14T14:50:23.436Z [2026-02-14T14:50:23.436Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:50:23.438Z [SEARCH DEBUG] Params: q=undefined, lat=undefined, lng=undefined, category=undefined
+[LOG] 2026-02-14T14:50:23.439Z [SEARCH DEBUG] isGeolocationSearch: undefined
+[LOG] 2026-02-14T14:50:23.450Z [2026-02-14T14:50:23.449Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:50:23.727Z [2026-02-14T14:50:23.727Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:50:23.910Z [2026-02-14T14:50:23.910Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T14:50:23.912Z [SEARCH DEBUG] Params: q=undefined, lat=undefined, lng=undefined, category=undefined
+[LOG] 2026-02-14T14:50:23.912Z [SEARCH DEBUG] isGeolocationSearch: undefined
+[LOG] 2026-02-14T14:56:36.179Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  override existing env vars with { override: true }[0m
+[LOG] 2026-02-14T14:56:36.181Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T14:56:38.191Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T14:56:38.263Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  write to custom object with { processEnv: myObject }[0m
+[LOG] 2026-02-14T14:56:38.363Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T14:56:39.570Z Connected to DB
+[LOG] 2026-02-14T14:56:42.972Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  enable debug logging with { debug: true }[0m
+[LOG] 2026-02-14T14:56:42.974Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T14:56:44.781Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T14:56:44.858Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com[0m
+[LOG] 2026-02-14T14:56:44.986Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T14:56:45.885Z Connected to DB
+[LOG] 2026-02-14T14:56:46.377Z Initial DB Connection Failed:
+[LOG] 2026-02-14T14:56:57.525Z [2026-02-14T14:56:57.525Z] GET /listings?q=Current+Location&lat=18.654076943430223&lng=73.76014078366708 from Origin: undefined
+[LOG] 2026-02-14T14:56:57.528Z [SEARCH DEBUG] Params: q=Current Location, lat=18.654076943430223, lng=73.76014078366708, category=undefined
+[LOG] 2026-02-14T14:56:57.528Z [SEARCH DEBUG] isGeolocationSearch: true
+[LOG] 2026-02-14T14:56:57.529Z [SEARCH DEBUG] Performing $near search for [73.76014078366708, 18.654076943430223]
+[ERR] 2026-02-14T14:56:57.844Z Global Error Handler caught:
+[ERR] 2026-02-14T14:56:57.844Z MongoServerError: error processing query: ns=test.listingsTree: GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T14:57:39.367Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  enable debug logging with { debug: true }[0m
+[LOG] 2026-02-14T14:57:39.369Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T14:57:40.747Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T14:57:40.804Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T14:57:40.906Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T14:57:42.410Z Connected to DB
+[LOG] 2026-02-14T14:57:43.160Z Initial DB Connection Failed:
+[LOG] 2026-02-14T14:58:21.253Z [HB-777] GET /listings?hb_test=1 from Origin: undefined
+[LOG] 2026-02-14T14:58:21.254Z [SEARCH DEBUG] Params: q=undefined, lat=undefined, lng=undefined, category=undefined
+[LOG] 2026-02-14T14:58:21.254Z [SEARCH DEBUG] isGeolocationSearch: undefined
+[LOG] 2026-02-14T15:01:35.018Z [HB-777] GET /listings?q=Current+Location&lat=18.654076943430223&lng=73.76014078366708 from Origin: undefined
+[LOG] 2026-02-14T15:01:35.019Z [SEARCH DEBUG] Params: q=Current Location, lat=18.654076943430223, lng=73.76014078366708, category=undefined
+[LOG] 2026-02-14T15:01:35.019Z [SEARCH DEBUG] isGeolocationSearch: true
+[LOG] 2026-02-14T15:01:35.020Z [SEARCH DEBUG] Performing $near search for [73.76014078366708, 18.654076943430223]
+[ERR] 2026-02-14T15:01:35.185Z Global Error Handler caught:
+[ERR] 2026-02-14T15:01:35.185Z MongoServerError: error processing query: ns=test.listingsTree: GEONEAR  field=geometry maxdist=50000 isNearSphere=0
+Sort: {}
+Proj: {}
+ planner returned error :: caused by :: unable to find index for $geoNear query
+    at Connection.sendCommand (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:305:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Connection.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cmap\connection.js:333:26)
+    at async Server.command (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\sdam\server.js:171:29)
+    at async FindOperation.execute (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\find.js:36:16)
+    at async tryOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:207:20)
+    at async executeOperation (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (C:\Users\hagep\Backend\Grandel\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:13)
+[LOG] 2026-02-14T15:02:07.277Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }[0m
+[LOG] 2026-02-14T15:02:07.279Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T15:02:08.772Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T15:02:08.834Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }[0m
+[LOG] 2026-02-14T15:02:08.957Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T15:02:10.079Z Connected to DB
+[ERR] 2026-02-14T15:02:10.994Z Index Sync Failed:
+[LOG] 2026-02-14T15:03:12.342Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com[0m
+[LOG] 2026-02-14T15:03:12.344Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T15:03:13.839Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T15:03:13.905Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-14T15:03:14.031Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T15:03:15.048Z Connected to DB
+[ERR] 2026-02-14T15:03:15.416Z Index Sync Failed:
+[LOG] 2026-02-14T15:03:40.978Z [HB-777] GET /listings?q=Current+Location&lat=18.654076943430223&lng=73.76014078366708 from Origin: undefined
+[LOG] 2026-02-14T15:03:40.981Z [SEARCH DEBUG] Params: q=Current Location, lat=18.654076943430223, lng=73.76014078366708, category=undefined
+[LOG] 2026-02-14T15:03:40.982Z [SEARCH DEBUG] isGeolocationSearch: true
+[LOG] 2026-02-14T15:03:40.982Z [SEARCH DEBUG] Performing $near search for [73.76014078366708, 18.654076943430223]
+[LOG] 2026-02-14T15:04:23.205Z [HB-777] GET /listings?q=Current+Location&lat=18.654076943430223&lng=73.76014078366708 from Origin: undefined
+[LOG] 2026-02-14T15:04:23.206Z [SEARCH DEBUG] Params: q=Current Location, lat=18.654076943430223, lng=73.76014078366708, category=undefined
+[LOG] 2026-02-14T15:04:23.207Z [SEARCH DEBUG] isGeolocationSearch: true
+[LOG] 2026-02-14T15:04:23.207Z [SEARCH DEBUG] Performing $near search for [73.76014078366708, 18.654076943430223]
+[LOG] 2026-02-14T15:04:45.198Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com[0m
+[LOG] 2026-02-14T15:04:45.200Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T15:04:46.607Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T15:04:46.653Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T15:04:46.737Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T15:04:47.829Z Connected to DB
+[LOG] 2026-02-14T15:04:57.080Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-14T15:04:57.082Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T15:04:58.476Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T15:04:58.532Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com[0m
+[LOG] 2026-02-14T15:04:58.611Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T15:05:01.256Z Connected to DB
+[LOG] 2026-02-14T15:05:04.581Z [dotenv@17.2.3] injecting env (19) from .env [2m-- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops[0m
+[LOG] 2026-02-14T15:05:04.584Z Loaded .env from C:\Users\hagep\Backend\Grandel\backend\.env
+[LOG] 2026-02-14T15:05:06.126Z Firebase Admin initialized successfully.
+[LOG] 2026-02-14T15:05:06.178Z [dotenv@17.2.3] injecting env (0) from .env [2m-- tip: ⚙️  suppress all logs with { quiet: true }[0m
+[LOG] 2026-02-14T15:05:06.257Z Server is running on http://localhost:8080
+[LOG] 2026-02-14T15:05:07.463Z Connected to DB
+[LOG] 2026-02-14T15:07:33.594Z [2026-02-14T15:07:33.594Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T15:07:33.986Z [2026-02-14T15:07:33.986Z] GET /listings from Origin: http://localhost:5173
+[LOG] 2026-02-14T15:07:34.093Z [2026-02-14T15:07:34.093Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T15:07:34.249Z [2026-02-14T15:07:34.249Z] GET /current-user from Origin: http://localhost:5173
+[LOG] 2026-02-14T15:07:41.367Z [2026-02-14T15:07:41.367Z] GET /listings?q=Current+Location&lat=18.654102545123067&lng=73.76025710164085 from Origin: http://localhost:5173
+[LOG] 2026-02-14T15:07:43.762Z [2026-02-14T15:07:43.762Z] GET /listings/699003ed2b6a49d32a5072ed from Origin: http://localhost:5173
+[ERR] 2026-02-14T15:07:46.177Z Overpass API Error:
+[LOG] 2026-02-14T15:07:46.177Z Nearby places sent to UI:
+[LOG] 2026-02-14T15:07:46.178Z Nearby places:
+[LOG] 2026-02-14T15:07:46.178Z TravelCompanion:
+[LOG] 2026-02-14T15:07:46.505Z [2026-02-14T15:07:46.505Z] GET /listings/699003ed2b6a49d32a5072ed from Origin: http://localhost:5173
+[ERR] 2026-02-14T15:07:48.863Z Overpass API Error:
+[LOG] 2026-02-14T15:07:48.864Z Nearby places sent to UI:
+[LOG] 2026-02-14T15:07:48.864Z Nearby places:
+[LOG] 2026-02-14T15:07:48.865Z TravelCompanion:
+[LOG] 2026-02-14T15:07:54.877Z [2026-02-14T15:07:54.877Z] GET /listings from Origin: http://localhost:5173
