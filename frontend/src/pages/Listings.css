@@ -609,4 +609,12 @@
         -webkit-text-stroke: 0 !important;
         opacity: 1 !important;
     }
+
+    .early-bird-badge {
+        top: 45px;
+        left: 8px;
+        padding: 4px 8px;
+        font-size: 0.65rem;
+        box-shadow: 0 2px 8px rgba(255, 56, 92, 0.3);
+    }
 }
