@@ -279,9 +279,9 @@ const ListingShow = ({ currUser, showFlash }) => {
                                 <div className="carousel-item-wrapper">
                                     <img
                                         key={currentImageIndex}
-                                        src={allImages[currentImageIndex].url}
+                                        src={allImages[currentImageIndex]?.url || '/images/fallback.jpg'}
                                         alt={`View ${currentImageIndex + 1}`}
-                                        onClick={() => setSelectedImage(allImages[currentImageIndex].url)}
+                                        onClick={() => setSelectedImage(allImages[currentImageIndex]?.url || '/images/fallback.jpg')}
                                     />
                                 </div>
                             </div>

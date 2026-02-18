@@ -238,7 +238,7 @@ const Home = ({ currUser }) => {
                                 .slice(0, 3)
                                 .map((listing) => (
                                     <div key={listing._id} className="listing-card reveal" onClick={() => navigate(`/listings/${listing._id}`, { state: { listing } })}>
-                                        <img src={listing.image.url} alt={listing.title} className="listing-image" />
+                                        <img src={listing.image?.url || '/images/fallback.jpg'} alt={listing.title} className="listing-image" />
                                         <div className="listing-content">
                                             <h3 className="listing-title">{listing.title}</h3>
                                             <div className="listing-location">
