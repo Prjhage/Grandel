@@ -64,6 +64,7 @@ const NewListing = ({ currUser, showFlash }) => {
         amenities: [],
         petsAllowed: false,
         petChargePerNight: 300,
+        discount: 0,
         numRooms: 1,
         guestsPerRoom: 2,
         acceptHostTerms: false
@@ -120,6 +121,7 @@ const NewListing = ({ currUser, showFlash }) => {
         data.append('listing[petChargePerNight]', formData.petChargePerNight);
         data.append('listing[numRooms]', formData.numRooms);
         data.append('listing[guestsPerRoom]', formData.guestsPerRoom);
+        data.append('listing[discount]', formData.discount);
         data.append('listing[acceptHostTerms]', formData.acceptHostTerms);
 
         formData.amenities.forEach(amenity => {
@@ -339,6 +341,21 @@ const NewListing = ({ currUser, showFlash }) => {
                                     onChange={handleChange}
                                 />
                                 <div className="invalid-feedback">Should be at least 0.</div>
+                            </div>
+                        </div>
+
+                        <div className="lf-row">
+                            <div className="lf-group">
+                                <label>Early Bird Discount (%)</label>
+                                <input
+                                    type="number"
+                                    name="discount"
+                                    min="0"
+                                    max="100"
+                                    value={formData.discount}
+                                    onChange={handleChange}
+                                />
+                                <small className="text-muted">Set 0 for no discount. Guests will see this as "Early Bird Discount" on booking.</small>
                             </div>
                         </div>
                     </div>

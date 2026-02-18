@@ -15,6 +15,7 @@ const BookingNew = ({ currUser, showFlash }) => {
     const [showTerms, setShowTerms] = useState(false);
     const [acceptedTerms, setAcceptedTerms] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [discountAvailable, setDiscountAvailable] = useState(false);
 
     // Guest data from query params
     const roomsDataSearch = searchParams.get('roomsData');
@@ -35,6 +36,7 @@ const BookingNew = ({ currUser, showFlash }) => {
             try {
                 const res = await axios.get(`/listings/${id}`);
                 setListing(res.data.listing || res.data);
+                setDiscountAvailable(res.data.discountAvailable || false);
                 setLoading(false);
             } catch (err) {
                 showFlash('Error fetching listing details', 'error');
@@ -59,14 +61,23 @@ const BookingNew = ({ currUser, showFlash }) => {
         const petCost = guests.animals * PET_PRICE * nights;
 
         const subtotal = baseTotal + petCost;
-        const gst = Math.round(subtotal * 0.18);
-        const total = subtotal + gst;
+
+        let discount = 0;
+        const discountPercent = listing.discount || 0;
+        if (discountPercent > 0 && discountAvailable) {
+            discount = Math.round(subtotal * discountPercent / 100);
+        }
+
+        const discountedSubtotal = subtotal - discount;
+        const gst = Math.round(discountedSubtotal * 0.18);
+        const total = discountedSubtotal + gst;
 
         return {
             nights,
             baseTotal,
             petCost,
             subtotal,
+            discount,
             gst,
             total
         };
@@ -83,7 +94,8 @@ const BookingNew = ({ currUser, showFlash }) => {
 
         setIsSubmitting(true);
         try {
-            await axios.post(`/listings/${id}/book`, {
+            // 1. Initiate Booking (Create Razorpay Order)
+            const initiateRes = await axios.post(`/listings/${id}/book/initiate`, {
                 startDate,
                 endDate,
                 adults: guests.adults,
@@ -91,12 +103,81 @@ const BookingNew = ({ currUser, showFlash }) => {
                 infants: guests.infants,
                 animals: guests.animals,
                 numRooms: guests.numRooms,
-                acceptGuestTerms: true
             });
-            showFlash('Booking is Done!', 'success');
-            navigate('/profile');
+
+            if (!initiateRes.data.success) {
+                throw new Error(initiateRes.data.message || 'Failed to initiate booking');
+            }
+
+            const { order, key, tokenAmount, totalPrice } = initiateRes.data;
+
+            // 2. Open Razorpay Checkout
+            const options = {
+                key: key,
+                amount: order.amount,
+                currency: order.currency,
+                name: "Grandel Stays",
+                description: `Booking for ${listing.title} (20% Token Amount)`,
+                image: "https://res.cloudinary.com/dqu3s2x41/image/upload/v1707555555/logo_icon.png", // Start with a generic or app logo if you have one
+                order_id: order.id,
+                handler: async function (response) {
+                    // 3. On Payment Success -> Verify & Create Booking
+                    try {
+                        const verifyRes = await axios.post(`/listings/${id}/book/verify`, {
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            bookingDetails: {
+                                startDate,
+                                endDate,
+                                adults: guests.adults,
+                                children: guests.children,
+                                infants: guests.infants,
+                                animals: guests.animals,
+                                numRooms: guests.numRooms,
+                                acceptGuestTerms: true
+                            }
+                        });
+
+
+                        if (verifyRes.data.success) {
+                            showFlash('Booking Confirmed! Payment Successful.', 'success');
+                            navigate('/profile');
+                        } else {
+                            showFlash('Payment verification failed. Please contact support.', 'error');
+                            setIsSubmitting(false);
+                        }
+                    } catch (verifyErr) {
+                        console.error("Verification Error:", verifyErr);
+                        showFlash(verifyErr.response?.data?.message || 'Payment verification failed', 'error');
+                        setIsSubmitting(false);
+                    }
+                },
+                prefill: {
+                    name: currUser?.username || "",
+                    email: currUser?.email || "",
+                    contact: currUser?.phone || ""
+                },
+                notes: {
+                    address: "Grandel Booking"
+                },
+                theme: {
+                    color: "#fe424d"
+                },
+                modal: {
+                    ondismiss: function () {
+                        setIsSubmitting(false);
+                        showFlash('Payment cancelled', 'info');
+                    }
+                }
+            };
+
+            const rzp1 = new window.Razorpay(options);
+            rzp1.open();
+
         } catch (err) {
-            showFlash(err.response?.data?.message || 'Booking failed', 'error');
+            console.error("Booking Error:", err);
+            showFlash(err.response?.data?.message || 'Booking initiation failed', 'error');
             setIsSubmitting(false);
         }
     };
@@ -194,6 +275,12 @@ const BookingNew = ({ currUser, showFlash }) => {
                                 <span>Subtotal</span>
                                 <span>₹{priceInfo.subtotal.toLocaleString('en-IN')}</span>
                             </div>
+                            {priceInfo.discount > 0 && (
+                                <div className="price-row d-flex justify-content-between mb-2" style={{ color: '#28a745' }}>
+                                    <span>⚡ Early Bird Discount ({listing.discount}%)</span>
+                                    <span>- ₹{priceInfo.discount.toLocaleString('en-IN')}</span>
+                                </div>
+                            )}
                             <div className="price-row d-flex justify-content-between mb-2">
                                 <span>GST (18%)</span>
                                 <span>₹{priceInfo.gst.toLocaleString('en-IN')}</span>
@@ -202,6 +289,10 @@ const BookingNew = ({ currUser, showFlash }) => {
                             <div className="price-row d-flex justify-content-between fw-bold fs-5">
                                 <span>Total</span>
                                 <span className="text-primary-custom">₹{priceInfo.total.toLocaleString('en-IN')}</span>
+                            </div>
+                            <div className="price-row d-flex justify-content-between fw-bold mt-2 pt-2 border-top text-success">
+                                <span>Pay Now (20% Token)</span>
+                                <span>₹{Math.round(priceInfo.total * 0.20).toLocaleString('en-IN')}</span>
                             </div>
                             <p className="text-muted small mt-2">
                                 ℹ Base price is per room. Max {listing.guestsPerRoom} guests allowed per room.
@@ -230,10 +321,10 @@ const BookingNew = ({ currUser, showFlash }) => {
                         {isSubmitting ? (
                             <>
                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Processing...
+                                Processing Payment...
                             </>
                         ) : (
-                            'Confirm & Reserve'
+                            'Pay Token & Reserve'
                         )}
                     </button>
                 </form>

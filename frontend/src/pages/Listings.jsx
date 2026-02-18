@@ -135,6 +135,11 @@ const Listings = ({ currUser }) => {
                                             alt="listing_image"
                                             onError={(e) => { e.target.src = '/images/fallback.jpg'; }}
                                         />
+                                        {listing.discount > 0 && listing.discountAvailable && (
+                                            <div className="early-bird-badge">
+                                                <i className="fa-solid fa-bolt"></i> {listing.discount}% Early Bird
+                                            </div>
+                                        )}
                                         {reviewCount > 0 && (
                                             <div className="image-overlay-info">
                                                 <span className="overlay-rating">

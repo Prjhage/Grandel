@@ -29,6 +29,7 @@ const EditListing = ({ currUser, showFlash }) => {
         amenities: [],
         petsAllowed: false,
         petChargePerNight: 300,
+        discount: 0,
         numRooms: 1,
         guestsPerRoom: 2
     });
@@ -53,6 +54,7 @@ const EditListing = ({ currUser, showFlash }) => {
                     amenities: listing.amenities || [],
                     petsAllowed: listing.petsAllowed || false,
                     petChargePerNight: listing.petChargePerNight || 300,
+                    discount: listing.discount || 0,
                     numRooms: listing.numRooms || 1,
                     guestsPerRoom: listing.guestsPerRoom || 2
                 });
@@ -124,6 +126,7 @@ const EditListing = ({ currUser, showFlash }) => {
         data.append('listing[petChargePerNight]', formData.petChargePerNight);
         data.append('listing[numRooms]', formData.numRooms);
         data.append('listing[guestsPerRoom]', formData.guestsPerRoom);
+        data.append('listing[discount]', formData.discount);
 
         formData.amenities.forEach(amenity => {
             data.append('listing[amenities]', amenity);
@@ -333,6 +336,21 @@ const EditListing = ({ currUser, showFlash }) => {
                                     value={formData.petChargePerNight}
                                     onChange={handleChange}
                                 />
+                            </div>
+                        </div>
+
+                        <div className="lf-row">
+                            <div className="lf-group">
+                                <label>Early Bird Discount (%)</label>
+                                <input
+                                    type="number"
+                                    name="discount"
+                                    min="0"
+                                    max="100"
+                                    value={formData.discount}
+                                    onChange={handleChange}
+                                />
+                                <small className="text-muted">Set 0 for no discount. Guests will see this as "Early Bird Discount" on booking.</small>
                             </div>
                         </div>
                     </div>

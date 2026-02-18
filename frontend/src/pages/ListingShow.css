@@ -364,6 +364,23 @@
     font-size: 1rem;
 }
 
+.discount-applied-tag {
+    display: inline-flex;
+    align-items: center;
+    background: #e6fffa;
+    color: #059669;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid #c6f6d5;
+}
+
+.discount-applied-tag i {
+    color: #059669;
+    font-size: 0.75rem;
+}
+
 /* Guest Selection */
 .guest-box {
     border: 1px solid #ddd;

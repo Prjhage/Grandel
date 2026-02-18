@@ -73,6 +73,12 @@ const listingSchema = new Schema({
     default: 300,
     min: 0,
   },
+  discount: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 100,
+  },
   geometry: {
     type: {
       type: String,
@@ -106,6 +112,9 @@ listingSchema.post("findOneAndDelete", async function (listing) {
   }
 });
 listingSchema.index({ geometry: "2dsphere" });
+listingSchema.index({ category: 1 });
+listingSchema.index({ price: 1 });
+listingSchema.index({ avgRating: -1 });
 
 const Listing = mongoose.model("Listing", listingSchema, "listings");
 

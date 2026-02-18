@@ -1,20 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const logFile = fs.createWriteStream(path.join(__dirname, 'debug.log'), { flags: 'a' });
-const logStdout = process.stdout;
-
-console.log = function (d) {
-  logFile.write(`[LOG] ${new Date().toISOString()} ${d}\n`);
-  logStdout.write(d + '\n');
-};
-console.error = function (d) {
-  logFile.write(`[ERR] ${new Date().toISOString()} ${d}\n`);
-  logStdout.write(d + '\n');
-};
-console.warn = function (d) {
-  logFile.write(`[WRN] ${new Date().toISOString()} ${d}\n`);
-  logStdout.write(d + '\n');
-};
 
 const envPath = path.join(__dirname, '.env');
 if (fs.existsSync(envPath)) {
@@ -27,8 +12,15 @@ if (fs.existsSync(envPath)) {
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-app.set("trust proxy", 1); // Trust proxy for secure cookies on Render
 const cors = require("cors");
+const helmet = require("helmet");
+const hpp = require("hpp");
+const rateLimit = require("express-rate-limit");
+const compression = require("compression");
+const morgan = require("morgan");
+
+app.set("trust proxy", 1);
+
 
 // =================================================
 // CORS CONFIGURATION (MUST BE AT THE TOP)
@@ -45,6 +37,49 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(morgan('dev'));
+
+// =================================================
+// SECURITY MIDDLEWARE
+// =================================================
+// Set security HTTP headers
+app.use(helmet());
+
+// Performance: Compression
+app.use(compression());
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again after 15 minutes"
+});
+app.use("/api/", limiter);
+
+// Custom Data Sanitization against NoSQL Injection (Express 5 compatible)
+app.use((req, res, next) => {
+  const sanitize = (obj) => {
+    if (obj && typeof obj === 'object') {
+      Object.keys(obj).forEach(key => {
+        if (key.startsWith('$')) {
+          delete obj[key];
+        } else {
+          sanitize(obj[key]);
+        }
+      });
+    }
+  };
+
+  if (req.body) sanitize(req.body);
+  if (req.params) sanitize(req.params);
+  // In Express 5, req.query is a getter. We sanitize the object it returns.
+  if (req.query) sanitize(req.query);
+
+  next();
+});
+
+// Prevent HTTP parameter pollution
+app.use(hpp());
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
@@ -154,12 +189,9 @@ app.get("/api/featured", async (req, res) => {
     // Fetch top 6 featured listings with optimized query
     const featuredListings = await Listing.find()
       .limit(6)
-      .select('title image price location reviews')
       .populate({
         path: 'reviews',
-        select: 'rating'
       })
-      .lean()
       .exec();
 
     // Calculate average rating for each listing

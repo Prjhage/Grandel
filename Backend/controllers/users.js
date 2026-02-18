@@ -29,25 +29,13 @@ module.exports.firebaseRegister = async (req, res, next) => {
             }
         }
 
-        if (!phone) {
-            return res.status(400).json({ message: "Phone number is required." });
+        // phone is now optional
+        let phoneHash = null;
+        let phoneLast4 = null;
+        if (phone) {
+            phoneHash = await bcrypt.hash(phone, 10);
+            phoneLast4 = phone.slice(-4);
         }
-
-        // Security check: Match session verified phone with body phone
-        if (!req.session.verifiedPhone || req.session.verifiedPhone !== phone) {
-            return res.status(403).json({
-                message: "Mobile number verification required. Please verify with OTP before signing up."
-            });
-        }
-
-        // Clear verification proof after use
-        delete req.session.verifiedPhone;
-
-
-
-        const phoneHash = await bcrypt.hash(phone, 10);
-        const phoneLast4 = phone.slice(-4);
-
 
         const newUser = new User({
             email,
@@ -217,23 +205,33 @@ module.exports.toggleWishlist = async (req, res) => {
 };
 
 module.exports.getWishlist = async (req, res) => {
-    const user = await User.findById(req.user._id).populate("wishlist");
+    const user = await User.findById(req.user._id)
+        .populate({
+            path: "wishlist",
+            select: "title image price location avgRating ratingCount"
+        })
+        .lean();
     res.json({ listings: user.wishlist });
 };
 
 module.exports.profile = async (req, res) => {
     try {
-        // Fetch fresh user data to ensure wishlist and other properties are up to date
-        const user = await User.findById(req.user._id);
+        // Fetch fresh user data optimized
+        const user = await User.findById(req.user._id).lean();
 
         const wishlistListings = await Listing.find({
             _id: { $in: user.wishlist || [] },
-        });
+        }).select("title image price location avgRating ratingCount").lean();
 
-        const bookings = await Booking.find({ user: user._id }).populate(
-            "listing",
-        );
-        const myListings = await Listing.find({ Owner: user._id });
+        const bookings = await Booking.find({ user: user._id })
+            .populate({
+                path: "listing",
+                select: "title image location"
+            })
+            .lean();
+        const myListings = await Listing.find({ Owner: user._id })
+            .select("title image price location avgRating ratingCount")
+            .lean();
 
         res.json({
             user: user,
@@ -268,22 +266,10 @@ module.exports.updateProfile = async (req, res) => {
             user.email = email;
         }
 
-        // 3. Update Phone (Requires OTP Verification proof in session)
+        // 3. Update Phone (Optional, no OTP required)
         if (phone) {
-            // If phone is different, check verification
-            // Note: phone arriving here should be the clean +91 version from frontend
-            if (!req.session.verifiedPhone || req.session.verifiedPhone !== phone) {
-                return res.status(403).json({
-                    success: false,
-                    message: "Mobile number verification required. Please verify with OTP."
-                });
-            }
-
             user.phoneHash = await bcrypt.hash(phone, 10);
             user.phoneLast4 = phone.slice(-4);
-
-            // Clear verification proof after use
-            delete req.session.verifiedPhone;
         }
 
         await user.save();

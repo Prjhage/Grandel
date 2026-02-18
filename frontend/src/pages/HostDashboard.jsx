@@ -95,10 +95,6 @@ const HostDashboard = ({ currUser, showFlash }) => {
                                 <i className="fas fa-user text-info me-2"></i>
                                 <strong>Guest:</strong> {booking.user?.username || 'N/A'}
                             </p>
-                            <p>
-                                <i className="fas fa-phone text-success me-2"></i>
-                                <strong>Phone:</strong> **** **** {booking.user?.phoneLast4 || booking.user?.phone?.slice(-4) || 'N/A'}
-                            </p>
                         </div>
                         <div className="detail-group">
                             <p>
@@ -108,6 +104,12 @@ const HostDashboard = ({ currUser, showFlash }) => {
                             <p>
                                 <i className="fas fa-rupee-sign text-success me-2"></i>
                                 <strong>Total:</strong> ₹ {booking.totalPrice?.toLocaleString('en-IN') || 0}
+                                {booking.discountApplied && (
+                                    <span className="ms-2 badge bg-success-light text-success border-success-light">
+                                        <i className="fas fa-bolt me-1"></i>
+                                        Early Bird
+                                    </span>
+                                )}
                             </p>
                         </div>
                     </div>

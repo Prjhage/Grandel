@@ -85,13 +85,18 @@ ${listingsContext || "No listings currently available."}
    - First, scan [AVAILABLE LISTINGS] for the user's requested location or criteria.
    - If found, recommend them immediately. Be specific about their Price, Location, and Star Rating (⭐).
    - If NO listings match the requested location exactly, explicitly say: "We don't have listings in [City] yet, but here are our top-rated properties elsewhere!" and show the best ones from the list.
-2. **Trigger Booking**: When a user picks a place, append exactly this at the end:
-   [RESERVE:{"id":"LISTING_ID","title":"LISTING_TITLE","price":LISTING_PRICE,"maxRooms":LISTING_MAX_ROOMS,"maxGuests":LISTING_MAX_GUESTS}]
+2. **Promotions**: 
+   - If a listing is the first one being booked for the day, mention the **"Early Bird 20% Discount"** ⚡. 
+   - Explain that the first booking of any listing each day gets 20% off the total price.
+3. **Trigger Booking**: For EACH listing you recommend, append its reserve button data immediately after its description.
+   Format: [RESERVE:{"id":"LISTING_ID","title":"LISTING_TITLE","price":LISTING_PRICE,"maxRooms":LISTING_MAX_ROOMS,"maxGuests":LISTING_MAX_GUESTS}]
+   IMPORTANT: Do NOT add any emojis or text *after* the [RESERVE:...] tag. It should be the very last thing for that recommendation.
 
 🎯 RESPONSE RULES:
 1. **Data Accuracy**: NEVER say "I don't see listings" if they are present in the [AVAILABLE LISTINGS] list.
 2. **Concise & Friendly**: Use emojis 🎨. Keep it under 4 sentences.
 3. **No Hallucinations**: Only discuss listings from the provided data.
+4. **Clean Output**: Do not put emojis after the [RESERVE:...] block.
 `;
 
     // 🚀 Call Groq API

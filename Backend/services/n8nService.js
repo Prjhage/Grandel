@@ -58,12 +58,15 @@ class n8nService {
         }
 
         try {
-            const response = await axios.post(this.emailWebhookUrl, {
+            const payload = {
                 email,
                 type, // 'guest_confirmation', 'host_notification', or 'guest_thanks'
                 booking: bookingDetails,
                 timestamp: new Date().toISOString()
-            }, {
+            };
+            console.log(`[n8nService Debug] Sending TYPE: "${payload.type}" to ${payload.email}`);
+
+            const response = await axios.post(this.emailWebhookUrl, payload, {
                 headers: {
                     "X-N8N-API-KEY": this.apiKey,
                     "Content-Type": "application/json"

@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    deleteUser,
+    signInWithEmailAndPassword,
+    signInWithPopup
+} from 'firebase/auth';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
-import '../config/firebase';
+import { auth, googleProvider } from '../config/firebase';
 import './Auth.css';
 
 const Signup = ({ onLogin, showFlash }) => {
@@ -11,12 +17,8 @@ const Signup = ({ onLogin, showFlash }) => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        password: '',
-        phone: '',
-        otp: ''
+        password: ''
     });
-    const [isOtpSent, setIsOtpSent] = useState(false);
-    const [isVerified, setIsVerified] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -30,39 +32,31 @@ const Signup = ({ onLogin, showFlash }) => {
         }
     }, [error]);
 
-    const handleSendOtp = async () => {
-        if (!formData.phone || formData.phone.length < 10) {
-            setError('Please enter a valid 10-digit mobile number');
-            return;
-        }
-        setError('');
+    const handleGoogleSignup = async () => {
         setLoading(true);
+        setError('');
         try {
-            const cleanPhone = formData.phone.startsWith('+91') ? formData.phone : `+91${formData.phone}`;
-            const res = await axios.post('/send-otp', { phone: cleanPhone });
-            if (res.data.success) {
-                setIsOtpSent(true);
-                showFlash('OTP sent to your mobile!', 'success');
-            }
-        } catch (err) {
-            setError(err.response?.data?.error || 'Failed to send OTP');
-        } finally {
-            setLoading(false);
-        }
-    };
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+            const token = await user.getIdToken();
 
-    const handleVerifyOtp = async () => {
-        setError('');
-        setLoading(true);
-        try {
-            const cleanPhone = formData.phone.startsWith('+91') ? formData.phone : `+91${formData.phone}`;
-            const res = await axios.post('/verify-otp', { phone: cleanPhone, code: formData.otp });
+            const res = await axios.post('/signup', {
+                username: user.displayName || user.email.split('@')[0],
+                email: user.email,
+                idToken: token
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
             if (res.data.success) {
-                setIsVerified(true);
-                showFlash('Mobile number verified!', 'success');
+                clearCache();
+                onLogin(res.data.user);
+                showFlash('Signed up with Google successfully!', 'success');
+                navigate('/listings');
             }
         } catch (err) {
-            setError(err.response?.data?.error || 'Invalid OTP');
+            console.error("Google Signup Error:", err);
+            setError(err.response?.data?.message || err.message);
         } finally {
             setLoading(false);
         }
@@ -70,24 +64,16 @@ const Signup = ({ onLogin, showFlash }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!isVerified) {
-            setError('Please verify your mobile number first.');
-            return;
-        }
         setError('');
         let userCredential;
         let isNewFirebaseUser = false;
 
         try {
-            const auth = getAuth();
-
             try {
                 userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
                 isNewFirebaseUser = true;
             } catch (firebaseErr) {
                 if (firebaseErr.code === 'auth/email-already-in-use') {
-
                     try {
                         userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
                         isNewFirebaseUser = false;
@@ -101,27 +87,20 @@ const Signup = ({ onLogin, showFlash }) => {
 
             const token = await userCredential.user.getIdToken();
 
-            // Ensure phone number format matches what was verified
-            const cleanPhone = formData.phone.startsWith('+91') ? formData.phone : `+91${formData.phone}`;
-
             const res = await axios.post('/signup', {
                 ...formData,
-                phone: cleanPhone,  // Send the +91 prefixed phone
-                token,
                 idToken: token
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.data.success) {
-                clearCache(); // Force fresh fetch on profile page
+                clearCache();
                 onLogin(res.data.user);
                 showFlash('Account created successfully!', 'success');
                 navigate('/listings');
             }
         } catch (err) {
             console.error(err);
-
-
             if (isNewFirebaseUser && userCredential && userCredential.user) {
                 await deleteUser(userCredential.user).catch(e => console.error("Error cleaning up user:", e));
             }
@@ -207,77 +186,24 @@ const Signup = ({ onLogin, showFlash }) => {
                             </div>
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="phone" className="form-label">Mobile Number</label>
-                            <div className="input-with-action">
-                                <div className="input-wrapper" style={{ flex: 1 }}>
-                                    <i className="fa-solid fa-phone input-icon"></i>
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        id="phone"
-                                        placeholder="10-digit mobile number"
-                                        required
-                                        disabled={isVerified}
-                                        value={formData.phone}
-                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                    />
-                                </div>
-                                {!isVerified && (
-                                    <button
-                                        type="button"
-                                        className="btn btn-sm action-btn"
-                                        onClick={handleSendOtp}
-                                        disabled={loading || isOtpSent}
-                                    >
-                                        {isOtpSent ? 'Resend' : 'Send'}
-                                    </button>
-                                )}
-                            </div>
+                        <button type="submit" className="login-btn" disabled={loading}>
+                            {loading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
+                        </button>
+
+                        <div className="social-login-separator mt-4 mb-3">
+                            <span>OR</span>
                         </div>
 
-                        {isOtpSent && !isVerified && (
-                            <div className="form-group">
-                                <label htmlFor="otp" className="form-label">Verification Code</label>
-                                <div className="input-with-action">
-                                    <div className="input-wrapper" style={{ flex: 1 }}>
-                                        <i className="fa-solid fa-key input-icon"></i>
-                                        <input
-                                            type="text"
-                                            name="otp"
-                                            id="otp"
-                                            placeholder="Enter 6-digit OTP"
-                                            maxLength="6"
-                                            value={formData.otp}
-                                            onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
-                                        />
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="btn btn-sm action-btn"
-                                        onClick={handleVerifyOtp}
-                                        disabled={loading}
-                                    >
-                                        {loading ? '...' : 'Verify'}
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
-                        {isVerified && (
-                            <div className="text-success small mb-3">
-                                <i className="fa-solid fa-circle-check"></i> Phone Verified
-                            </div>
-                        )}
-
-                        <div className="terms-checkbox">
-                            <input type="checkbox" id="terms" required />
-                            <label htmlFor="terms" style={{ margin: 0 }}>
-                                I read and agree to <Link to="/terms" target="_blank">Terms & Conditions</Link>
-                            </label>
-                        </div>
-
-                        <button type="submit" className="login-btn" disabled={!isVerified}>CREATE ACCOUNT</button>
+                        <button
+                            type="button"
+                            className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center"
+                            onClick={handleGoogleSignup}
+                            disabled={loading}
+                            style={{ borderRadius: '10px', padding: '10px', fontSize: '0.9rem', fontWeight: '500' }}
+                        >
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', marginRight: '10px' }} />
+                            Sign up with Google
+                        </button>
 
                         <Link to="/login" className="forgot-link mt-3">
                             Already have an account? Sign in

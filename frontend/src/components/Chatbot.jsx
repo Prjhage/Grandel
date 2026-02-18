@@ -115,18 +115,35 @@ const Chatbot = ({ currUser }) => {
     };
 
     const parseMessage = (text) => {
-        const reserveRegex = /\[RESERVE:(.*?)\]/;
-        const match = text.match(reserveRegex);
-        if (match) {
+        const regex = /\[RESERVE:(.*?)\]/g;
+        const parts = [];
+        let lastIndex = 0;
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+            if (match.index > lastIndex) {
+                const content = text.substring(lastIndex, match.index);
+                if (content.trim()) {
+                    parts.push({ type: 'text', content: content });
+                }
+            }
             try {
                 const data = JSON.parse(match[1]);
-                const cleanText = text.replace(reserveRegex, '').trim();
-                return { text: cleanText, reserveData: data };
+                parts.push({ type: 'reserve', data });
             } catch (e) {
                 console.error("Failed to parse reserve data", e);
             }
+            lastIndex = regex.lastIndex;
         }
-        return { text };
+
+        if (lastIndex < text.length) {
+            const content = text.substring(lastIndex);
+            if (content.trim()) {
+                parts.push({ type: 'text', content: content });
+            }
+        }
+
+        return parts.length > 0 ? parts : [{ type: 'text', content: text }];
     };
 
     const handleReserve = (listingId, roomsData) => {
@@ -167,6 +184,8 @@ const Chatbot = ({ currUser }) => {
         }
     };
 
+    if (!currUser) return null;
+
     return (
         <>
             {isOpen && (
@@ -181,30 +200,39 @@ const Chatbot = ({ currUser }) => {
 
                     <div className="chatbot-messages">
                         {messages.map((msg, index) => {
-                            const { text, reserveData } = parseMessage(msg.text);
-                            const isFormOpen = openReserveIndices.includes(index);
+                            const parts = parseMessage(msg.text);
 
                             return (
                                 <div key={index} className={`chat-message ${msg.sender}-message`}>
                                     <div className="message-content">
-                                        <p>{text}</p>
-                                        {reserveData && (
-                                            <div className="reserve-trigger-container mt-2">
-                                                {!isFormOpen ? (
-                                                    <button
-                                                        className="btn btn-sm btn-primary rounded-pill px-3 shadow-sm reserve-trigger-btn"
-                                                        onClick={() => toggleReserveForm(index)}
-                                                    >
-                                                        <i className="fa-solid fa-calendar-check me-1"></i> Reserve
-                                                    </button>
-                                                ) : (
-                                                    <QuickReserveForm
-                                                        data={reserveData}
-                                                        onReserve={(roomsData) => handleReserve(reserveData.id, roomsData)}
-                                                    />
-                                                )}
-                                            </div>
-                                        )}
+                                        {parts.map((part, partIndex) => {
+                                            if (part.type === 'text') {
+                                                return <p key={partIndex} className="mb-0" style={{ whiteSpace: 'pre-wrap' }}>{part.content}</p>;
+                                            } else if (part.type === 'reserve') {
+                                                // Unique key for the form visibility state using message index and part index
+                                                const uniqueId = `${index}-${partIndex}`;
+                                                const isFormOpen = openReserveIndices.includes(uniqueId);
+
+                                                return (
+                                                    <div key={partIndex} className="reserve-trigger-container mt-2 mb-2">
+                                                        {!isFormOpen ? (
+                                                            <button
+                                                                className="btn btn-sm btn-primary rounded-pill px-3 shadow-sm reserve-trigger-btn"
+                                                                onClick={() => toggleReserveForm(uniqueId)}
+                                                            >
+                                                                <i className="fa-solid fa-calendar-check me-1"></i> Reserve {part.data.title}
+                                                            </button>
+                                                        ) : (
+                                                            <QuickReserveForm
+                                                                data={part.data}
+                                                                onReserve={(roomsData) => handleReserve(part.data.id, roomsData)}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })}
                                     </div>
                                 </div>
                             );

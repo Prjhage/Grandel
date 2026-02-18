@@ -107,8 +107,27 @@ const bookingSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "cancelled", "completed"],
-      default: "pending",
+      enum: ["pending", "confirmed", "cancelled", "completed", "pending_payment"],
+      default: "pending_payment",
+    },
+    payment: {
+      razorpayOrderId: { type: String },
+      razorpayPaymentId: { type: String },
+      amount: { type: Number },
+      status: {
+        type: String,
+        enum: ['pending', 'paid', 'failed'],
+        default: 'pending'
+      },
+    },
+    // 🏷️ Discount logic
+    discountApplied: {
+      type: Boolean,
+      default: false,
+    },
+    discountAmount: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

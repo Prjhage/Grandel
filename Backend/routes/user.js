@@ -73,7 +73,7 @@ router.get(
     const bookings = await Booking.find({
       listing: { $in: listingIds },
     })
-      .populate("user", "username email phoneLast4")
+      .populate("user", "username email")
       .populate("listing", "title");
 
     // 📊 Categorize bookings
@@ -135,6 +135,7 @@ router.post(
 
       if (status === 'confirmed') {
         // Send Guest Confirmation
+        console.log(`[Email Debug] Sending guest_confirmation to Guest: ${booking.user.email}`);
         await n8nService.sendBookingConfirmation(booking.user.email, {
           id: booking._id,
           listingName: booking.listing.title,
@@ -147,6 +148,7 @@ router.post(
 
       } else if (status === 'completed') {
         // Send Guest "Thank You"
+        console.log(`[Email Debug] Sending guest_thanks to Guest: ${booking.user.email}`);
         await n8nService.sendBookingConfirmation(booking.user.email, {
           id: booking._id,
           listingName: booking.listing.title,

@@ -81,7 +81,11 @@ const ListingShow = ({ currUser, showFlash }) => {
             const tc = res.data.travelCompanion || data.travelCompanion || { places: [], food: [] };
             setTravelCompanion(tc);
 
-            if (res.data.nearbyPlaces) setNearbyPlaces(res.data.nearbyPlaces);
+            // Merge discountAvailable
+            if (res.data.discountAvailable !== undefined) {
+                data.discountAvailable = res.data.discountAvailable;
+            }
+            setListing(data);
             setHostStats({
                 reviewsCount: res.data.hostReviewsCount || 0,
                 avgRating: res.data.hostAvgRating || 0
@@ -139,7 +143,14 @@ const ListingShow = ({ currUser, showFlash }) => {
         const basePrice = listing.price;
         const petCharge = listing.petChargePerNight || 300;
 
-        return (basePrice * guests.rooms.length) + (guests.animals * petCharge);
+        let total = (basePrice * guests.rooms.length) + (guests.animals * petCharge);
+
+        const discountPercent = listing.discount || 0;
+        if (discountPercent > 0 && listing.discountAvailable) {
+            total = total * (1 - discountPercent / 100);
+        }
+
+        return Math.round(total);
     };
 
     const getGuestSummary = () => {
@@ -505,7 +516,7 @@ const ListingShow = ({ currUser, showFlash }) => {
                     <h3 id="map-section">Where you'll be</h3>
                     <div className="listing-map col-12 mt-5 px-0">
                         <iframe
-                            src={`https://www.google.com/maps?q=${encodeURIComponent(`${listing.title}, ${listing.location}, ${listing.country}`)}&z=14&output=embed`}
+                            src={`https://maps.google.com/maps?q=${encodeURIComponent(`${listing.title}, ${listing.location}, ${listing.country}`)}&z=14&ie=UTF8&iwloc=B&output=embed`}
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
                             style={{ width: '100%', height: '420px', border: 0, borderRadius: '16px' }}
@@ -521,6 +532,12 @@ const ListingShow = ({ currUser, showFlash }) => {
                                 <div className="price-info mb-3">
                                     <span className="final-price">₹{calculatePrice().toLocaleString('en-IN')}</span>
                                     <span className="night-text"> / night</span>
+                                    {listing.discount > 0 && listing.discountAvailable && (
+                                        <div className="discount-applied-tag mt-1">
+                                            <i className="fa-solid fa-bolt me-1"></i>
+                                            {listing.discount}% Early Bird Discount
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="guest-box" onClick={() => setShowGuestDropdown(!showGuestDropdown)}>

@@ -69,7 +69,13 @@ module.exports.index = async (req, res) => {
     };
   }
 
-  let allListings = await Listing.find(query);
+  let allListings = await Listing.find(query)
+    .select('title image price location reviews numRooms guestsPerRoom discount avgRating ratingCount')
+    .populate({
+      path: 'reviews',
+      select: 'rating'
+    })
+    .lean();
 
   // 3. Date Availability & Strict Capacity Filtering
   if ((startDate && endDate) || reqRooms > 0 || reqGuests > 0) {
@@ -115,14 +121,26 @@ module.exports.index = async (req, res) => {
   }
 
   const userWishlist = req.user ? req.user.wishlist || [] : [];
+  const isHost = req.user ? req.user.role === 'host' : false;
 
-  // Check if user has any listings (is a host)
-  const isHost = req.user
-    ? (await Listing.find({ Owner: req.user._id })).length > 0
-    : false;
+  // Early Bird Discount availability: hide discount if listing was booked today
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const bookedTodayIds = await Booking.distinct("listing", {
+    createdAt: { $gte: today },
+    status: { $ne: "cancelled" }
+  });
+  const bookedTodaySet = new Set(bookedTodayIds.map(id => id.toString()));
+
+  const listingsWithDiscount = allListings.map(l => {
+    const obj = l.toObject ? l.toObject() : { ...l };
+    obj.discountAvailable = obj.discount > 0 && !bookedTodaySet.has(obj._id.toString());
+    return obj;
+  });
 
   res.json({
-    allListings,
+    allListings: listingsWithDiscount,
     userWishlist,
     isHost,
     sort,
@@ -133,8 +151,9 @@ module.exports.showListings = async (req, res) => {
   const { id } = req.params;
 
   const listing = await Listing.findById(id)
-    .populate({ path: "reviews", populate: { path: "author" } })
-    .populate("Owner");
+    .populate({ path: "reviews", populate: { path: "author", select: 'username avatar' } })
+    .populate("Owner", "username email avatar")
+    .lean();
 
   if (!listing) {
     return res.status(404).json({ success: false, message: "Listing you requested for does not exist!" });
@@ -146,8 +165,8 @@ module.exports.showListings = async (req, res) => {
   }
   if (listing.images && listing.images.length > 0) {
     listing.images = listing.images.map(img => ({
-      ...img.toObject(),
-      url: img.url.replace(/\/upload\/[a-z0-9_,]+\//, '/upload/')
+      ...(img.toObject ? img.toObject() : img),
+      url: img.url ? img.url.replace(/\/upload\/[a-z0-9_,]+\//, '/upload/') : ""
     }));
   }
 
@@ -213,6 +232,20 @@ module.exports.showListings = async (req, res) => {
     }
   }
 
+  // Early Bird Discount: available only if not booked today
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let discountAvailable = false;
+
+  if (listing.discount > 0) {
+    const bookingToday = await Booking.findOne({
+      listing: id,
+      createdAt: { $gte: today },
+      status: { $ne: "cancelled" }
+    });
+    discountAvailable = !bookingToday;
+  }
+
   res.json({
     listing,
     avgRating: listing.avgRating,
@@ -221,6 +254,7 @@ module.exports.showListings = async (req, res) => {
     nearbyPlaces,
     travelCompanion,
     amenityIcons,
+    discountAvailable
   });
 };
 
@@ -441,6 +475,7 @@ module.exports.updateListings = async (req, res) => {
   listing.petChargePerNight = req.body.listing.petChargePerNight || 300;
   listing.numRooms = req.body.listing.numRooms || 1;
   listing.guestsPerRoom = req.body.listing.guestsPerRoom || 2;
+  listing.discount = req.body.listing.discount != null ? Number(req.body.listing.discount) : 0;
 
   /* ================= AMENITIES UPDATE ================= */
   // If no amenities selected → empty array
