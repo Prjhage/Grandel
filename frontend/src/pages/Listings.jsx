@@ -53,7 +53,7 @@ const Listings = ({ currUser }) => {
         const params = new URLSearchParams(searchParams);
         if (newSort) params.set('sort', newSort);
         else params.delete('sort');
-        setSearchParams(params);
+        setSearchParams(params, { replace: true });
     };
 
     const toggleWishlist = async (listingId) => {

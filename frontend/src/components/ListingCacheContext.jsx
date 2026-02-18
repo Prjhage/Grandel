@@ -21,6 +21,8 @@ export const ListingCacheProvider = ({ children }) => {
         timestamp: null
     });
 
+    const [showCache, setShowCache] = useState({}); // { [id]: { listing, travelCompanion, nearbyPlaces, hostStats, timestamp } }
+
     /**
      * Get cached data if filters match
      * @param {Object} currentFilters - { category, sort, q }
@@ -65,6 +67,38 @@ export const ListingCacheProvider = ({ children }) => {
     };
 
     /**
+     * Get cached show data for a specific listing ID
+     * @param {string} id - Listing ID
+     * @returns {Object|null} - Cached show data or null if not found
+     */
+    const getCachedShow = (id) => {
+        const cached = showCache[id];
+        if (!cached) return null;
+
+        // Optional: Cache expiration (e.g., 5 minutes)
+        if (Date.now() - cached.timestamp > 5 * 60 * 1000) {
+            return null;
+        }
+
+        return cached;
+    };
+
+    /**
+     * Set cached show data for a specific listing ID
+     * @param {string} id - Listing ID
+     * @param {Object} data - { listing, travelCompanion, nearbyPlaces, hostStats }
+     */
+    const setCachedShow = (id, data) => {
+        setShowCache(prev => ({
+            ...prev,
+            [id]: {
+                ...data,
+                timestamp: Date.now()
+            }
+        }));
+    };
+
+    /**
      * Clear all cached data
      */
     const clearCache = () => {
@@ -74,11 +108,14 @@ export const ListingCacheProvider = ({ children }) => {
             filters: null,
             timestamp: null
         });
+        setShowCache({});
     };
 
     const value = {
         getCachedData,
         setCachedData,
+        getCachedShow,
+        setCachedShow,
         clearCache,
         hasCache: !!cache.listings
     };

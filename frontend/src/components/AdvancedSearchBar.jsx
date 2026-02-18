@@ -118,9 +118,9 @@ const AdvancedSearchBar = () => {
         setIsMobileModalOpen(false); // Close on search
 
         if (location.pathname !== '/listings') {
-            navigate(`/listings?${params.toString()}`);
+            navigate(`/listings?${params.toString()}`, { replace: true });
         } else {
-            setSearchParams(params);
+            setSearchParams(params, { replace: true });
         }
     };
 
@@ -140,7 +140,7 @@ const AdvancedSearchBar = () => {
 
         // If on listings page, also clear URL params to trigger new results
         if (location.pathname === '/listings') {
-            setSearchParams(new URLSearchParams());
+            setSearchParams(new URLSearchParams(), { replace: true });
         }
     };
 
@@ -235,8 +235,8 @@ const AdvancedSearchBar = () => {
                                             params.set('q', 'Current Location');
                                             params.set('lat', latitude);
                                             params.set('lng', longitude);
-                                            if (location.pathname === '/listings') setSearchParams(params);
-                                            else navigate(`/listings?${params.toString()}`);
+                                            if (location.pathname === '/listings') setSearchParams(params, { replace: true });
+                                            else navigate(`/listings?${params.toString()}`, { replace: true });
                                         },
                                         (error) => {
                                             handleFilterChange('q', originalQ);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../config/axios';
+import { useListingCache } from '../components/ListingCacheContext';
 import './EditListing.css';
 
 const amenitiesList = [
@@ -19,6 +20,7 @@ const amenitiesList = [
 const EditListing = ({ currUser, showFlash }) => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { clearCache } = useListingCache();
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
         title: '',
@@ -144,6 +146,7 @@ const EditListing = ({ currUser, showFlash }) => {
             await axios.put(`/listings/${id}`, data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
+            clearCache(); // Invalidate cache so ListingShow fetches fresh data
             showFlash('Listing updated successfully!', 'success');
             navigate(`/listings/${id}`);
         } catch (err) {

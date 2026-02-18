@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from '../config/axios';
+import { useListingCache } from '../components/ListingCacheContext';
 import './ListingShow.css';
 
 const amenityIcons = {
@@ -36,7 +37,20 @@ const ListingShow = ({ currUser, showFlash }) => {
     const [nearbyPlaces, setNearbyPlaces] = useState(location.state?.listing?.nearbyPlaces || []);
     const [hostStats, setHostStats] = useState({ reviewsCount: 0, avgRating: 0 });
 
+    const { getCachedShow, setCachedShow } = useListingCache();
+
     useEffect(() => {
+        const cached = getCachedShow(id);
+        if (cached) {
+            setListing(cached.listing);
+            setTravelCompanion(cached.travelCompanion);
+            setNearbyPlaces(cached.nearbyPlaces);
+            setHostStats(cached.hostStats);
+            setLoading(false);
+            setCurrentImageIndex(0);
+            return;
+        }
+
         fetchListing();
         setCurrentImageIndex(0); // Reset to first image when listing changes
     }, [id]);
@@ -86,10 +100,20 @@ const ListingShow = ({ currUser, showFlash }) => {
                 data.discountAvailable = res.data.discountAvailable;
             }
             setListing(data);
-            setHostStats({
+            const stats = {
                 reviewsCount: res.data.hostReviewsCount || 0,
                 avgRating: res.data.hostAvgRating || 0
+            };
+            setHostStats(stats);
+
+            // Cache for future visits
+            setCachedShow(id, {
+                listing: data,
+                travelCompanion: tc,
+                nearbyPlaces: res.data.nearbyPlaces || [], // Assuming nearbyPlaces might be in res.data
+                hostStats: stats
             });
+
             setLoading(false);
         } catch (err) {
             console.error('Error fetching listing:', err);
@@ -210,6 +234,7 @@ const ListingShow = ({ currUser, showFlash }) => {
 
         try {
             await axios.delete(`/listings/${id}`);
+            clearCache(); // Invalidate cache so Listing pages refresh
             showFlash('Listing deleted', 'success');
             navigate('/listings');
         } catch (err) {
