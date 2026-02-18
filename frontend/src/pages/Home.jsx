@@ -248,7 +248,7 @@ const Home = ({ currUser }) => {
                                             <div className="listing-rating">
                                                 <i className="fas fa-star"></i>
                                                 {listing.avgRating ? listing.avgRating.toFixed(1) : 'N/A'}
-                                                {listing.reviews && listing.reviews.length > 0 && ` (${listing.reviews.length} reviews)`}
+                                                {listing.reviews?.length > 0 && ` (${listing.reviews.length} reviews)`}
                                             </div>
                                             <div className="listing-price">₹{listing.price}/night</div>
                                             <button className="listing-button">View Details</button>

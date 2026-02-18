@@ -239,11 +239,11 @@ const Profile = ({ currUser, showFlash }) => {
             {/* Wishlist Tab */}
             {activeTab === 'wishlist' && (
                 <div className="tab-panel active">
-                    {wishlistListings.length === 0 && (
+                    {wishlistListings?.length === 0 && (
                         <p className="empty">No wishlist items yet.</p>
                     )}
                     <div className="grid">
-                        {wishlistListings.map(listing => (
+                        {wishlistListings?.map(listing => (
                             <div key={listing._id} className="card">
                                 <img src={listing.image?.url || '/images/fallback.jpg'} alt={listing.title} />
                                 <h5>{listing.title}</h5>
@@ -262,11 +262,11 @@ const Profile = ({ currUser, showFlash }) => {
             {/* Bookings Tab */}
             {activeTab === 'bookings' && (
                 <div className="tab-panel active">
-                    {bookings.length === 0 && (
+                    {bookings?.length === 0 && (
                         <p className="empty">No bookings yet.</p>
                     )}
                     <div className="grid">
-                        {bookings.map(booking => (
+                        {bookings?.map(booking => (
                             booking.listing && (
                                 <div key={booking._id} className="card">
                                     <img src={booking.listing.image?.url || '/images/fallback.jpg'} alt={booking.listing.title} />
@@ -327,14 +327,14 @@ const Profile = ({ currUser, showFlash }) => {
             {/* My Listings Tab */}
             {activeTab === 'mylistings' && (
                 <div className="tab-panel active">
-                    {(!myListings || myListings.length === 0) && (
+                    {(!myListings || myListings?.length === 0) && (
                         <>
                             <p className="empty">You haven't created any listings yet.</p>
                             <Link to="/listings/new" className="btn btn-dark mt-2">Become a Host</Link>
                         </>
                     )}
                     <div className="grid">
-                        {myListings.map(listing => (
+                        {myListings?.map(listing => (
                             <div key={listing._id} className="card">
                                 <img src={listing.image?.url || '/images/fallback.jpg'} alt={listing.title} />
                                 <h5>{listing.title}</h5>
@@ -445,7 +445,7 @@ const Profile = ({ currUser, showFlash }) => {
                                 <>
                                     <h5 className="text-primary mb-3">📍 Places to Visit</h5>
                                     <div className="row g-3 mb-4">
-                                        {selectedBooking.listing.travelCompanion.places.map((place, idx) => (
+                                        {selectedBooking.listing?.travelCompanion?.places?.map((place, idx) => (
                                             <div key={idx} className="col-md-4">
                                                 <div className="card shadow-sm h-100">
                                                     <img src={place.image || '/images/placeholder.jpg'} style={{ height: '180px', objectFit: 'cover' }} alt={place.name} />
@@ -464,7 +464,7 @@ const Profile = ({ currUser, showFlash }) => {
                                 <>
                                     <h5 className="text-primary mb-3">🍽 Local Food</h5>
                                     <div className="row g-3 mb-4">
-                                        {selectedBooking.listing.travelCompanion.food.map((food, idx) => (
+                                        {selectedBooking.listing?.travelCompanion?.food?.map((food, idx) => (
                                             <div key={idx} className="col-md-3">
                                                 <div className="card shadow-sm h-100">
                                                     <img src={food.image || '/images/placeholder-food.jpg'} style={{ height: '160px', objectFit: 'cover' }} alt={food.name} />
@@ -483,7 +483,7 @@ const Profile = ({ currUser, showFlash }) => {
                                 <>
                                     <h5 className="text-primary mb-3">🗓 Day-wise Itinerary</h5>
                                     <ul className="list-group">
-                                        {selectedBooking.travelCompanion.plan.map((day, idx) => (
+                                        {selectedBooking.travelCompanion?.plan?.map((day, idx) => (
                                             <li key={idx} className="list-group-item">{day}</li>
                                         ))}
                                     </ul>

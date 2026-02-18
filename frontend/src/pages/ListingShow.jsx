@@ -348,11 +348,11 @@ const ListingShow = ({ currUser, showFlash }) => {
                     </div>
 
                     {/* Amenities */}
-                    {listing.amenities && listing.amenities.length > 0 && (
+                    {listing?.amenities?.length > 0 && (
                         <div className="amenities-card p-3 border rounded shadow-sm bg-white mt-3">
                             <h4>What this place offers</h4>
                             <div className="amenities-grid">
-                                {listing.amenities.map((amenity, idx) => (
+                                {listing?.amenities?.map((amenity, idx) => (
                                     <div key={idx} className="amenity-item">
                                         <i className={`fa-solid ${amenityIcons[amenity] || 'fa-check'}`}></i>
                                         <span>{amenity}</span>
@@ -413,11 +413,11 @@ const ListingShow = ({ currUser, showFlash }) => {
                     )}
 
                     {/* All Reviews */}
-                    {listing.reviews && listing.reviews.length > 0 && typeof listing.reviews[0] === 'object' && (
+                    {listing?.reviews?.length > 0 && typeof listing.reviews[0] === 'object' && (
                         <div className="mt-4" id="reviews-section">
                             <h4 className="mb-4">All Reviews</h4>
                             <div className="row">
-                                {listing.reviews.map((review) => (
+                                {listing?.reviews?.map((review) => (
                                     <div key={review._id} className="col-6 col-md-6 mb-4">
                                         <div className="review-card">
                                             <div className="review-header">
@@ -443,7 +443,7 @@ const ListingShow = ({ currUser, showFlash }) => {
                                             </div>
 
                                             <p className="review-text">
-                                                {review.comment.length > 140 ? review.comment.slice(0, 140) + '...' : review.comment}
+                                                {review.comment?.length > 140 ? review.comment.slice(0, 140) + '...' : (review.comment || "")}
                                             </p>
 
                                             {currUser && review.author && currUser._id === review.author._id && (
@@ -462,15 +462,15 @@ const ListingShow = ({ currUser, showFlash }) => {
                     )}
 
                     {/* Around this place (Nearby) */}
-                    {((nearbyPlaces && nearbyPlaces.length > 0) || (travelCompanion.places && travelCompanion.places.length > 0) || (travelCompanion.food && travelCompanion.food.length > 0)) && (
+                    {(nearbyPlaces?.length > 0 || travelCompanion?.places?.length > 0 || travelCompanion?.food?.length > 0) && (
                         <div className="nearby-section mb-4 p-3 border rounded shadow-sm bg-white">
                             <h5 className="mb-3"><i className="fa-solid fa-map-location-dot me-2 text-primary-custom"></i>Around this place</h5>
 
-                            {((nearbyPlaces && nearbyPlaces.length > 0) || (travelCompanion.places && travelCompanion.places.length > 0)) && (
+                            {(nearbyPlaces?.length > 0 || travelCompanion?.places?.length > 0) && (
                                 <>
                                     <h6 className="text-primary-custom mb-2"><i className="fa-solid fa-location-dot me-2"></i>Places to Visit</h6>
                                     <div className="row g-2 mb-3">
-                                        {(nearbyPlaces && nearbyPlaces.length > 0 ? nearbyPlaces : (travelCompanion.places || [])).map((place, idx) => (
+                                        {(nearbyPlaces?.length > 0 ? nearbyPlaces : (travelCompanion?.places || [])).map((place, idx) => (
                                             <div key={idx} className="col-lg-4 col-md-4 col-sm-6">
                                                 <div className="card h-100 border-0 shadow-sm mini-suggestion-card">
                                                     <img
@@ -492,11 +492,11 @@ const ListingShow = ({ currUser, showFlash }) => {
                                 </>
                             )}
 
-                            {travelCompanion.food && travelCompanion.food.length > 0 && (
+                            {travelCompanion?.food?.length > 0 && (
                                 <>
                                     <h6 className="text-primary-custom mb-2"><i className="fa-solid fa-utensils me-2"></i>Local Food</h6>
                                     <div className="row g-2">
-                                        {travelCompanion.food.map((f, idx) => (
+                                        {travelCompanion?.food?.map((f, idx) => (
                                             <div key={idx} className="col-lg-4 col-md-4 col-sm-6">
                                                 <div className="card h-100 border-0 shadow-sm mini-suggestion-card">
                                                     <img src={f.image || '/images/placeholder-food.jpg'} className="card-img-top p-1 rounded" style={{ height: '120px', objectFit: 'cover' }} alt={f.name} />
