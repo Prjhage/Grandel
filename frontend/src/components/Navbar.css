@@ -295,9 +295,53 @@
             right: 0;
             width: 100%;
             z-index: 2000;
-            background-color: #fff;
-            padding: 1rem;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 0 0 15px 15px;
+
+            .home-nav #mainNavbar.navbar-collapse {
+                background: rgba(10, 10, 26, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            }
         }
-    }
+
+        /* --- Home Nav (Dark Theme) --- */
+        .navbar.home-nav {
+            background: rgba(5, 5, 16, 0.7) !important;
+            backdrop-filter: blur(25px) saturate(200%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+            transition: all 0.4s ease;
+        }
+
+        .home-nav .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .home-nav .nav-link:hover {
+            color: #fff !important;
+        }
+
+        .home-nav .auth-link {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .home-nav .auth-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .home-nav .user-circle {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .home-nav .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.2);
+            filter: invert(1) brightness(2);
+        }
+
+        @media (max-width: 768px) {
+            .navbar.home-nav {
+                background: rgba(10, 10, 26, 0.8) !important;
+            }
+        }
