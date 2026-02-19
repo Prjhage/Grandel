@@ -642,9 +642,15 @@
 
     /* Mobile hero section */
     .mobile-hero-section {
-        background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
+        background: #0a0a1a;
+        background-image:
+            radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+            radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+            radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%),
+            radial-gradient(at 0% 100%, hsla(339, 49%, 30%, 1) 0, transparent 50%),
+            radial-gradient(at 50% 100%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+            radial-gradient(at 100% 100%, hsla(253, 16%, 7%, 1) 0, transparent 50%);
         min-height: 85vh;
-        /* Increased from 85vh */
         width: 100%;
         margin-top: 0;
         display: flex;
@@ -653,7 +659,6 @@
         position: relative;
         overflow: hidden;
         padding: 60px 20px 100px;
-        /* Increased padding */
     }
 
     /* Animated Clouds */
@@ -785,22 +790,25 @@
     }
 
     /* House body */
+    /* House body - Dark Glassmorphism */
     .house-body {
-        background: white;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         padding: 50px 24px 70px;
         text-align: center;
-        color: #333;
+        color: #fff;
         position: relative;
         z-index: 2;
-        border-radius: 0 0 12px 12px;
-        background-image: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        border-radius: 0 0 24px 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
 
     /* Text scaling */
     .house-body h1 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         margin-bottom: 12px;
-        background: linear-gradient(90deg, #ff385c, #d90b3e);
+        background: linear-gradient(to bottom, #ffffff 30%, rgba(255, 255, 255, 0.5));
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -808,11 +816,10 @@
     }
 
     .house-body p {
-        font-size: 0.95rem;
+        font-size: 1rem;
         margin-bottom: 24px;
-        color: #666;
+        color: rgba(255, 255, 255, 0.7);
         line-height: 1.5;
-        opacity: 1;
     }
 
     /* Buttons stack cleanly */
@@ -825,17 +832,15 @@
     .house-body .btn-primary-custom,
     .house-body .btn-secondary-custom {
         width: 100%;
-        padding: 12px;
+        padding: 14px;
         font-size: 1rem;
-    }
-
-    .house-body .btn-primary-custom {
-        box-shadow: none;
+        border-radius: 100px;
     }
 
     .house-body .btn-secondary-custom {
-        border-color: #ddd;
-        color: #555;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
     }
 
 
