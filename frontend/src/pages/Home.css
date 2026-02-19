@@ -893,6 +893,20 @@
         height: 200px;
     }
 
+    .videos-grid {
+        grid-template-columns: 1fr;
+        /* Stack videos on mobile */
+        gap: 20px;
+    }
+
+    .video-wrapper {
+        min-width: 0;
+        /* Remove fixed min-width causing overflow */
+        max-width: 100%;
+        padding: 15px;
+        margin: 0 auto;
+    }
+
     /* Mobile Hero - Revert to Simple Layout */
     .hero-section {
         display: none !important;
