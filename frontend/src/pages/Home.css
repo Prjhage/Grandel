@@ -39,7 +39,7 @@
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 80px 40px;
+    padding: 60px 20px;
     display: flex;
     justify-content: center;
 }
@@ -49,7 +49,7 @@
     backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 40px;
-    padding: 80px 60px;
+    padding: 60px 40px;
     max-width: 1000px;
     width: 100%;
     box-shadow:
@@ -91,10 +91,10 @@
 }
 
 .hero-section h1 {
-    font-size: 5rem;
+    font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 1.5rem;
-    line-height: 1;
+    line-height: 1.1;
     letter-spacing: -0.02em;
     background: linear-gradient(to bottom, #ffffff 30%, rgba(255, 255, 255, 0.5));
     -webkit-background-clip: text;
@@ -110,8 +110,8 @@
 }
 
 .hero-section p {
-    font-size: 1.5rem;
-    margin-bottom: 3.5rem;
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.5;
     font-weight: 400;
@@ -130,10 +130,10 @@
 .btn-primary-custom {
     background: #ff385c !important;
     color: white;
-    padding: 20px 50px;
+    padding: 15px 35px;
     border: none;
     border-radius: 100px;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 700;
     cursor: pointer;
     text-decoration: none;
@@ -170,10 +170,10 @@
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     color: white;
-    padding: 20px 50px;
+    padding: 15px 35px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 100px;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 700;
     cursor: pointer;
     text-decoration: none;
@@ -237,7 +237,7 @@
 /* Features Section - Glassmorphism Alignment */
 
 .features-section {
-    padding: 100px 20px;
+    padding: 70px 20px;
     background: #0a0a1a;
     width: 100%;
     position: relative;
@@ -268,9 +268,9 @@
 
 .section-title {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0.7));
     -webkit-background-clip: text;
     background-clip: text;
@@ -293,7 +293,7 @@
 .feature-card {
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(10px);
-    padding: 40px 30px;
+    padding: 30px 20px;
     border-radius: 20px;
     text-align: center;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -311,7 +311,7 @@
 }
 
 .feature-icon {
-    font-size: 3rem;
+    font-size: 2.2rem;
     color: #ff385c;
     margin-bottom: 25px;
     filter: drop-shadow(0 0 8px rgba(255, 56, 92, 0.3));
@@ -319,7 +319,7 @@
 }
 
 .feature-card h3 {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: white;
     margin-bottom: 20px;
@@ -334,7 +334,7 @@
 /* How It Works - Precision Alignment */
 
 .how-it-works {
-    padding: 100px 20px;
+    padding: 70px 20px;
     background-color: #050510;
     color: white;
     width: 100%;
@@ -369,7 +369,7 @@
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(10px);
     color: white;
-    padding: 40px 30px;
+    padding: 30px 20px;
     border-radius: 20px;
     text-align: center;
     position: relative;
@@ -387,21 +387,21 @@
 
 .step-number {
     position: absolute;
-    top: -20px;
+    top: -15px;
     left: 50%;
     transform: translateX(-50%);
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background: linear-gradient(135deg, #ff385c 0%, #d90b3e 100%);
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: 800;
     box-shadow: 0 8px 20px rgba(255, 56, 92, 0.4);
-    border: 3px solid #050510;
+    border: 2px solid #050510;
 }
 
 .step-card h3 {
@@ -419,7 +419,7 @@
 /* Video Section - Premium Alignment */
 
 .video-section {
-    padding: 100px 20px;
+    padding: 70px 20px;
     background: #0a0a1a;
     color: white;
     width: 100%;
@@ -526,7 +526,7 @@
 /* FAQ Section - Glassmorphism Alignment */
 
 .faq-section {
-    padding: 100px 20px;
+    padding: 70px 20px;
     background-color: #0a0a1a;
     width: 100%;
     position: relative;
@@ -603,7 +603,7 @@
     background: #050510;
     background-image: radial-gradient(circle at 50% 120%, rgba(255, 56, 92, 0.2) 0%, transparent 60%);
     color: white;
-    padding: 100px 20px;
+    padding: 70px 20px;
     text-align: center;
     width: 100%;
 }
@@ -614,14 +614,14 @@
 }
 
 .cta-section h2 {
-    font-size: 4rem;
+    font-size: 2.8rem;
     font-weight: 800;
     margin-bottom: 25px;
     letter-spacing: -0.02em;
 }
 
 .cta-section p {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     margin-bottom: 50px;
     color: rgba(255, 255, 255, 0.7);
     max-width: 600px;
@@ -716,7 +716,7 @@
     /* Roof (perfectly aligned) */
     .house-roof {
         width: 100%;
-        height: 140px;
+        height: 110px;
         background: linear-gradient(135deg, #ff385c 0%, #d90b3e 100%);
         clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
         position: relative;
@@ -796,7 +796,7 @@
 
     /* Text scaling */
     .house-body h1 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         margin-bottom: 12px;
         background: linear-gradient(90deg, #ff385c, #d90b3e);
         -webkit-background-clip: text;
@@ -967,7 +967,7 @@
 /* Featured Listings Section - Premium Alignment */
 
 .featured-listings-section {
-    padding: 100px 20px;
+    padding: 70px 20px;
     background-color: #050510;
     width: 100%;
 }
@@ -1188,8 +1188,8 @@
     .faq-section,
     .featured-listings-section {
         width: 100%;
-        padding-top: 40px;
-        padding-bottom: 40px;
+        padding-top: 30px;
+        padding-bottom: 30px;
     }
 
     .home-page {
