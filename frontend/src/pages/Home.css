@@ -643,7 +643,8 @@
     /* Mobile hero section */
     .mobile-hero-section {
         background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
-        min-height: 85vh;
+        min-height: 95vh;
+        /* Increased from 85vh */
         width: 100%;
         margin-top: 0;
         display: flex;
@@ -651,7 +652,8 @@
         align-items: center;
         position: relative;
         overflow: hidden;
-        padding: 45px 20px 90px;
+        padding: 60px 20px 100px;
+        /* Increased padding */
     }
 
     /* Animated Clouds */
