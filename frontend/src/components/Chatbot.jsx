@@ -74,6 +74,7 @@ const Chatbot = ({ currUser }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const isHomePage = location.pathname === '/';
+    const isShowPage = location.pathname.startsWith('/listings/') && !location.pathname.endsWith('/edit') && !location.pathname.endsWith('/new');
 
     const [messages, setMessages] = useState([
         {
@@ -267,7 +268,7 @@ const Chatbot = ({ currUser }) => {
             )}
 
             {!isOpen && (
-                <div className={`chatbot-toggle-wrapper ${isHomePage ? 'home-theme' : ''}`}>
+                <div className={`chatbot-toggle-wrapper ${isHomePage ? 'home-theme' : ''} ${isShowPage ? 'show-theme' : ''}`}>
                     {showHint && (
                         <div className="chatbot-hint-bubble">
                             Any questions? 👋

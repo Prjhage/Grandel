@@ -505,4 +505,15 @@
         padding: 6px 12px;
         font-size: 0.75rem;
     }
+
+    /* Higher positioning for show page to avoid reserve bar */
+    .chatbot-toggle-wrapper.show-theme {
+        bottom: 85px;
+        right: 15px;
+    }
+
+    .show-theme+.chatbot-container,
+    .chatbot-container:has(.show-theme) {
+        bottom: 155px;
+    }
 }

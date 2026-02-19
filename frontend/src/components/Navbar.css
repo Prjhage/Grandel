@@ -295,13 +295,12 @@
             right: 0;
             width: 100%;
             z-index: 2000;
-
-            .home-nav #mainNavbar.navbar-collapse {
-                background: rgba(10, 10, 26, 0.95);
-                backdrop-filter: blur(20px);
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-            }
+            background-color: #fff;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 0 0 15px 15px;
+            border: 1px solid #eee;
+            border-top: none;
         }
 
         /* --- Home Nav (Dark Theme) --- */
