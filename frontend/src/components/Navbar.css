@@ -1,52 +1,60 @@
     .navbar-brand {
-        color: #007bff !important;
-        font-size: 2rem;
-        transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        font-weight: 800;
-        letter-spacing: -0.5px;
+        gap: 6px;
+        text-decoration: none;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .navbar-brand-text {
         display: flex;
         align-items: center;
-        gap: 3px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        font-size: 2rem;
+        background: linear-gradient(135deg, #007bff 0%, #00c6ff 50%, #ff6b6b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
     }
 
     .navbar-brand-grand {
-        color: #007bff;
-        font-size: 2rem;
+        /* Color is handled by the parent gradient */
     }
 
     .navbar-brand-el {
-        color: #ff6b6b;
-        font-size: 2rem;
+        /* Color is handled by the parent gradient */
     }
 
     .navbar-brand-icon {
-        font-size: 0.8rem !important;
+        font-size: 0.85rem !important;
         color: #ff6b6b !important;
-        animation: bounce 1s infinite !important;
+        animation: premiumBounce 2s ease-in-out infinite !important;
         display: inline-block !important;
-        margin-bottom: 0px;
+        margin-top: -8px;
+        filter: drop-shadow(0 2px 4px rgba(255, 107, 107, 0.3));
     }
 
-    @keyframes bounce {
+    @keyframes premiumBounce {
 
         0%,
         100% {
-            transform: translateY(0);
+            transform: translateY(0) rotate(0deg);
         }
 
-        50% {
-            transform: translateY(-10px);
+        25% {
+            transform: translateY(-4px) rotate(-5deg);
+        }
+
+        75% {
+            transform: translateY(-2px) rotate(5deg);
         }
     }
 
     .navbar-brand:hover {
-        transform: scale(1.05);
+        transform: translateY(-1px) scale(1.02);
+        filter: brightness(1.1);
     }
 
     .logo-img {

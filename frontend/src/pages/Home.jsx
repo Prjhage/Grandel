@@ -350,9 +350,10 @@ const Home = ({ currUser }) => {
                     <h2 className="section-title reveal">Frequently Asked Questions</h2>
 
                     {[
-                        { q: "How do I create an account?", a: "Creating an account is simple! Click on the \"Sign Up\" button, enter your email address, choose a password, and verify your email. You can then complete your profile with your personal information and payment details." },
-                        { q: "Is my payment information secure?", a: "Yes, absolutely! We use industry-standard encryption and comply with PCI-DSS standards to ensure your payment information is secure. All transactions are processed through trusted payment gateways." },
-                        { q: "What is the cancellation policy?", a: "Cancellation policies vary by listing. Most properties offer flexible, moderate, or strict cancellation options. You can see the specific policy for each property when you're browsing listings. Cancellations made before the deadline will receive a full or partial refund depending on the policy." }
+                        { q: "How do I become a host on Grandel?", a: "Simply click on \"Become a Host\" in the navigation bar, fill in your property details, upload photos, and set your price. Once verified by our team, your listing will be live for guests to book." },
+                        { q: "What is the 20% token payment?", a: "To confirm your booking and protect both guests and hosts, we require a 20% token payment via Razorpay. The remaining 80% is paid directly to the host upon arrival." },
+                        { q: "How does host verification work?", a: "We verify all hosts through a multi-step process including identity checks and property verification to ensure a safe and premium experience for all our guests." },
+                        { q: "Can I use the AI chatbot for recommendations?", a: "Yes! Our intelligent chatbot can help you find the perfect stay based on your preferences, budget, and desired location. Just click the chat icon to start." }
                     ].map((item, index) => (
                         <div className="faq-item reveal" key={index}>
                             <div className="faq-question" onClick={() => toggleFAQ(index)}>
