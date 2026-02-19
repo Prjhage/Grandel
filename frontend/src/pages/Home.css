@@ -643,7 +643,7 @@
     /* Mobile hero section */
     .mobile-hero-section {
         background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
-        min-height: 100vh;
+        min-height: 115vh;
         /* Increased from 85vh */
         width: 100%;
         margin-top: 0;
@@ -787,7 +787,7 @@
     /* House body */
     .house-body {
         background: white;
-        padding: 40px 24px 60px;
+        padding: 50px 24px 70px;
         text-align: center;
         color: #333;
         position: relative;

@@ -491,9 +491,8 @@
         font-size: 22px;
     }
 
-    .chatbot-toggle-wrapper {
-        bottom: 85px;
-        /* Stay above the sticky reserve bar (60px + gap) */
+    .chatbot-toggle-wrapper.home-theme {
+        bottom: 20px;
     }
 
     /* Hide chatbot when reserve form/drawer is open on mobile */
