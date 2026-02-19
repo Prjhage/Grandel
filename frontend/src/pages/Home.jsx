@@ -88,26 +88,42 @@ const Home = ({ currUser }) => {
             {/* Hero Section - Desktop Only */}
             <section className="hero-section">
                 <div className="hero-content">
-                    <div className="hero-text-center">
-                        <h1>
-                            Welcome to <span>Grandel</span>
-                        </h1>
-                        <p>Discover unique places to stay and create unforgettable travel experiences around the world</p>
-                        <div className="hero-buttons">
-                            <Link to="/listings" className="btn-primary-custom">Explore Listings</Link>
-                            {!currUser ? (
-                                <Link to="/signup" className="btn-secondary-custom">Become a Host</Link>
-                            ) : (
-                                <Link to="/listings/new" className="btn-secondary-custom">Create Listing</Link>
-                            )}
+                    <div className="hero-glass-card">
+                        <div className="hero-text-center">
+                            <h1>
+                                Welcome to <span>Grandel</span>
+                            </h1>
+                            <p>Discover unique places to stay and create unforgettable travel experiences around the world</p>
+                            <div className="hero-buttons">
+                                <Link to="/listings" className="btn-primary-custom">Explore Listings</Link>
+                                {!currUser ? (
+                                    <Link to="/signup" className="btn-secondary-custom">Become a Host</Link>
+                                ) : (
+                                    <Link to="/listings/new" className="btn-secondary-custom">Create Listing</Link>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Decorative Elements */}
-                    <div className="hero-decoration">
-                        <div className="decoration-orb orb-1"></div>
-                        <div className="decoration-orb orb-2"></div>
-                        <div className="decoration-orb orb-3"></div>
+                    {/* Precision Elements - Floating Cards */}
+                    <div className="hero-floating-card card-1">
+                        <div className="card-icon" style={{ background: 'rgba(255, 56, 92, 0.2)', padding: '10px', borderRadius: '12px' }}>
+                            <i className="fas fa-star" style={{ color: '#ff385c' }}></i>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>Top Rated</div>
+                            <div style={{ fontWeight: '700' }}>Premium Stays</div>
+                        </div>
+                    </div>
+
+                    <div className="hero-floating-card card-2">
+                        <div className="card-icon" style={{ background: 'rgba(67, 206, 162, 0.2)', padding: '10px', borderRadius: '12px' }}>
+                            <i className="fas fa-shield-check" style={{ color: '#43cea2' }}></i>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>Verified</div>
+                            <div style={{ fontWeight: '700' }}>Host Guarantee</div>
+                        </div>
                     </div>
                 </div>
             </section>

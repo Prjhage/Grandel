@@ -70,7 +70,7 @@ module.exports.index = async (req, res) => {
   }
 
   let allListings = await Listing.find(query)
-    .select('title image price location reviews numRooms guestsPerRoom discount avgRating ratingCount')
+    .select('title image price location country reviews numRooms guestsPerRoom discount avgRating ratingCount')
     .populate({
       path: 'reviews',
       select: 'rating'

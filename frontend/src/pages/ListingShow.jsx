@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from '../config/axios';
 import { useListingCache } from '../components/ListingCacheContext';
@@ -89,7 +89,6 @@ const ListingShow = ({ currUser, showFlash }) => {
         try {
             const res = await axios.get(`/listings/${id}`);
             const data = res.data.listing || res.data;
-            setListing(data);
 
             // Sync travelCompanion priority (top-level res.data > listing property)
             const tc = res.data.travelCompanion || data.travelCompanion || { places: [], food: [] };
@@ -99,6 +98,7 @@ const ListingShow = ({ currUser, showFlash }) => {
             if (res.data.discountAvailable !== undefined) {
                 data.discountAvailable = res.data.discountAvailable;
             }
+
             setListing(data);
             const stats = {
                 reviewsCount: res.data.hostReviewsCount || 0,
@@ -267,6 +267,19 @@ const ListingShow = ({ currUser, showFlash }) => {
     if (listing.image?.url) allImages.push(listing.image);
     if (listing.images?.length) allImages.push(...listing.images);
     if (allImages.length === 0) allImages.push({ url: '/images/fallback.jpg' });
+
+    const memoizedMap = useMemo(() => {
+        if (!listing?.title) return null;
+        return (
+            <iframe
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(`${listing.title}, ${listing.location}, ${listing.country}`)}&z=14&ie=UTF8&iwloc=B&output=embed`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                style={{ width: '100%', height: '420px', border: 0, borderRadius: '16px' }}
+                title="Listing Location"
+            ></iframe>
+        );
+    }, [listing?._id, listing?.title, listing?.location, listing?.country]);
 
     return (
         <div className="container mt-3 page-fade listing-show-page">
@@ -540,12 +553,7 @@ const ListingShow = ({ currUser, showFlash }) => {
                     {/* Map */}
                     <h3 id="map-section">Where you'll be</h3>
                     <div className="listing-map col-12 mt-5 px-0">
-                        <iframe
-                            src={`https://maps.google.com/maps?q=${encodeURIComponent(`${listing.title}, ${listing.location}, ${listing.country}`)}&z=14&ie=UTF8&iwloc=B&output=embed`}
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                            style={{ width: '100%', height: '420px', border: 0, borderRadius: '16px' }}
-                        ></iframe>
+                        {memoizedMap}
                     </div>
                 </div>
 

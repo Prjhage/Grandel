@@ -189,7 +189,7 @@ app.get("/api/featured", async (req, res) => {
     // Fetch top 6 featured listings with optimized query
     const featuredListings = await Listing.find()
       .limit(6)
-      .select('title image price location reviews')
+      .select('title image price location country reviews')
       .populate({
         path: 'reviews',
         select: 'rating'
