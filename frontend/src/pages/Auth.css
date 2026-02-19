@@ -318,31 +318,75 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .login-overlay {
+        padding: 10px;
+        background: #f8f9fa;
+        /* Simpler background for mobile */
+    }
+
     .login-card {
         flex-direction: column;
-        max-width: 450px;
+        max-width: 360px;
+        /* narrowed from 420px */
+        min-height: auto;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     }
 
+    /* Hide welcome section on mobile to save space */
     .auth-welcome-section {
-        order: -1;
-        min-height: 200px;
-        padding: 2rem;
-    }
-
-    .welcome-content h2 {
-        font-size: 1.8rem;
-    }
-
-    .welcome-content p {
-        font-size: 0.9rem;
+        display: none;
     }
 
     .auth-form-section {
-        padding: 2rem 1.5rem;
+        padding: 1.25rem 1rem;
+        /* tighter padding */
+    }
+
+    .login-header {
+        margin-bottom: 1rem;
+        /* reduced from 1.5rem */
+    }
+
+    .login-header i {
+        font-size: 1.75rem !important;
+        /* slightly smaller icon */
     }
 
     .login-header h2 {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+        margin-top: 0.25rem;
+    }
+
+    .login-form .form-group {
+        margin-bottom: 0.75rem;
+        /* tighter vertical flow */
+    }
+
+    .login-form label {
+        margin-bottom: 0.25rem;
+        font-size: 0.8rem;
+    }
+
+    .login-form input {
+        padding: 0.6rem 0.6rem 0.6rem 2.4rem;
+        font-size: 0.85rem;
+        border-radius: 10px;
+    }
+
+    .login-btn {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .social-login-separator {
+        margin: 0.75rem 0 !important;
+    }
+
+    .forgot-link {
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
     }
 }
 
@@ -351,11 +395,26 @@
         padding: 10px;
     }
 
-    .auth-form-section {
-        padding: 1.5rem 1rem;
+    .login-card {
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: 16px;
     }
 
-    .welcome-content h2 {
-        font-size: 1.5rem;
+    .auth-form-section {
+        padding: 1.25rem 1rem;
+    }
+
+    .login-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .login-tabs .btn {
+        padding: 5px 12px;
+        font-size: 0.75rem;
+    }
+
+    .social-login-separator {
+        margin: 1rem 0 !important;
     }
 }
