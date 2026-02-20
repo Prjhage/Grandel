@@ -1,346 +1,330 @@
-    .navbar-brand {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        text-decoration: none;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+/* ===== Navbar Brand ===== */
+.navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.navbar-brand-text {
+    display: flex;
+    align-items: center;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-size: 2rem;
+    background: linear-gradient(135deg, #007bff 0%, #00c6ff 50%, #ff6b6b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+}
+
+.navbar-brand-icon {
+    font-size: 0.85rem !important;
+    color: #ff6b6b !important;
+    animation: premiumBounce 2s ease-in-out infinite !important;
+    display: inline-block !important;
+    margin-top: -8px;
+    filter: drop-shadow(0 2px 4px rgba(255, 107, 107, 0.3));
+}
+
+@keyframes premiumBounce {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
     }
 
-    .navbar-brand-text {
-        display: flex;
-        align-items: center;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        font-size: 2rem;
-        background: linear-gradient(135deg, #007bff 0%, #00c6ff 50%, #ff6b6b 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+    25% {
+        transform: translateY(-4px) rotate(-5deg);
     }
 
-    .navbar-brand-grand {
-        /* Color is handled by the parent gradient */
+    75% {
+        transform: translateY(-2px) rotate(5deg);
+    }
+}
+
+.navbar-brand:hover {
+    transform: translateY(-1px) scale(1.02);
+    filter: brightness(1.1);
+}
+
+/* ===== Logo ===== */
+.logo-img {
+    height: 50px;
+    width: auto;
+    object-fit: cover;
+}
+
+/* ===== Search ===== */
+.btn-search {
+    background-color: #fe424d;
+    color: white;
+    border-radius: 25px;
+    padding: 0 1rem 0 1rem;
+}
+
+.btn-search:hover {
+    background-color: #fe424d;
+    color: white;
+}
+
+.btn-search i {
+    display: inline;
+    margin-right: 0.5rem;
+}
+
+.search-input {
+    border-radius: 25px;
+    font-size: 1rem;
+}
+
+/* ===== Navbar Search Section ===== */
+.navbar-search-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+@media (min-width: 992px) {
+    .navbar-search-section {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        max-width: 1250px;
+    }
+}
+
+@media (max-width: 991px) {
+    .navbar-search-section {
+        display: none !important;
+        order: 3;
+        width: 100%;
+        margin-top: 10px;
+        padding: 0 10px;
     }
 
-    .navbar-brand-el {
-        /* Color is handled by the parent gradient */
+    .navbar-search-section.is-listings-index {
+        display: flex !important;
     }
 
-    .navbar-brand-icon {
-        font-size: 0.85rem !important;
-        color: #ff6b6b !important;
-        animation: premiumBounce 2s ease-in-out infinite !important;
-        display: inline-block !important;
-        margin-top: -8px;
-        filter: drop-shadow(0 2px 4px rgba(255, 107, 107, 0.3));
+    .navbar-search-section.home-search {
+        display: none !important;
     }
 
-    @keyframes premiumBounce {
+    /* Collapse search in navbar for mobile if too crowded */
+    .navbar {
+        height: auto !important;
+        padding: 10px 0;
+    }
+}
 
-        0%,
-        100% {
-            transform: translateY(0) rotate(0deg);
-        }
+/* ===== Nav Links ===== */
+.nav-link {
+    font-size: 0.95rem !important;
+    font-weight: 500;
+}
 
-        25% {
-            transform: translateY(-4px) rotate(-5deg);
-        }
+/* ===== Auth Links ===== */
+.auth-links {
+    display: flex;
+    gap: 0.7rem;
+    align-items: center;
+}
 
-        75% {
-            transform: translateY(-2px) rotate(5deg);
-        }
+.auth-link {
+    position: relative;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #222;
+    padding: 0.4rem 0.6rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.auth-link:hover {
+    background: rgba(254, 66, 77, 0.08);
+    color: #fe424d;
+}
+
+.auth-link::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #fe424d;
+    transition: 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.auth-link:hover::after {
+    width: 60%;
+}
+
+/* ===== User Circle ===== */
+.user-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.2s ease;
+}
+
+.user-circle:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Home Nav (Dark Theme) ===== */
+.navbar.home-nav {
+    background: rgba(5, 5, 16, 0.7) !important;
+    backdrop-filter: blur(25px) saturate(200%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    transition: all 0.4s ease;
+}
+
+.home-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.home-nav .nav-link:hover {
+    color: #fff !important;
+}
+
+.home-nav .auth-link {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.home-nav .auth-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.home-nav .user-circle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.home-nav .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.2);
+    filter: invert(1) brightness(2);
+}
+
+/* ===== Mobile Navbar Overlay ===== */
+@media (max-width: 991.98px) {
+    .navbar {
+        position: relative;
     }
 
-    .navbar-brand:hover {
-        transform: translateY(-1px) scale(1.02);
-        filter: brightness(1.1);
+    #mainNavbar.navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 2000;
+        background-color: #fff;
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border-radius: 0 0 15px 15px;
+        border: 1px solid #eee;
+        border-top: none;
+    }
+}
+
+/* ===== Mobile (max-width: 768px) ===== */
+@media (max-width: 768px) {
+    .search-desktop {
+        display: none !important;
+    }
+
+    .navbar {
+        background: linear-gradient(135deg, #fdf9d4 0%, #eca8f2 100%) !important;
+    }
+
+    .navbar.home-nav {
+        background: rgba(10, 10, 26, 0.8) !important;
     }
 
     .logo-img {
-        height: 50px;
-        width: auto;
-        object-fit: cover;
+        height: 36px;
     }
 
-    .btn-search {
-        background-color: #fe424d;
-        color: white;
-        border-radius: 25px;
-        padding: 0 1rem 0 1rem;
-    }
-
-    .btn-search:hover {
-        background-color: #fe424d;
-        color: white;
-    }
-
-    .btn-search i {
-        display: inline;
-        margin-right: 0.5rem;
-    }
-
-    .search-input {
-        border-radius: 25px;
-        font-size: 1rem;
-    }
-
-    /* Global Advanced Search Section */
-    .navbar-search-section {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        padding: 0 20px;
-    }
-
-    @media (min-width: 992px) {
-        .navbar-search-section {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: auto;
-            max-width: 1250px;
-        }
-    }
-
-    @media (max-width: 991px) {
-        .navbar-search-section {
-            display: none !important;
-            order: 3;
-            width: 100%;
-            margin-top: 10px;
-            padding: 0 10px;
-        }
-
-        .navbar-search-section.is-listings-index {
-            display: flex !important;
-        }
-
-        .navbar-search-section.home-search {
-            display: none !important;
-        }
-
-        /* Collapse search in navbar for mobile if too crowded */
-        .navbar {
-            height: auto !important;
-            padding: 10px 0;
-        }
-    }
-
-    .nav-link {
-        font-size: 0.95rem !important;
-        font-weight: 500;
-    }
-
-    .auth-links {
-        display: flex;
-        gap: 0.7rem;
-        align-items: center;
-    }
-
-    .auth-link {
+    .navbar-brand {
+        margin-right: 0;
+        z-index: 10;
         position: relative;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.95rem;
-        color: #222;
-        padding: 0.4rem 0.6rem;
-        border-radius: 20px;
-        transition: all 0.3s ease;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 2px;
     }
 
-    .auth-link:hover {
-        background: rgba(254, 66, 77, 0.08);
-        color: #fe424d;
+    .navbar-brand-grand,
+    .navbar-brand-el {
+        font-size: 1.7rem;
     }
 
-    .auth-link::after {
-        content: "";
-        position: absolute;
-        bottom: 4px;
-        left: 50%;
-        width: 0;
-        height: 2px;
-        background: #fe424d;
-        transition: 0.3s ease;
-        transform: translateX(-50%);
+    .navbar-search-section {
+        order: 2;
+        margin: 10px 0;
     }
 
-    .auth-link:hover::after {
-        width: 60%;
+    .heading {
+        display: none;
     }
 
-    .user-circle {
+    .mobile-user-icon {
+        position: relative;
+        margin-right: 1.2rem;
+        z-index: 10;
+    }
+
+    .mobile-user-icon .user-circle {
         width: 38px;
         height: 38px;
         border-radius: 50%;
         border: 1px solid #ddd;
-        background: white;
+        background: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: box-shadow 0.2s ease;
     }
 
-    .user-circle:hover {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    .mobile-user-icon .dropdown-menu {
+        margin-top: 0.5rem;
     }
 
-    @media (max-width: 768px) {
-        .search-desktop {
-            display: none;
-        }
-
-        .auth-links {
-            flex-direction: column;
-            align-items: flex-start;
-            margin-top: 0.8rem;
-        }
-
-        .auth-link {
-            width: 100%;
-            padding: 0.6rem 1rem;
-        }
-
-        .auth-link::after {
-            display: none;
-        }
+    .navbar>.container-fluid {
+        align-items: center;
     }
 
-    @media (max-width: 768px) {
-        .search-desktop {
-            display: none !important;
-        }
+    .user-circle {
+        display: none;
     }
 
-    @media (max-width: 768px) {
-        .navbar {
-            background: linear-gradient(135deg, #fdf9d4 0%, #eca8f2 100%) !important;
-        }
-
-        .logo-img {
-            height: 36px;
-        }
-
-        .navbar-brand {
-            margin-right: 0;
-            z-index: 10;
-            position: relative;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .navbar-brand-grand,
-        .navbar-brand-el {
-            font-size: 1.7rem;
-        }
-
-        .navbar-search-section {
-            order: 2;
-            /* Move below logo on mobile overflow if wrapped */
-            margin: 10px 0;
-        }
+    .auth-links {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 0.8rem;
     }
 
-    @media (max-width: 768px) {
-        .heading {
-            display: none;
-        }
-
-        .mobile-user-icon {
-            position: relative;
-            margin-right: 1.2rem;
-            z-index: 10;
-        }
-
-        .mobile-user-icon .user-circle {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mobile-user-icon .dropdown-menu {
-            margin-top: 0.5rem;
-        }
-
-        /* Align items nicely */
-        .navbar>.container-fluid {
-            align-items: center;
-        }
-
-        .user-circle {
-            display: none;
-        }
+    .auth-link {
+        width: 100%;
+        padding: 0.6rem 1rem;
     }
 
-    /* --- Mobile Navbar Overlay --- */
-    @media (max-width: 991.98px) {
-        .navbar {
-            /* This is the positioning context for the absolute-positioned menu */
-            position: relative;
-        }
-
-        #mainNavbar.navbar-collapse {
-            position: absolute;
-            top: 100%;
-            /* Position it right below the navbar */
-            left: 0;
-            right: 0;
-            width: 100%;
-            z-index: 2000;
-            background-color: #fff;
-            padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border-radius: 0 0 15px 15px;
-            border: 1px solid #eee;
-            border-top: none;
-        }
-
-        /* --- Home Nav (Dark Theme) --- */
-        .navbar.home-nav {
-            background: rgba(5, 5, 16, 0.7) !important;
-            backdrop-filter: blur(25px) saturate(200%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-            transition: all 0.4s ease;
-        }
-
-        .home-nav .nav-link {
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
-
-        .home-nav .nav-link:hover {
-            color: #fff !important;
-        }
-
-        .home-nav .auth-link {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .home-nav .auth-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-
-        .home-nav .user-circle {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .home-nav .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.2);
-            filter: invert(1) brightness(2);
-        }
-
-        @media (max-width: 768px) {
-            .navbar.home-nav {
-                background: rgba(10, 10, 26, 0.8) !important;
-            }
-        }
+    .auth-link::after {
+        display: none;
+    }
+}
