@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from '../config/axios';
 import { useHostDashboardCache } from '../components/HostDashboardCacheContext';
 import SkeletonCard from '../components/SkeletonCard';
@@ -204,7 +205,12 @@ const HostDashboard = ({ currUser, showFlash }) => {
 
     return (
         <div className="container host-dashboard">
-            <h3>🏠 Host Dashboard</h3>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h3 className="mb-0">🏠 Host Dashboard</h3>
+                <Link to="/profile/host/scanner" className="btn btn-dark rounded-pill px-4">
+                    <i className="fa-solid fa-qrcode me-2"></i> Scan Guest QR
+                </Link>
+            </div>
 
             <ul className="nav dashboard-tabs">
                 <li className="nav-item">

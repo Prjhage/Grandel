@@ -1,6 +1,7 @@
 const PDFDocument = require("pdfkit");
+const bwipjs = require("bwip-js");
 
-module.exports.generateBookingPDF = ({
+module.exports.generateBookingPDF = async ({
   res,
   bookingId,
   user,
@@ -45,6 +46,9 @@ module.exports.generateBookingPDF = ({
   if (booking && booking.totalPrice) {
     totalPrice = Number(booking.totalPrice);
   }
+
+  const tokenPaid = Math.round(totalPrice * 0.2);
+  const balanceDue = totalPrice - tokenPaid;
 
   /* ===== GUEST DETAILS ===== */
   if (booking && booking.guests) {
@@ -92,7 +96,7 @@ module.exports.generateBookingPDF = ({
   const startY = doc.y;
   doc.save();
   doc.translate(297.5, 421).rotate(-45);
-  doc.fontSize(80).fillColor("#cccccc").opacity(0.2);
+  doc.fontSize(80).fillColor("#cccccc").opacity(0.15);
   doc.text(booking.status.toUpperCase(), -297.5, -30, {
     align: "center",
     width: 595,
@@ -112,8 +116,7 @@ module.exports.generateBookingPDF = ({
     .fontSize(10)
     .fillColor("#555")
     .text(
-      `${listing?.location || "Wanderlust"}, ${listing?.country || ""} | ${
-        owner?.email || "info@wanderlust.com"
+      `${listing?.location || "Grandel"}, ${listing?.country || ""} | ${owner?.email || "support@grandel.com"
       }`,
       { align: "center" }
     );
@@ -134,22 +137,31 @@ module.exports.generateBookingPDF = ({
   doc.text(`Guest Name: ${user?.username || "N/A"}`, 40, y);
   y += 15;
 
-  doc.text(`Check-in: ${booking.startDate.toDateString()}`, 40, y);
+  doc.text(`Check-in: ${new Date(booking.startDate).toDateString()}`, 40, y);
   y += 15;
 
-  doc.text(`Check-out: ${booking.endDate.toDateString()}`, 40, y);
+  doc.text(`Check-out: ${new Date(booking.endDate).toDateString()}`, 40, y);
   y += 15;
 
   doc.text(`Nights: ${nights}`, 40, y);
 
-  doc.text(`Booking ID: ${bookingId}`, 350, y - 45);
-  doc.text(
-    `Status: ${
-      booking.status.charAt(0).toUpperCase() + booking.status.slice(1)
-    }`,
-    350,
-    y - 30
+  // Align right column consistently
+  const rightColumnX = 330;
+  const rightColumnStartY = y - 45; // Start roughly aligned with the middle of the left block
+
+  doc.font("Helvetica-Bold").text(`Booking ID:`, rightColumnX, rightColumnStartY);
+  doc.font("Helvetica").text(`${bookingId}`, rightColumnX + 65, rightColumnStartY);
+
+  doc.font("Helvetica-Bold").text(`Status:`, rightColumnX, rightColumnStartY + 15);
+  const statusColor = booking.status === 'completed' ? '#1e7e34' :
+    booking.status === 'pending' ? '#f39c12' : '#d9534f';
+
+  doc.fillColor(statusColor).text(
+    `${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}`,
+    rightColumnX + 65,
+    rightColumnStartY + 15
   );
+  doc.fillColor("#000"); // Reset color
 
   /* ===== GUEST SUMMARY ===== */
   y += 30;
@@ -224,22 +236,56 @@ module.exports.generateBookingPDF = ({
     .lineWidth(0.5)
     .stroke("#ccc");
 
-  doc.fontSize(13).fillColor("#1e4fa1").text("TOTAL", 300, rowY);
+  doc.fontSize(13).fillColor("#1e4fa1").text("TOTAL PAYABLE", 280, rowY);
   doc.text(`Rs. ${totalPrice.toLocaleString("en-IN")}`, 400, rowY, {
     width: 140,
     align: "right",
   });
 
-  /* ===== NOTE ===== */
-  rowY += 35;
+  /* ===== PAYMENT SUMMARY SECTION ===== */
+  rowY += 40;
+  doc.rect(40, rowY, 515, 60).fill("#f8faff").lineWidth(1).stroke("#cfd8e3");
+
+  doc.fillColor("#000").fontSize(10);
+  doc.text("Payment Summary", 50, rowY + 10, { underline: true });
+
+  doc.text("Token Paid (Razorpay - 20%):", 50, rowY + 28);
+  doc.fillColor("#1e7e34").text(`(-) Rs. ${tokenPaid.toLocaleString("en-IN")}`, 400, rowY + 28, { width: 140, align: "right" });
+
+  doc.fillColor("#000").fontSize(11).font("Helvetica-Bold");
+  doc.text("Balance Due at Hotel (80%):", 50, rowY + 42);
+  doc.fillColor("#d9534f").text(`Rs. ${balanceDue.toLocaleString("en-IN")}`, 400, rowY + 42, { width: 140, align: "right" });
+  doc.font("Helvetica");
+
+  /* ===== CHECK-IN BARCODE (QR CODE) ===== */
+  try {
+    const png = await bwipjs.toBuffer({
+      bcid: "qrcode",
+      text: bookingId.toString(),
+      scale: 3,
+      height: 10,
+      width: 10,
+      includetext: false,
+    });
+
+    const barcodeY = 660;
+    doc.image(png, 435, barcodeY, { width: 80 });
+    doc.fontSize(9).fillColor("#555").text("Check-in QR Code", 435, barcodeY + 85, { width: 80, align: "center" });
+
+    doc.fontSize(8).fillColor("#888").text("Scan this at the reception upon arrival to verify your identity and access your room.", 40, barcodeY + 20, { width: 350 });
+  } catch (err) {
+    console.error("Barcode Generation Error:", err);
+  }
+
+  /* ===== FOOTER NOTE ===== */
   doc
-    .fontSize(9)
-    .fillColor("#444")
+    .fontSize(8)
+    .fillColor("#999")
     .text(
-      `ℹ Includes up to ${freeGuests} guests at no extra cost. Additional guests and pets incur additional nightly charges.`,
+      "This is a computer generated invoice. No physical signature is required.",
       40,
-      rowY,
-      { width: 500 }
+      780,
+      { align: "center", width: 515 }
     );
 
   doc.end();

@@ -325,7 +325,7 @@ module.exports.generatePDF = async (req, res) => {
         return res.status(404).json({ success: false, message: "Booking not found" });
     }
 
-    generateBookingPDF({
+    await generateBookingPDF({
         res,
         bookingId: booking._id,
         user: req.user,
@@ -345,4 +345,53 @@ module.exports.cancelBooking = async (req, res) => {
 
     await Booking.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Booking cancelled" });
+};
+
+/* ================= VERIFY BOOKING (SCANNER) ================= */
+module.exports.verifyBooking = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const booking = await Booking.findById(id)
+            .populate("user", "username email avatar")
+            .populate({
+                path: "listing",
+                select: "title location Owner image"
+            });
+
+        if (!booking) {
+            return res.status(404).json({ success: false, message: "Booking not found" });
+        }
+
+        // 🔐 SECURITY CHECK: Does this host own the listing?
+        if (!booking.listing.Owner.equals(req.user._id)) {
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized: This booking belongs to another property. You can only verify bookings for your own listings."
+            });
+        }
+
+        // Calculate balance due (80%)
+        const tokenPaid = Math.round(booking.totalPrice * 0.20);
+        const balanceDue = booking.totalPrice - tokenPaid;
+
+        res.json({
+            success: true,
+            booking: {
+                id: booking._id,
+                status: booking.status,
+                startDate: booking.startDate,
+                endDate: booking.endDate,
+                guest: booking.user,
+                listingTitle: booking.listing.title,
+                totalPrice: booking.totalPrice,
+                tokenPaid,
+                balanceDue,
+                guests: booking.guests
+            }
+        });
+
+    } catch (err) {
+        console.error("Verify Booking Error:", err);
+        res.status(500).json({ success: false, message: "Verification failed due to a server error" });
+    }
 };

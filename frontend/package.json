@@ -13,6 +13,7 @@
     "axios": "^1.13.4",
     "bootstrap": "^5.3.8",
     "firebase": "^10.8.0",
+    "html5-qrcode": "^2.3.8",
     "leaflet": "^1.9.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

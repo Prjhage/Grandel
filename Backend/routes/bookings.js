@@ -39,6 +39,13 @@ router.delete(
   wrapAsync(bookingController.cancelBooking)
 );
 
+// Verify Booking (Scanner)
+router.get(
+  "/bookings/verify/:id",
+  isLoggedIn,
+  wrapAsync(bookingController.verifyBooking)
+);
+
 // Keep the old route temporarily for backward compatibility if needed, 
 // but pointing to initiate is wrong. 
 // Frontend will now call /initiate and /verify. 

@@ -1,0 +1,89 @@
+.host-scanner-container {
+    min-height: 100vh;
+    background: #fdfdfd;
+}
+
+.premium-title {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #222;
+}
+
+.scanner-wrapper {
+    background: white;
+    padding: 30px;
+    border-radius: 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.qr-reader-frame {
+    border-radius: 20px;
+    overflow: hidden;
+    border: none !important;
+}
+
+#reader__status_span {
+    display: none !important;
+}
+
+#reader__dashboard_section_csr button {
+    background: #222 !important;
+    color: white !important;
+    border-radius: 50px !important;
+    padding: 10px 25px !important;
+    border: none !important;
+    font-weight: 600 !important;
+    margin: 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+#reader__dashboard_section_csr button:hover {
+    background: #ff385c !important;
+    transform: translateY(-2px);
+}
+
+.scanner-instruction {
+    color: #666;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Success Card */
+.verification-success-card,
+.verification-failed-card {
+    background: white;
+    padding: 40px;
+    border-radius: 32px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+}
+
+.booking-details-box {
+    background: #f8faff;
+    border-radius: 24px;
+    border: 1px solid #eef2f8;
+}
+
+.payment-alert-box {
+    background: #fff;
+    border: 1px solid #eef2f8;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.success-badge i {
+    filter: drop-shadow(0 10px 15px rgba(25, 135, 84, 0.2));
+}
+
+.error-icon i {
+    filter: drop-shadow(0 10px 15px rgba(220, 53, 69, 0.2));
+}
+
+.animate__animated {
+    --animate-duration: 0.8s;
+}
+
+@media (max-width: 576px) {
+    .verification-success-card {
+        padding: 25px;
+    }
+}

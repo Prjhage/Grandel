@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import HostDashboard from './pages/HostDashboard';
+import HostScanner from './pages/HostScanner';
 import BookingNew from './pages/BookingNew';
 import EditListing from './pages/EditListing';
 import Privacy from './pages/Privacy';
@@ -89,6 +90,7 @@ function App() {
                 <Route path="/signup" element={<Signup onLogin={handleLogin} showFlash={showFlash} />} />
                 <Route path="/profile" element={<Profile currUser={currUser} showFlash={showFlash} />} />
                 <Route path="/profile/host" element={<HostDashboard currUser={currUser} showFlash={showFlash} />} />
+                <Route path="/profile/host/scanner" element={<HostScanner currUser={currUser} showFlash={showFlash} />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="*" element={<div>404 Not Found</div>} />
