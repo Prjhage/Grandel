@@ -9,6 +9,9 @@ const Home = ({ currUser }) => {
     const [featuredListings, setFeaturedListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeFAQ, setActiveFAQ] = useState(null);
+    const [stats, setStats] = useState({ totalListings: null, totalUsers: null });
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [displayStats, setDisplayStats] = useState({ totalListings: 0, totalUsers: 0 });
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -64,6 +67,39 @@ const Home = ({ currUser }) => {
 
         fetchListings();
     }, []);
+
+    // Fetch site stats
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const res = await axios.get('/api/stats');
+                setStats(res.data);
+            } catch (err) {
+                console.error('Error fetching stats', err);
+            }
+        };
+        fetchStats();
+    }, []);
+
+    // Animated counter effect
+    useEffect(() => {
+        if (stats.totalListings === null) return;
+        const duration = 1800;
+        const steps = 50;
+        const interval = duration / steps;
+        let step = 0;
+        const timer = setInterval(() => {
+            step++;
+            const progress = step / steps;
+            const ease = 1 - Math.pow(1 - progress, 3);
+            setDisplayStats({
+                totalListings: Math.round(ease * stats.totalListings),
+                totalUsers: Math.round(ease * stats.totalUsers),
+            });
+            if (step >= steps) clearInterval(timer);
+        }, interval);
+        return () => clearInterval(timer);
+    }, [stats]);
 
     const toggleFAQ = (index) => {
         setActiveFAQ(activeFAQ === index ? null : index);
@@ -150,6 +186,43 @@ const Home = ({ currUser }) => {
                         </div>
                     </div>
 
+                </div>
+            </section>
+
+            {/* Stats Section */}
+            <section className="stats-section">
+                <div className="stats-container">
+                    <div className="stat-card reveal">
+                        <div className="stat-icon">
+                            <i className="fas fa-hotel"></i>
+                        </div>
+                        <div className="stat-number">
+                            {stats.totalListings === null ? (
+                                <span className="stat-loading">—</span>
+                            ) : (
+                                displayStats.totalListings.toLocaleString()
+                            )}
+                        </div>
+                        <div className="stat-label">Hotels & Properties</div>
+                        <div className="stat-sub">Listed on Grandel</div>
+                    </div>
+
+                    <div className="stat-divider"></div>
+
+                    <div className="stat-card reveal">
+                        <div className="stat-icon">
+                            <i className="fas fa-users"></i>
+                        </div>
+                        <div className="stat-number">
+                            {stats.totalUsers === null ? (
+                                <span className="stat-loading">—</span>
+                            ) : (
+                                displayStats.totalUsers.toLocaleString()
+                            )}
+                        </div>
+                        <div className="stat-label">Happy Members</div>
+                        <div className="stat-sub">Guests & Hosts</div>
+                    </div>
                 </div>
             </section>
 
@@ -370,6 +443,62 @@ const Home = ({ currUser }) => {
 
                 </div>
             </section>
+
+            {/* Feedback Section */}
+            <section className="feedback-section">
+                <div className="feedback-container">
+                    <div className="feedback-header reveal">
+                        <div className="feedback-badge">
+                            <i className="fas fa-comment-dots"></i>
+                            <span>Your Voice Matters</span>
+                        </div>
+                        <h2 className="section-title">Share Your Feedback</h2>
+                        <p className="feedback-subtitle">
+                            Help us make Grandel even better. Your experience and suggestions shape the future of our platform.
+                        </p>
+                        <button
+                            className="feedback-open-btn reveal"
+                            onClick={() => setShowFeedback(true)}
+                        >
+                            <span className="feedback-btn-icon">
+                                <i className="fas fa-pen-nib"></i>
+                            </span>
+                            <span className="feedback-btn-text">
+                                <span className="feedback-btn-main">Tell Us What You Think</span>
+                                <span className="feedback-btn-sub">2 min · anonymous · free</span>
+                            </span>
+                            <i className="fas fa-arrow-right feedback-btn-arrow"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            {/* Feedback Modal */}
+            {showFeedback && (
+                <div className="feedback-modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowFeedback(false)}>
+                    <div className="feedback-modal">
+                        <div className="feedback-modal-header">
+                            <div className="feedback-modal-title">
+                                <i className="fas fa-comment-dots"></i>
+                                <span>Grandel Feedback</span>
+                            </div>
+                            <button className="feedback-modal-close" onClick={() => setShowFeedback(false)}>
+                                <i className="fas fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div className="feedback-modal-body">
+                            <iframe
+                                src="https://docs.google.com/forms/d/e/1FAIpQLScAjJTBgfpLTpRUJX3xd4XPOCvGMZqqXKPVBjh4ZLuVXO-6qA/viewform?embedded=true"
+                                className="feedback-iframe"
+                                title="Grandel Feedback Form"
+                                frameBorder="0"
+                            >
+                                Loading form…
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* CTA Section */}
             <section className="cta-section">

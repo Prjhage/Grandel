@@ -217,6 +217,20 @@ app.get("/api/featured", async (req, res) => {
   }
 });
 
+// API Route for Site Stats (total users & hotels)
+app.get("/api/stats", async (req, res) => {
+  try {
+    const [totalListings, totalUsers] = await Promise.all([
+      Listing.countDocuments(),
+      User.countDocuments(),
+    ]);
+    res.json({ totalListings, totalUsers });
+  } catch (error) {
+    console.log("Error fetching stats:", error);
+    res.status(500).json({ totalListings: 0, totalUsers: 0 });
+  }
+});
+
 // NEW: Seed Route to populate DB if empty
 app.get("/seed-db", async (req, res) => {
   try {
