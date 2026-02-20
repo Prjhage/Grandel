@@ -362,11 +362,26 @@ module.exports.verifyBooking = async (req, res) => {
             return res.status(404).json({ success: false, message: "Booking not found" });
         }
 
+        if (!booking.listing) {
+            return res.status(404).json({ success: false, message: "Associated listing not found" });
+        }
+
+        if (!booking.listing.Owner) {
+            return res.status(403).json({ success: false, message: "Listing owner not found. Contact support." });
+        }
+
         // 🔐 SECURITY CHECK: Does this host own the listing?
-        if (!booking.listing.Owner.equals(req.user._id)) {
+        const ownerId = booking.listing.Owner.toString();
+        const requesterId = req.user._id.toString();
+
+        console.log("--- QR Verification Debug ---");
+        console.log("Owner ID (string):", ownerId);
+        console.log("Requester ID (string):", requesterId);
+
+        if (ownerId !== requesterId) {
             return res.status(403).json({
                 success: false,
-                message: "Unauthorized: This booking belongs to another property. You can only verify bookings for your own listings."
+                message: "Unauthorized: This booking belongs to another property."
             });
         }
 
