@@ -5,7 +5,9 @@ import {
     createUserWithEmailAndPassword,
     deleteUser,
     signInWithEmailAndPassword,
-    signInWithPopup
+    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult
 } from 'firebase/auth';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
@@ -32,33 +34,76 @@ const Signup = ({ onLogin, showFlash }) => {
         }
     }, [error]);
 
+    useEffect(() => {
+        const handleRedirectResult = async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result) {
+                    setLoading(true);
+                    const user = result.user;
+                    const token = await user.getIdToken();
+
+                    const res = await axios.post('/signup', {
+                        username: user.displayName || user.email.split('@')[0],
+                        email: user.email,
+                        idToken: token
+                    }, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+
+                    if (res.data.success) {
+                        clearCache();
+                        onLogin(res.data.user);
+                        showFlash('Signed up with Google successfully!', 'success');
+                        navigate('/listings');
+                    }
+                }
+            } catch (err) {
+                console.error("Google Redirect Signup Error:", err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        handleRedirectResult();
+    }, [auth, navigate, onLogin, clearCache, showFlash]);
+
     const handleGoogleSignup = async () => {
         setLoading(true);
         setError('');
         try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
-            const token = await user.getIdToken();
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-            const res = await axios.post('/signup', {
-                username: user.displayName || user.email.split('@')[0],
-                email: user.email,
-                idToken: token
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            if (isMobile) {
+                await signInWithRedirect(auth, googleProvider);
+            } else {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+                const token = await user.getIdToken();
 
-            if (res.data.success) {
-                clearCache();
-                onLogin(res.data.user);
-                showFlash('Signed up with Google successfully!', 'success');
-                navigate('/listings');
+                const res = await axios.post('/signup', {
+                    username: user.displayName || user.email.split('@')[0],
+                    email: user.email,
+                    idToken: token
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (res.data.success) {
+                    clearCache();
+                    onLogin(res.data.user);
+                    showFlash('Signed up with Google successfully!', 'success');
+                    navigate('/listings');
+                }
             }
         } catch (err) {
             console.error("Google Signup Error:", err);
             setError(err.response?.data?.message || err.message);
         } finally {
-            setLoading(false);
+            if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                setLoading(false);
+            }
         }
     };
 

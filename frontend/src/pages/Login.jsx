@@ -3,7 +3,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import {
     getAuth,
     signInWithEmailAndPassword,
-    signInWithPopup
+    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult
 } from 'firebase/auth';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
@@ -29,32 +31,74 @@ const Login = ({ onLogin, showFlash }) => {
         }
     }, [error]);
 
+    useEffect(() => {
+        const handleRedirectResult = async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result) {
+                    setLoading(true);
+                    const user = result.user;
+                    const token = await user.getIdToken();
+
+                    const res = await axios.post('/login', {
+                        idToken: token,
+                        token: token
+                    }, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+
+                    if (res.data.success) {
+                        clearCache();
+                        onLogin(res.data.user);
+                        showFlash('Logged in with Google!', 'success');
+                        navigate('/listings');
+                    }
+                }
+            } catch (err) {
+                console.error("Google Redirect Login Error:", err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        handleRedirectResult();
+    }, [auth, navigate, onLogin, clearCache, showFlash]);
+
     const handleGoogleLogin = async () => {
         setLoading(true);
         setError('');
         try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
-            const token = await user.getIdToken();
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-            const res = await axios.post('/login', {
-                idToken: token,
-                token: token
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            if (isMobile) {
+                await signInWithRedirect(auth, googleProvider);
+            } else {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+                const token = await user.getIdToken();
 
-            if (res.data.success) {
-                clearCache();
-                onLogin(res.data.user);
-                showFlash('Logged in with Google!', 'success');
-                navigate('/listings');
+                const res = await axios.post('/login', {
+                    idToken: token,
+                    token: token
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (res.data.success) {
+                    clearCache();
+                    onLogin(res.data.user);
+                    showFlash('Logged in with Google!', 'success');
+                    navigate('/listings');
+                }
             }
         } catch (err) {
             console.error("Google Login Error:", err);
             setError(err.response?.data?.message || err.message);
         } finally {
-            setLoading(false);
+            if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                setLoading(false);
+            }
         }
     };
 
