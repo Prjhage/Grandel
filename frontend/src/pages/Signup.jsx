@@ -7,7 +7,8 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
     signInWithRedirect,
-    getRedirectResult
+    getRedirectResult,
+    onAuthStateChanged
 } from 'firebase/auth';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
@@ -33,6 +34,41 @@ const Signup = ({ onLogin, showFlash }) => {
             return () => clearTimeout(timer);
         }
     }, [error]);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user && (window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey='))) {
+                console.log("onAuthStateChanged triggered with user after redirect (signup):", user.email);
+                if (!loading) {
+                    setLoading(true);
+                    try {
+                        const token = await user.getIdToken();
+                        console.log("Processing backend signup from onAuthStateChanged...");
+                        const res = await axios.post('/signup', {
+                            username: user.displayName || user.email.split('@')[0],
+                            email: user.email,
+                            idToken: token
+                        }, {
+                            headers: { Authorization: `Bearer ${token}` }
+                        });
+
+                        if (res.data.success) {
+                            console.log("Backend signup SUCCESSFUL from fallback");
+                            clearCache();
+                            onLogin(res.data.user);
+                            showFlash('Signed up with Google successfully!', 'success');
+                            navigate('/listings');
+                        }
+                    } catch (err) {
+                        console.error("Fallback Signup Error:", err);
+                    } finally {
+                        setLoading(false);
+                    }
+                }
+            }
+        });
+        return () => unsubscribe();
+    }, [auth, navigate, onLogin, clearCache, showFlash, loading]);
 
     useEffect(() => {
         const handleRedirectResult = async () => {
