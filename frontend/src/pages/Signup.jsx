@@ -107,18 +107,24 @@ const Signup = ({ onLogin, showFlash }) => {
                     }
                 } else if (isRedirectBack) {
                     console.warn("URL had redirect params but getRedirectResult returned NULL (signup).");
+                    setError("SIGNUP ERROR: The browser blocked the redirect response. Try another browser or check 'Cross-Site Tracking' settings.");
                 }
             } catch (err) {
                 console.error("CRITICAL Google Redirect Signup Error:", err.code, err.message);
                 let msg = err.message;
                 if (err.code === 'auth/unauthorized-domain') {
-                    msg = "This domain is not authorized in Firebase. Please add " + window.location.hostname + " to Authorized Domains.";
+                    msg = "CONFIG ERROR: This domain is not authorized in Firebase. Add " + window.location.hostname + " to 'Authorized Domains'.";
                 }
                 setError(msg);
             } finally {
                 setLoading(false);
             }
         };
+
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (!import.meta.env.VITE_API_BASE_URL && !isLocal) {
+            setError("CONFIG ERROR: VITE_API_BASE_URL is missing in environment variables.");
+        }
 
         handleRedirectResult();
     }, [auth, navigate, onLogin, clearCache, showFlash]);
