@@ -1,16 +1,18 @@
 import axios from 'axios';
 
-let baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+let baseURL = import.meta.env.VITE_API_BASE_URL;
 
-// Remove trailing slash if present to prevent double slashes (e.g., .com//api)
-if (baseURL.endsWith('/')) {
-    baseURL = baseURL.slice(0, -1);
+if (!baseURL) {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        baseURL = 'http://localhost:8080';
+    } else {
+        // In production, if VITE_API_BASE_URL is missing, we assume relative paths
+        // or the user needs to set it. We'll default to empty string to use relative.
+        baseURL = '';
+        console.warn("⚠️ VITE_API_BASE_URL is missing! Defaulting to relative paths.");
+    }
 }
-
-if (!import.meta.env.VITE_API_BASE_URL) {
-    console.warn("⚠️ VITE_API_BASE_URL is missing! Requests will fail in production.");
-}
-console.log("🔗 Axios connecting to:", baseURL);
+console.log("🔗 Axios connecting to:", baseURL || "(relative)");
 
 // Create axios instance with default config
 const axiosInstance = axios.create({

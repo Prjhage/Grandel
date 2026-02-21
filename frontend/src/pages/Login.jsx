@@ -93,6 +93,11 @@ const Login = ({ onLogin, showFlash }) => {
                         token: token
                     }, {
                         headers: { Authorization: `Bearer ${token}` }
+                    }).catch(err => {
+                        console.error("Backend unreachable during redirect:", err);
+                        const errorMsg = err.response?.data?.message || (err.code === 'ERR_NETWORK' ? "Cannot reach backend. Check VITE_API_BASE_URL." : err.message);
+                        setError("BACKEND ERROR: " + errorMsg);
+                        throw err;
                     });
 
                     if (res.data.success) {
@@ -144,6 +149,11 @@ const Login = ({ onLogin, showFlash }) => {
                     token: token
                 }, {
                     headers: { Authorization: `Bearer ${token}` }
+                }).catch(err => {
+                    console.error("Backend unreachable during popup login:", err);
+                    const errorMsg = err.response?.data?.message || (err.code === 'ERR_NETWORK' ? "Cannot reach backend. Check VITE_API_BASE_URL." : err.message);
+                    setError("BACKEND ERROR: " + errorMsg);
+                    throw err;
                 });
 
                 if (res.data.success) {
