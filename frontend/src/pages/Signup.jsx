@@ -36,9 +36,17 @@ const Signup = ({ onLogin, showFlash }) => {
 
     useEffect(() => {
         const handleRedirectResult = async () => {
+            const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
+
+            if (isRedirectBack) {
+                console.log("Detected possible redirect back (signup). Checking result...");
+                setLoading(true);
+            }
+
             try {
                 const result = await getRedirectResult(auth);
                 if (result) {
+                    console.log("Redirect result SUCCESSFULLY captured (signup):", result.user.email);
                     setLoading(true);
                     const user = result.user;
                     const token = await user.getIdToken();
@@ -52,15 +60,25 @@ const Signup = ({ onLogin, showFlash }) => {
                     });
 
                     if (res.data.success) {
+                        console.log("Backend signup SUCCESSFUL after redirect");
                         clearCache();
                         onLogin(res.data.user);
                         showFlash('Signed up with Google successfully!', 'success');
                         navigate('/listings');
+                    } else {
+                        console.error("Backend signup FAILED after redirect:", res.data);
+                        setError(res.data.message || "Failed to finalize signup.");
                     }
+                } else if (isRedirectBack) {
+                    console.warn("URL had redirect params but getRedirectResult returned NULL (signup).");
                 }
             } catch (err) {
-                console.error("Google Redirect Signup Error:", err);
-                setError(err.message);
+                console.error("CRITICAL Google Redirect Signup Error:", err.code, err.message);
+                let msg = err.message;
+                if (err.code === 'auth/unauthorized-domain') {
+                    msg = "This domain is not authorized in Firebase. Please add " + window.location.hostname + " to Authorized Domains.";
+                }
+                setError(msg);
             } finally {
                 setLoading(false);
             }

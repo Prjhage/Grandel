@@ -33,10 +33,22 @@ const Login = ({ onLogin, showFlash }) => {
 
     useEffect(() => {
         const handleRedirectResult = async () => {
+            // Check if we just came back from a redirect
+            // Firebase adds specific parameters to the URL after a redirect
+            const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
+
+            if (isRedirectBack) {
+                console.log("Detected possible redirect back from Google. Checking result...");
+                setLoading(true);
+            } else {
+                console.log("No redirect parameters detected in URL.");
+            }
+
             try {
                 const result = await getRedirectResult(auth);
                 if (result) {
-                    setLoading(true);
+                    console.log("Redirect result SUCCESSFULLY captured:", result.user.email);
+                    setLoading(true); // Ensure loading is true while talking to backend
                     const user = result.user;
                     const token = await user.getIdToken();
 
@@ -48,15 +60,28 @@ const Login = ({ onLogin, showFlash }) => {
                     });
 
                     if (res.data.success) {
+                        console.log("Backend login SUCCESSFUL after redirect");
                         clearCache();
                         onLogin(res.data.user);
                         showFlash('Logged in with Google!', 'success');
                         navigate('/listings');
+                    } else {
+                        console.error("Backend login FAILED after redirect:", res.data);
+                        setError(res.data.message || "Failed to finalize login.");
                     }
+                } else if (isRedirectBack) {
+                    console.warn("URL had redirect params but getRedirectResult returned NULL. This usually means a domain/cookie issue.");
+                    // Don't set error yet, maybe it was already handled or is a false positive
+                } else {
+                    console.log("No redirect result found (normal mount).");
                 }
             } catch (err) {
-                console.error("Google Redirect Login Error:", err);
-                setError(err.message);
+                console.error("CRITICAL Google Redirect Login Error:", err.code, err.message);
+                let msg = err.message;
+                if (err.code === 'auth/unauthorized-domain') {
+                    msg = "This domain is not authorized in Firebase. Please add " + window.location.hostname + " to Authorized Domains.";
+                }
+                setError(msg);
             } finally {
                 setLoading(false);
             }
