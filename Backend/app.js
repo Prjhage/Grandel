@@ -18,6 +18,7 @@ const hpp = require("hpp");
 const rateLimit = require("express-rate-limit");
 const compression = require("compression");
 const morgan = require("morgan");
+const cacheService = require("./services/cacheService");
 
 app.set("trust proxy", 1);
 
@@ -51,7 +52,7 @@ app.use(compression());
 // Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 300, // relaxed from 100 to 300 to support high-traffic/prefetching
   message: "Too many requests from this IP, please try again after 15 minutes"
 });
 app.use("/api/", limiter);
@@ -186,6 +187,12 @@ app.get("/", (req, res) => {
 // API Route for Featured Listings
 app.get("/api/featured", async (req, res) => {
   try {
+    const cacheKey = "featured_listings";
+    const cachedData = cacheService.get(cacheKey);
+    if (cachedData) {
+      return res.json({ featuredListings: cachedData, fromCache: true });
+    }
+
     // Fetch top 6 featured listings with optimized query
     const featuredListings = await Listing.find()
       .limit(6)
@@ -210,6 +217,7 @@ app.get("/api/featured", async (req, res) => {
       };
     });
 
+    cacheService.set(cacheKey, listingsWithRating, cacheService.TTL.FEATURED);
     res.json({ featuredListings: listingsWithRating });
   } catch (error) {
     console.log("Error fetching featured listings:", error);
@@ -220,11 +228,21 @@ app.get("/api/featured", async (req, res) => {
 // API Route for Site Stats (total users & hotels)
 app.get("/api/stats", async (req, res) => {
   try {
+    const cacheKey = "site_stats";
+    const cachedStats = cacheService.get(cacheKey);
+    if (cachedStats) {
+      return res.json({ ...cachedStats, fromCache: true });
+    }
+
     const [totalListings, totalUsers] = await Promise.all([
       Listing.countDocuments(),
       User.countDocuments(),
     ]);
-    res.json({ totalListings, totalUsers });
+
+    const stats = { totalListings, totalUsers };
+    cacheService.set(cacheKey, stats, cacheService.TTL.STATS);
+
+    res.json(stats);
   } catch (error) {
     console.log("Error fetching stats:", error);
     res.status(500).json({ totalListings: 0, totalUsers: 0 });

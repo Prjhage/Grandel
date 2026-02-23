@@ -45,7 +45,7 @@ const Home = ({ currUser }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const { getCachedData, setCachedData } = useListingCache();
+    const { getCachedData, setCachedData, prefetchListing } = useListingCache();
 
     useEffect(() => {
         const fetchListings = async () => {
@@ -333,7 +333,12 @@ const Home = ({ currUser }) => {
                                 .sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0))
                                 .slice(0, 3)
                                 .map((listing) => (
-                                    <div key={listing._id} className="listing-card reveal" onClick={() => navigate(`/listings/${listing._id}`, { state: { listing } })}>
+                                    <div
+                                        key={listing._id}
+                                        className="listing-card reveal"
+                                        onClick={() => navigate(`/listings/${listing._id}`, { state: { listing } })}
+                                        onMouseEnter={() => prefetchListing(listing._id, axios)}
+                                    >
                                         <img src={listing.image?.url || '/images/fallback.jpg'} alt={listing.title} className="listing-image" />
                                         <div className="listing-content">
                                             <h3 className="listing-title">{listing.title}</h3>

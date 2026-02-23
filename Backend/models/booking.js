@@ -142,4 +142,10 @@ bookingSchema.pre("validate", function (next) {
   }
 });
 
+bookingSchema.index({ listing: 1 });
+bookingSchema.index({ user: 1 });
+bookingSchema.index({ status: 1 });
+bookingSchema.index({ startDate: 1, endDate: 1 });
+bookingSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Booking", bookingSchema);

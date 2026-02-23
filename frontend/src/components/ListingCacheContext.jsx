@@ -111,11 +111,30 @@ export const ListingCacheProvider = ({ children }) => {
         setShowCache({});
     };
 
+    /**
+     * Prefetch a listing data in background
+     * @param {string} id - Listing ID
+     * @param {function} axiosInstance - Axios instance to use
+     */
+    const prefetchListing = async (id, axiosInstance) => {
+        if (getCachedShow(id)) return;
+
+        try {
+            const res = await axiosInstance.get(`/listings/${id}`);
+            if (res.data.listing) {
+                setCachedShow(id, res.data);
+            }
+        } catch (err) {
+            console.error(`Prefetch failed for ${id}:`, err);
+        }
+    };
+
     const value = {
         getCachedData,
         setCachedData,
         getCachedShow,
         setCachedShow,
+        prefetchListing,
         clearCache,
         hasCache: !!cache.listings
     };

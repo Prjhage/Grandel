@@ -12,7 +12,7 @@ const Listings = ({ currUser }) => {
     const [userWishlist, setUserWishlist] = useState([]);
 
     // Use the cache context
-    const { getCachedData, setCachedData } = useListingCache();
+    const { getCachedData, setCachedData, prefetchListing } = useListingCache();
 
     const sort = searchParams.get('sort') || '';
 
@@ -126,6 +126,7 @@ const Listings = ({ currUser }) => {
                                 to={`/listings/${listing._id}`}
                                 state={{ listing }}
                                 style={{ textDecoration: 'none', color: 'black' }}
+                                onMouseEnter={() => prefetchListing(listing._id, axios)}
                             >
                                 <div className="card col listing-card" data-id={listing._id}>
                                     <div className="card-img-container">

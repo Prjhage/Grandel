@@ -5,6 +5,7 @@ const { getTravelSuggestions } = require("../services/geminiService");
 const { getImage } = require("../services/imageService");
 const { getNearbyPlaces } = require("../services/nearbyPlacesService");
 const amenityIcons = require("../utils/amenities.js");
+const cacheService = require("../services/cacheService");
 
 module.exports.index = async (req, res) => {
   let { q, sort, startDate, endDate, rooms, guests, lat, lng, category } = req.query;
@@ -149,6 +150,13 @@ module.exports.index = async (req, res) => {
 
 module.exports.showListings = async (req, res) => {
   const { id } = req.params;
+  const cacheKey = `listing_show_${id}`;
+
+  // 1. Try Cache First
+  const cachedData = cacheService.get(cacheKey);
+  if (cachedData) {
+    return res.json({ ...cachedData, fromCache: true });
+  }
 
   const listing = await Listing.findById(id)
     .populate({ path: "reviews", populate: { path: "author", select: 'username avatar' } })
@@ -199,16 +207,8 @@ module.exports.showListings = async (req, res) => {
     );
   }
 
-  console.log("Nearby places sent to UI:", nearbyPlaces.length);
-
   // 🔹 2. Latest travelCompanion data (food + places)
   const travelCompanion = listing.travelCompanion || { places: [], food: [] };
-
-  console.log("Nearby places:", nearbyPlaces.length);
-  console.log(
-    "TravelCompanion:",
-    travelCompanion ? "Available" : "Not available",
-  );
 
   // 🔹 3. Host Aggregate Ratings
   let hostReviewsCount = 0;
@@ -246,7 +246,7 @@ module.exports.showListings = async (req, res) => {
     discountAvailable = !bookingToday;
   }
 
-  res.json({
+  const responseData = {
     listing,
     avgRating: listing.avgRating,
     hostReviewsCount,
@@ -255,7 +255,12 @@ module.exports.showListings = async (req, res) => {
     travelCompanion,
     amenityIcons,
     discountAvailable
-  });
+  };
+
+  // Cache the result for 1 hour
+  cacheService.set(cacheKey, responseData, cacheService.TTL.LISTING_ITEM);
+
+  res.json(responseData);
 };
 
 module.exports.createListings = async (req, res) => {
