@@ -26,6 +26,10 @@ router.get("/current-user", (req, res) => {
 //logout
 router.get("/logout", userController.logout);
 
+// password reset
+router.post("/forgot-password", wrapAsync(userController.forgotPassword));
+router.post("/reset-password/:token", wrapAsync(userController.resetPassword));
+
 //wishlist
 router.post(
   "/wishlist/:id",

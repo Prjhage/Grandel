@@ -21,6 +21,8 @@ import BookingNew from './pages/BookingNew';
 import EditListing from './pages/EditListing';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import axios from './config/axios';
 
 import './App.css';
@@ -108,6 +110,8 @@ function App() {
                 <Route path="/profile/host/scanner" element={<HostScanner currUser={currUser} showFlash={showFlash} />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="*" element={<div>404 Not Found</div>} />
               </Routes>
             </div>

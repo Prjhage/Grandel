@@ -40,7 +40,7 @@ const userSchema = new Schema({
     wishlist: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Listing",
-    }, ],
+    },],
 
 
     avatar: {
@@ -56,9 +56,13 @@ const userSchema = new Schema({
         type: Boolean,
         default: true,
     },
-}, { timestamps: true }, );
 
-userSchema.statics.hashPhone = async function(phone) {
+    // 🔑 Password Reset Fields
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+}, { timestamps: true },);
+
+userSchema.statics.hashPhone = async function (phone) {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(phone, salt);
 };

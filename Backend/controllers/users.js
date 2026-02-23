@@ -4,6 +4,8 @@ const Listing = require("../models/listing");
 const bcrypt = require("bcrypt");
 const admin = require("firebase-admin");
 const passport = require("passport");
+const crypto = require("crypto");
+const mailService = require("../services/mailService");
 
 
 
@@ -340,4 +342,73 @@ module.exports.hostDashboard = async (req, res) => {
         completed,
         cancelled,
     });
+};
+
+/* ================= PASSWORD RESET CONTROLLERS ================= */
+
+module.exports.forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "No account with that email address exists." });
+        }
+
+        // 🛡️ If user is a Firebase/Google user, tell the frontend to use Firebase SDK
+        if (user.firebaseUid) {
+            return res.json({
+                success: true,
+                isFirebase: true,
+                message: "This account uses Google Login. We'll trigger a reset through Google."
+            });
+        }
+
+        // Generate reset token for local users
+        const token = crypto.randomBytes(20).toString("hex");
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        await user.save();
+
+        // Send Email
+        const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+        const mailResult = await mailService.sendResetEmail(user.email, resetUrl);
+
+        if (mailResult.success) {
+            res.json({ success: true, isFirebase: false, message: "An e-mail has been sent to " + user.email + " with further instructions." });
+        } else {
+            res.status(500).json({ success: false, message: "Error sending reset email. Please try again later." });
+        }
+    } catch (err) {
+        console.error("Forgot Password Error:", err);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+};
+
+module.exports.resetPassword = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { password } = req.body;
+
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() },
+        });
+
+        if (!user) {
+            return res.status(400).json({ success: false, message: "Password reset token is invalid or has expired." });
+        }
+
+        // Use passport-local-mongoose convenience method
+        await user.setPassword(password);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.json({ success: true, message: "Success! Your password has been changed." });
+    } catch (err) {
+        console.error("Reset Password Error:", err);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
 };

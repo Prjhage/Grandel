@@ -282,6 +282,18 @@ const Login = ({ onLogin, showFlash }) => {
                             </div>
                         </div>
 
+                        <div className="text-end mb-3">
+                            <Link
+                                to="/forgot-password"
+                                state={{ email: formData.email?.includes('@') ? formData.email : '' }}
+                                title="Click here to reset your password"
+                                className="forgot-link"
+                                style={{ fontSize: '0.8rem' }}
+                            >
+                                Forgot Password?
+                            </Link>
+                        </div>
+
                         <button type="submit" className="login-btn" disabled={loading}>
                             {loading ? 'LOGGING IN...' : 'LOGIN'}
                         </button>
@@ -314,8 +326,8 @@ const Login = ({ onLogin, showFlash }) => {
                         <p>Enter your credentials and start your journey with us</p>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 
