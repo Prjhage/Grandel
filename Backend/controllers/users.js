@@ -372,7 +372,11 @@ module.exports.forgotPassword = async (req, res) => {
         await user.save();
 
         // Send Email
-        const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+        const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+        const resetUrl = `${frontendURL}/reset-password/${token}`;
+
+        console.log(`[AUTH] Generating reset link for ${user.email}: ${resetUrl}`);
+
         const mailResult = await mailService.sendResetEmail(user.email, resetUrl);
 
         if (mailResult.success) {
