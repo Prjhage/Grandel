@@ -107,17 +107,10 @@ const Navbar = ({ currUser, onLogout }) => {
                     {/* AUTH / USER */}
                     <div className="navbar-nav ms-lg-3">
                         {!currUser ? (
-                            localStorage.getItem('grand_user_hint') === 'true' ? (
-                                /* Optimistic User Skeleton while loading */
-                                <div className="user-circle d-flex align-items-center justify-content-center bg-light">
-                                    <div className="spinner-border spinner-border-sm text-secondary" role="status" style={{ width: '12px', height: '12px', borderWidth: '2px' }}></div>
-                                </div>
-                            ) : (
-                                <div className="auth-links">
-                                    <Link to="/signup" className="auth-link signup" onClick={handleNavClose}>Sign up</Link>
-                                    <Link to="/login" className="auth-link login" onClick={handleNavClose}>Log in</Link>
-                                </div>
-                            )
+                            <div className="auth-links">
+                                <Link to="/signup" className="auth-link signup" onClick={handleNavClose}>Sign up</Link>
+                                <Link to="/login" className="auth-link login" onClick={handleNavClose}>Log in</Link>
+                            </div>
                         ) : (
                             <div className="dropdown ms-lg-3 mt-2 mt-lg-0">
                                 <button className="user-circle" data-bs-toggle="dropdown">

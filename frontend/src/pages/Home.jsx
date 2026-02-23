@@ -9,9 +9,15 @@ const Home = ({ currUser }) => {
     const [featuredListings, setFeaturedListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeFAQ, setActiveFAQ] = useState(null);
-    const [stats, setStats] = useState({ totalListings: null, totalUsers: null });
+    const [stats, setStats] = useState(() => {
+        const savedStats = localStorage.getItem('grand_site_stats');
+        return savedStats ? JSON.parse(savedStats) : { totalListings: null, totalUsers: null };
+    });
     const [showFeedback, setShowFeedback] = useState(false);
-    const [displayStats, setDisplayStats] = useState({ totalListings: 0, totalUsers: 0 });
+    const [displayStats, setDisplayStats] = useState(() => {
+        const savedStats = localStorage.getItem('grand_site_stats');
+        return savedStats ? JSON.parse(savedStats) : { totalListings: 0, totalUsers: 0 };
+    });
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -74,6 +80,7 @@ const Home = ({ currUser }) => {
             try {
                 const res = await axios.get('/api/stats');
                 setStats(res.data);
+                localStorage.setItem('grand_site_stats', JSON.stringify(res.data));
             } catch (err) {
                 console.error('Error fetching stats', err);
             }

@@ -137,6 +137,17 @@ const Login = ({ onLogin, showFlash }) => {
         }
 
         handleRedirectResult();
+
+        // 🚀 Proactive Wake-up: Ping backend to wake up cold instance
+        const wakeUpBackend = async () => {
+            try {
+                await axios.get('/current-user');
+                console.log("Backend pinged successfully.");
+            } catch (err) {
+                console.warn("Backend wake-up ping failed:", err.message);
+            }
+        };
+        wakeUpBackend();
     }, [auth, navigate, onLogin, clearCache, showFlash]);
 
     const handleGoogleLogin = async () => {
@@ -184,6 +195,7 @@ const Login = ({ onLogin, showFlash }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
 
         try {
             const auth = getAuth();
@@ -208,11 +220,16 @@ const Login = ({ onLogin, showFlash }) => {
                 navigate('/listings');
             }
         } catch (err) {
-            let msg = err.response?.data?.message || 'Login failed. Please try again.';
-            if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+            console.error(err);
+            let msg = err.response?.data?.message || 'Login failed. Please check your connection.';
+            if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || (err.response && err.response.status === 401)) {
                 msg = 'Invalid email or password.';
+            } else if (err.code === 'ERR_NETWORK') {
+                msg = 'Cannot reach the server. It might be waking up, please try again in a few seconds.';
             }
             setError(msg);
+        } finally {
+            setLoading(false);
         }
     };
 

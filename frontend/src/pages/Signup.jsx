@@ -127,6 +127,16 @@ const Signup = ({ onLogin, showFlash }) => {
         }
 
         handleRedirectResult();
+
+        // 🚀 Proactive Wake-up
+        const wakeUpBackend = async () => {
+            try {
+                await axios.get('/current-user');
+            } catch (err) {
+                console.warn("Backend wake-up failed:", err.message);
+            }
+        };
+        wakeUpBackend();
     }, [auth, navigate, onLogin, clearCache, showFlash]);
 
     const handleGoogleSignup = async () => {
@@ -170,6 +180,7 @@ const Signup = ({ onLogin, showFlash }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
         let userCredential;
         let isNewFirebaseUser = false;
 
@@ -213,6 +224,8 @@ const Signup = ({ onLogin, showFlash }) => {
             let msg = 'Signup failed. Please try again.';
             if (err.response?.data?.message) {
                 msg = err.response.data.message;
+            } else if (err.code === 'ERR_NETWORK') {
+                msg = 'Cannot reach the server. It might be waking up, please try again.';
             } else if (err.message) {
                 msg = err.message;
             }
@@ -223,6 +236,8 @@ const Signup = ({ onLogin, showFlash }) => {
                 msg = 'Password should be at least 6 characters.';
             }
             setError(msg);
+        } finally {
+            setLoading(false);
         }
     };
 

@@ -26,7 +26,11 @@ import axios from './config/axios';
 import './App.css';
 
 function App() {
-  const [currUser, setCurrUser] = useState(null);
+  const [currUser, setCurrUser] = useState(() => {
+    // Initial check from local storage for instant UI
+    const savedUser = localStorage.getItem('grand_user_metadata');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const [flash, setFlash] = useState(null);
 
   // Helper to show flash messages
@@ -40,10 +44,16 @@ function App() {
       try {
         const res = await axios.get('/current-user');
         if (res.data.user) {
+          const userMetadata = {
+            username: res.data.user.username,
+            role: res.data.user.role,
+            avatar: res.data.user.avatar
+          };
           setCurrUser(res.data.user);
-          localStorage.setItem('grand_user_hint', 'true');
+          localStorage.setItem('grand_user_metadata', JSON.stringify(userMetadata));
         } else {
-          localStorage.removeItem('grand_user_hint');
+          setCurrUser(null);
+          localStorage.removeItem('grand_user_metadata');
         }
       } catch (err) {
         console.error("Error checking session", err);
@@ -53,15 +63,20 @@ function App() {
   }, []);
 
   const handleLogin = (user) => {
+    const userMetadata = {
+      username: user.username,
+      role: user.role,
+      avatar: user.avatar
+    };
     setCurrUser(user);
-    localStorage.setItem('grand_user_hint', 'true');
+    localStorage.setItem('grand_user_metadata', JSON.stringify(userMetadata));
   };
 
   const handleLogout = async () => {
     try {
       await axios.get('/logout');
       setCurrUser(null);
-      localStorage.removeItem('grand_user_hint');
+      localStorage.removeItem('grand_user_metadata');
       showFlash("Logged out successfully");
     } catch (err) {
       showFlash("Logout failed", "error");
