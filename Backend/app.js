@@ -27,6 +27,7 @@ app.set("trust proxy", 1);
 // CORS CONFIGURATION (MUST BE AT THE TOP)
 // =================================================
 const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+console.log(`[INIT] Frontend URL: ${frontendURL}`);
 // Ensure no trailing slash in the env variable to prevent mismatch
 const cleanFrontendURL = frontendURL.replace(/\/$/, "");
 
