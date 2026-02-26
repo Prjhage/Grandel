@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -36,10 +36,10 @@ function App() {
   const [flash, setFlash] = useState(null);
 
   // Helper to show flash messages
-  const showFlash = (message, type = 'success') => {
+  const showFlash = useCallback((message, type = 'success') => {
     setFlash({ message, type });
     setTimeout(() => setFlash(null), 3000);
-  };
+  }, []);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -64,7 +64,8 @@ function App() {
     checkUser();
   }, []);
 
-  const handleLogin = (user) => {
+  const handleLogin = useCallback((user) => {
+    console.log("💾 Logging user in to App state:", user.username);
     const userMetadata = {
       username: user.username,
       role: user.role,
@@ -72,9 +73,9 @@ function App() {
     };
     setCurrUser(user);
     localStorage.setItem('grand_user_metadata', JSON.stringify(userMetadata));
-  };
+  }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await axios.get('/logout');
       setCurrUser(null);
@@ -83,7 +84,7 @@ function App() {
     } catch (err) {
       showFlash("Logout failed", "error");
     }
-  };
+  }, [showFlash]);
 
   return (
     <ListingCacheProvider>

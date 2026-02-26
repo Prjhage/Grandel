@@ -3,11 +3,17 @@ import axios from 'axios';
 let baseURL = import.meta.env.VITE_API_BASE_URL;
 
 if (!baseURL) {
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    const hostname = window.location.hostname;
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+    const isIP = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname);
+
+    if (isLocal) {
         baseURL = 'http://localhost:8080';
+    } else if (isIP) {
+        // If accessed via IP (e.g. 192.168.x.x on mobile), assume backend is on same IP, port 8080
+        baseURL = `http://${hostname}:8080`;
+        console.log("📱 Mobile/IP access detected. Using baseURL:", baseURL);
     } else {
-        // In production, if VITE_API_BASE_URL is missing, we assume relative paths
-        // or the user needs to set it. We'll default to empty string to use relative.
         baseURL = '';
         console.warn("⚠️ VITE_API_BASE_URL is missing! Defaulting to relative paths.");
     }

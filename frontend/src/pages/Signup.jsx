@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
     getAuth,
@@ -25,6 +25,7 @@ const Signup = ({ onLogin, showFlash }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const isProcessing = useRef(false);
 
     useEffect(() => {
         if (error) {
@@ -36,116 +37,97 @@ const Signup = ({ onLogin, showFlash }) => {
     }, [error]);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user && (window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey='))) {
-                console.log("onAuthStateChanged triggered with user after redirect (signup):", user.email);
-                if (!loading) {
-                    setLoading(true);
-                    try {
-                        const token = await user.getIdToken();
-                        console.log("Processing backend signup from onAuthStateChanged...");
-                        const res = await axios.post('/signup', {
-                            username: user.displayName || user.email.split('@')[0],
-                            email: user.email,
-                            idToken: token
-                        }, {
-                            headers: { Authorization: `Bearer ${token}` }
-                        });
-
-                        if (res.data.success) {
-                            console.log("Backend signup SUCCESSFUL from fallback");
-                            clearCache();
-                            onLogin(res.data.user);
-                            showFlash('Signed up with Google successfully!', 'success');
-                            navigate('/listings');
-                        }
-                    } catch (err) {
-                        console.error("Fallback Signup Error:", err);
-                    } finally {
-                        setLoading(false);
-                    }
-                }
-            }
-        });
-        return () => unsubscribe();
-    }, [auth, navigate, onLogin, clearCache, showFlash, loading]);
-
-    useEffect(() => {
-        const handleRedirectResult = async () => {
+        const handleAuthResult = async () => {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
+            const isPending = sessionStorage.getItem('pending_google_signup') === 'true';
 
-            if (isRedirectBack) {
-                console.log("Detected possible redirect back (signup). Checking result...");
+            if (isRedirectBack || (isMobile && isPending)) {
                 setLoading(true);
             }
 
             try {
                 const result = await getRedirectResult(auth);
                 if (result) {
-                    console.log("Redirect result SUCCESSFULLY captured (signup):", result.user.email);
-                    setLoading(true);
-                    const user = result.user;
-                    const token = await user.getIdToken();
-
-                    const res = await axios.post('/signup', {
-                        username: user.displayName || user.email.split('@')[0],
-                        email: user.email,
-                        idToken: token
-                    }, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-
-                    if (res.data.success) {
-                        console.log("Backend signup SUCCESSFUL after redirect");
-                        clearCache();
-                        onLogin(res.data.user);
-                        showFlash('Signed up with Google successfully!', 'success');
-                        navigate('/listings');
-                    } else {
-                        console.error("Backend signup FAILED after redirect:", res.data);
-                        setError(res.data.message || "Failed to finalize signup.");
-                    }
-                } else if (isRedirectBack) {
-                    console.warn("URL had redirect params but getRedirectResult returned NULL (signup).");
-                    setError("SIGNUP ERROR: The browser blocked the redirect response. Try another browser or check 'Cross-Site Tracking' settings.");
+                    await processGoogleUser(result.user);
+                    sessionStorage.removeItem('pending_google_signup');
                 }
             } catch (err) {
-                console.error("CRITICAL Google Redirect Signup Error:", err.code, err.message);
-                let msg = err.message;
-                if (err.code === 'auth/unauthorized-domain') {
-                    msg = "CONFIG ERROR: This domain is not authorized in Firebase. Add " + window.location.hostname + " to 'Authorized Domains'.";
+                sessionStorage.removeItem('pending_google_signup');
+                console.error("Signup Redirect Error:", err);
+                setError(err.message);
+            } finally {
+                if (!isRedirectBack && !isPending) setLoading(false);
+            }
+        };
+
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            const isPending = sessionStorage.getItem('pending_google_signup') === 'true';
+            if (user && isPending) {
+                console.log("onAuthStateChanged: Catching user for pending signup.");
+                await processGoogleUser(user);
+                sessionStorage.removeItem('pending_google_signup');
+            }
+        });
+
+        const processGoogleUser = async (firebaseUser) => {
+            if (isProcessing.current) return;
+            isProcessing.current = true;
+            console.log("🚀 Starting backend signup for user:", firebaseUser.email);
+            setLoading(true);
+            try {
+                const token = await firebaseUser.getIdToken();
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                if (isMobile) {
+                    // alert("Signup Token retrieved, talking to backend...");
                 }
-                setError(msg);
+                const res = await axios.post('/signup', {
+                    username: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+                    email: firebaseUser.email,
+                    idToken: token
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                console.log("📡 Backend Signup response received:", res.status, res.data);
+
+                if (res.data.success) {
+                    clearCache();
+                    onLogin(res.data.user);
+                    showFlash('Signed up with Google successfully!', 'success');
+                    setTimeout(() => navigate('/listings'), 100);
+                } else {
+                    setError(res.data.message || "Signup refused by server.");
+                    isProcessing.current = false;
+                }
+            } catch (err) {
+                console.error("💥 Backend Signup process error:", err);
+                isProcessing.current = false;
+                const backendMsg = err.response?.data?.message || err.message;
+
+                if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
+                    setError("API ERROR: Backend returned HTML. Your API link might be wrong.");
+                } else {
+                    setError(backendMsg);
+                }
             } finally {
                 setLoading(false);
             }
         };
 
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        if (!import.meta.env.VITE_API_BASE_URL && !isLocal) {
-            setError("CONFIG ERROR: VITE_API_BASE_URL is missing in environment variables.");
-        }
-
-        handleRedirectResult();
-
-        // 🚀 Proactive Wake-up
-        const wakeUpBackend = async () => {
-            try {
-                await axios.get('/current-user');
-            } catch (err) {
-                console.warn("Backend wake-up failed:", err.message);
-            }
-        };
-        wakeUpBackend();
+        handleAuthResult();
+        return () => unsubscribe();
     }, [auth, navigate, onLogin, clearCache, showFlash]);
 
     const handleGoogleSignup = async () => {
         setLoading(true);
         setError('');
+        sessionStorage.setItem('pending_google_signup', 'true');
         try {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
             if (isMobile) {
+                console.log("📱 Mobile device detected. Starting Redirect (Signup)...");
                 await signInWithRedirect(auth, googleProvider);
             } else {
                 const result = await signInWithPopup(auth, googleProvider);
@@ -324,11 +306,11 @@ const Signup = ({ onLogin, showFlash }) => {
                             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', marginRight: '10px' }} />
                             Sign up with Google
                         </button>
-
-                        <Link to="/login" className="forgot-link mt-3">
-                            Already have an account? Sign in
-                        </Link>
                     </form>
+
+                    <Link to="/login" className="forgot-link mt-3">
+                        Already have an account? Sign in
+                    </Link>
                 </div>
 
                 {/* Right Side - Welcome Section with Cloud Waves */}

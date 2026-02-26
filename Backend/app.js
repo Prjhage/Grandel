@@ -121,6 +121,8 @@ const store = MongoStore.create({
   touchAfter: 24 * 60 * 60,
 });
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const sessionOptions = {
   store: store,
   secret: process.env.SECRET,
@@ -128,11 +130,12 @@ const sessionOptions = {
   saveUninitialized: true,
   proxy: true,
   cookie: {
-    expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // one week for milliseconds
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    // 🛡️ Enhanced Mobile/Cross-Site Cookie Security
+    secure: isProd || process.env.FORCE_SECURE_COOKIES === 'true',
+    sameSite: isProd ? 'none' : 'lax',
   },
 };
 
