@@ -63,37 +63,7 @@ const Booking = require("../models/booking");
 router.get(
   "/profile/host",
   isLoggedIn,
-  wrapAsync(async (req, res) => {
-    // 🔐 Only hosts allowed
-    if (req.user.role !== "host") {
-      return res.status(403).json({ success: false, message: "Host access only" });
-    }
-
-    // 🏠 Get host listings
-    const listings = await Listing.find({ Owner: req.user._id });
-    const listingIds = listings.map((l) => l._id);
-
-    // 📦 Get all bookings for those listings
-    const bookings = await Booking.find({
-      listing: { $in: listingIds },
-    })
-      .populate("user", "username email")
-      .populate("listing", "title");
-
-    // 📊 Categorize bookings
-    const upcoming = bookings.filter((b) => b.status === "pending");
-    const confirmed = bookings.filter((b) => b.status === "confirmed");
-    const cancelled = bookings.filter((b) => b.status === "cancelled");
-    const completed = bookings.filter((b) => b.status === "completed");
-
-    res.json({
-      upcoming,
-      confirmed,
-      cancelled,
-      completed,
-      listings
-    });
-  }),
+  wrapAsync(userController.hostDashboard),
 );
 
 /* ================= UPDATE BOOKING STATUS ================= */

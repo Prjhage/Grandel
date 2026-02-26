@@ -8,8 +8,12 @@ const amenityIcons = require("../utils/amenities.js");
 const cacheService = require("../services/cacheService");
 
 module.exports.index = async (req, res) => {
-  let { q, sort, startDate, endDate, rooms, guests, lat, lng, category } = req.query;
-  // 1. Generate Cache Key
+  let { q, sort, startDate, endDate, rooms, guests, lat, lng, category, page = 1, limit = 12 } = req.query;
+  page = parseInt(page);
+  limit = parseInt(limit);
+  const skip = (page - 1) * limit;
+
+  // 1. Generate Cache Key (Include page/limit in cache key)
   const cacheKey = `listings_index_${JSON.stringify(req.query)}_${req.user?._id || 'guest'}`;
   const cachedData = cacheService.get(cacheKey);
   if (cachedData) {
@@ -76,32 +80,39 @@ module.exports.index = async (req, res) => {
     };
   }
 
-  let allListings = await Listing.find(query)
-    .select('title image price location country reviews numRooms guestsPerRoom discount avgRating ratingCount')
-    .populate({
-      path: 'reviews',
-      select: 'rating'
-    })
-    .lean();
+  // 4. Date and Today constant
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  // 3. Date Availability & Strict Capacity Filtering
+  const [allListingsResult, overlappingBookings, bookedTodayIds] = await Promise.all([
+    Listing.find(query)
+      .select('title image price location country reviews numRooms guestsPerRoom discount avgRating ratingCount')
+      .populate({
+        path: 'reviews',
+        select: 'rating'
+      })
+      .lean(),
+    (startDate && endDate) ? Booking.find({
+      status: { $in: ["confirmed", "pending"] },
+      $or: [
+        { startDate: { $lt: new Date(endDate) }, endDate: { $gt: new Date(startDate) } }
+      ]
+    }) : Promise.resolve([]),
+    Booking.distinct("listing", {
+      createdAt: { $gte: today },
+      status: { $ne: "cancelled" }
+    })
+  ]);
+
+  let allListings = allListingsResult;
+
+  // 5. Date Availability & Strict Capacity Filtering (In-memory for now as it's complex for aggregation)
   if ((startDate && endDate) || reqRooms > 0 || reqGuests > 0) {
     const start = startDate ? new Date(startDate) : null;
     const end = endDate ? new Date(endDate) : null;
 
-    // Fetch relevant bookings for these dates
-    let overlappingBookings = [];
-    if (start && end) {
-      overlappingBookings = await Booking.find({
-        status: { $in: ["confirmed", "pending"] },
-        $or: [
-          { startDate: { $lt: end }, endDate: { $gt: start } }
-        ]
-      });
-    }
-
     allListings = allListings.filter(listing => {
-      // Precise guest capacity check: reqGuests must be <= listing.numRooms * listing.guestsPerRoom
+      // Precise guest capacity check
       if (reqGuests > listing.numRooms * listing.guestsPerRoom) return false;
 
       // Date check
@@ -110,7 +121,6 @@ module.exports.index = async (req, res) => {
         const bookedRoomsCount = listingBookings.reduce((sum, b) => sum + (b.numRooms || 1), 0);
         const availableRooms = listing.numRooms - bookedRoomsCount;
 
-        // Must have at least the requested rooms available
         const roomsToChecks = reqRooms > 0 ? reqRooms : 1;
         if (availableRooms < roomsToChecks) return false;
       }
@@ -118,7 +128,7 @@ module.exports.index = async (req, res) => {
     });
   }
 
-  // Sort listings based on sort parameter
+  // 6. Sort listings
   if (sort === "price-low") {
     allListings.sort((a, b) => a.price - b.price);
   } else if (sort === "price-high") {
@@ -127,33 +137,23 @@ module.exports.index = async (req, res) => {
     allListings.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0));
   }
 
-  const userWishlist = req.user ? req.user.wishlist || [] : [];
-  const isHost = req.user ? req.user.role === 'host' : false;
-
-  // Early Bird Discount availability: hide discount if listing was booked today
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const bookedTodayIds = await Booking.distinct("listing", {
-    createdAt: { $gte: today },
-    status: { $ne: "cancelled" }
-  });
   const bookedTodaySet = new Set(bookedTodayIds.map(id => id.toString()));
 
-  const listingsWithDiscount = allListings.map(l => {
-    const obj = l.toObject ? l.toObject() : { ...l };
-    obj.discountAvailable = obj.discount > 0 && !bookedTodaySet.has(obj._id.toString());
-    return obj;
-  });
+  // 7. Paginate results
+  const totalListings = listingsWithDiscount.length;
+  const paginatedListings = listingsWithDiscount.slice(skip, skip + limit);
 
   const finalData = {
-    allListings: listingsWithDiscount,
-    userWishlist,
-    isHost,
+    allListings: paginatedListings,
+    totalListings,
+    currentPage: page,
+    totalPages: Math.ceil(totalListings / limit),
+    userWishlist: req.user ? req.user.wishlist || [] : [],
+    isHost: req.user ? req.user.role === 'host' : false,
     sort,
   };
 
-  // Cache for 5 minutes (reduced from default 1h because data might change)
+  // Cache for 5 minutes
   cacheService.set(cacheKey, finalData, 300);
 
   res.json(finalData);

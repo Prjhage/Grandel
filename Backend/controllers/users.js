@@ -218,22 +218,30 @@ module.exports.getWishlist = async (req, res) => {
 
 module.exports.profile = async (req, res) => {
     try {
-        // Fetch fresh user data optimized
-        const user = await User.findById(req.user._id).lean();
+        const userId = req.user._id;
 
+        // Fetch all profile data in parallel
+        const [user, bookings, myListings] = await Promise.all([
+            User.findById(userId).lean(),
+            Booking.find({ user: userId })
+                .populate({
+                    path: "listing",
+                    select: "title image location"
+                })
+                .lean(),
+            Listing.find({ Owner: userId })
+                .select("title image price location avgRating ratingCount")
+                .lean()
+        ]);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Fetch wishlist listings (needs user.wishlist from the first query)
         const wishlistListings = await Listing.find({
             _id: { $in: user.wishlist || [] },
         }).select("title image price location avgRating ratingCount").lean();
-
-        const bookings = await Booking.find({ user: user._id })
-            .populate({
-                path: "listing",
-                select: "title image location"
-            })
-            .lean();
-        const myListings = await Listing.find({ Owner: user._id })
-            .select("title image price location avgRating ratingCount")
-            .lean();
 
         res.json({
             user: user,
@@ -316,31 +324,52 @@ module.exports.updateProfilePhoto = async (req, res) => {
 };
 
 module.exports.hostDashboard = async (req, res) => {
-    // Fetch bookings for listings owned by the current user (host)
-    const hostBookings = await Booking.find()
+    // 🔐 Only hosts allowed
+    if (req.user.role !== "host") {
+        return res.status(403).json({ success: false, message: "Host access only" });
+    }
+
+    let { page = 1, limit = 10 } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
+    const skip = (page - 1) * limit;
+
+    // 🏠 Fetch host's listings first to get their IDs
+    const listings = await Listing.find({ Owner: req.user._id }).select('title image price location').lean();
+    const listingIds = listings.map((l) => l._id);
+
+    // 📦 Fetch all bookings for those listings in one go
+    const bookings = await Booking.find({
+        listing: { $in: listingIds },
+    })
+        .populate("user", "username email avatar")
         .populate({
             path: "listing",
-            match: { Owner: req.user._id }, // Only listings owned by the current user
+            select: "title image location"
         })
-        .populate("user") // The guest who made the booking
-        .populate("partner"); // The booking partner
+        .sort({ createdAt: -1 })
+        .lean();
 
-    // Filter out bookings where listing is null (not owned by the user)
-    const filteredBookings = hostBookings.filter(
-        (booking) => booking.listing !== null,
-    );
+    // 📊 Categorize bookings efficiently in memory
+    const upcoming = bookings.filter((b) => b.status === "pending" || b.status === "upcoming");
+    const confirmed = bookings.filter((b) => b.status === "confirmed");
+    const cancelled = bookings.filter((b) => b.status === "cancelled");
+    const completed = bookings.filter((b) => b.status === "completed");
 
-
-    const upcoming = filteredBookings.filter((b) => b.status === "upcoming");
-    const confirmed = filteredBookings.filter((b) => b.status === "confirmed");
-    const completed = filteredBookings.filter((b) => b.status === "completed");
-    const cancelled = filteredBookings.filter((b) => b.status === "cancelled");
-
+    // Paginate each category if needed, or just return them as is if small
+    // For now, let's keep categorization but return count info
     res.json({
         upcoming,
         confirmed,
-        completed,
         cancelled,
+        completed,
+        listings,
+        counts: {
+            upcoming: upcoming.length,
+            confirmed: confirmed.length,
+            cancelled: cancelled.length,
+            completed: completed.length
+        }
     });
 };
 

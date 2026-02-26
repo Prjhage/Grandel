@@ -30,13 +30,11 @@ const HostDashboard = ({ currUser, showFlash }) => {
             const cachedData = getCachedData();
 
             if (cachedData) {
-                // Use cached data - no loading state needed
                 setBookings(cachedData.bookings);
                 setLoading(false);
                 return;
             }
 
-            // No cache - fetch from API
             const res = await axios.get('/profile/host');
             const fetchedBookings = {
                 upcoming: res.data.upcoming || [],
@@ -46,10 +44,7 @@ const HostDashboard = ({ currUser, showFlash }) => {
             };
 
             setBookings(fetchedBookings);
-
-            // Cache the results
             setCachedData(fetchedBookings);
-
             setLoading(false);
         } catch (err) {
             console.error('Error fetching host bookings:', err);

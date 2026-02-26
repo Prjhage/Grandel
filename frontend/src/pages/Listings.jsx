@@ -9,7 +9,10 @@ const Listings = ({ currUser }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [userWishlist, setUserWishlist] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
 
     // Use the cache context
     const { getCachedData, setCachedData, prefetchListing } = useListingCache();
@@ -17,34 +20,47 @@ const Listings = ({ currUser }) => {
     const sort = searchParams.get('sort') || '';
 
     useEffect(() => {
-        fetchListings();
+        setPage(1);
+        setListings([]);
+        setHasMore(true);
+        fetchListings(1, true);
     }, [searchParams]);
 
-    const fetchListings = async () => {
+    const fetchListings = async (pageNum, isInitial = false) => {
         try {
+            if (isInitial) setLoading(true);
+            else setLoadingMore(true);
+
             const currentFilters = Object.fromEntries(searchParams.entries());
             currentFilters.sort = sort;
+            currentFilters.page = pageNum;
 
-            const cachedData = getCachedData(currentFilters);
-            if (cachedData) {
-                setListings(cachedData.listings);
-                setUserWishlist(cachedData.userWishlist);
-                setLoading(false);
-                return;
-            }
-
-            setLoading(true);
-            const res = await axios.get('/listings', { params: searchParams });
+            const res = await axios.get('/listings', { params: { ...currentFilters, limit: 12 } });
             const fetchedListings = res.data.allListings || [];
             const fetchedWishlist = res.data.userWishlist || [];
 
-            setListings(fetchedListings);
-            setUserWishlist(fetchedWishlist);
-            setCachedData(fetchedListings, fetchedWishlist, currentFilters);
+            if (isInitial) {
+                setListings(fetchedListings);
+                setUserWishlist(fetchedWishlist);
+            } else {
+                setListings(prev => [...prev, ...fetchedListings]);
+            }
+
+            setHasMore(fetchedListings.length === 12);
             setLoading(false);
+            setLoadingMore(false);
         } catch (err) {
             console.error('Error fetching listings:', err);
             setLoading(false);
+            setLoadingMore(false);
+        }
+    };
+
+    const loadMore = () => {
+        if (!loadingMore && hasMore) {
+            const nextPage = page + 1;
+            setPage(nextPage);
+            fetchListings(nextPage);
         }
     };
 
@@ -186,6 +202,24 @@ const Listings = ({ currUser }) => {
                     })
                 )}
             </div>
+
+            {/* Load More Trigger */}
+            {hasMore && (
+                <div className="load-more-container d-flex justify-content-center mt-5 mb-5">
+                    <button
+                        className="btn btn-outline-dark rounded-pill px-5 py-2"
+                        onClick={loadMore}
+                        disabled={loadingMore}
+                    >
+                        {loadingMore ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </>
+                        ) : 'Show more'}
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
