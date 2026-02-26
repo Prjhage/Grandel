@@ -167,164 +167,166 @@
     width: 60%;
 }
 
-/* ===== User Circle ===== */
-.user-circle {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: 1px solid #ddd;
-    background: white;
+/* ===== Mobile Sidebar Redesign ===== */
+.navbar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 1500;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.navbar-sidebar {
+    background: #fff;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    transition: box-shadow 0.2s ease;
 }
 
-.user-circle:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+.navbar-toggler-custom {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 2100;
 }
 
-/* ===== Home Nav (Dark Theme) ===== */
-.navbar.home-nav {
-    background: rgba(5, 5, 16, 0.7) !important;
-    backdrop-filter: blur(25px) saturate(200%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-    transition: all 0.4s ease;
+.toggler-icon {
+    width: 24px;
+    height: 2px;
+    background: #333;
+    border-radius: 2px;
+    transition: all 0.3s ease;
 }
 
-.home-nav .nav-link {
-    color: rgba(255, 255, 255, 0.8) !important;
+.navbar-toggler-custom.active .toggler-icon:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
 }
 
-.home-nav .nav-link:hover {
-    color: #fff !important;
+.navbar-toggler-custom.active .toggler-icon:nth-child(2) {
+    opacity: 0;
 }
 
-.home-nav .auth-link {
-    color: rgba(255, 255, 255, 0.9);
+.navbar-toggler-custom.active .toggler-icon:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
-.home-nav .auth-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-}
-
-.home-nav .user-circle {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.home-nav .navbar-toggler {
-    border-color: rgba(255, 255, 255, 0.2);
-    filter: invert(1) brightness(2);
-}
-
-/* ===== Mobile Navbar Overlay ===== */
 @media (max-width: 991.98px) {
-    .navbar {
-        position: relative;
+    .navbar-toggler-custom {
+        display: flex;
     }
 
-    #mainNavbar.navbar-collapse {
-        position: absolute;
-        top: 100%;
-        left: 0;
+    .navbar-sidebar {
+        position: fixed;
+        top: 0;
         right: 0;
-        width: 100%;
+        bottom: 0;
+        width: 300px;
+        max-width: 80%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
         z-index: 2000;
-        background-color: #fff;
-        padding: 1.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        border-radius: 0 0 15px 15px;
-        border: 1px solid #eee;
-        border-top: none;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 80px 30px 40px;
+        transform: translateX(100%);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+        border-left: 1px solid rgba(255, 255, 255, 0.3);
     }
-}
 
-/* ===== Mobile (max-width: 768px) ===== */
-@media (max-width: 768px) {
-    .search-desktop {
+    .navbar-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-header {
+        position: absolute;
+        top: 25px;
+        left: 30px;
+        right: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .sidebar-title {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #111;
+        letter-spacing: -0.01em;
+    }
+
+    .btn-close-custom {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #666;
+        cursor: pointer;
+    }
+
+    .navbar-sidebar .navbar-nav {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .navbar-sidebar .nav-link {
+        font-size: 1.2rem !important;
+        font-weight: 600 !important;
+        color: #222 !important;
+        padding: 0.5rem 0 !important;
+    }
+
+    .navbar-sidebar .auth-links {
+        margin-top: 3rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .navbar-sidebar .auth-link {
+        padding: 1rem !important;
+        text-align: center;
+        border-radius: 12px;
+        font-weight: 700;
+    }
+
+    .navbar-sidebar .auth-link.signup {
+        background: #000;
+        color: #fff;
+    }
+
+    .navbar-sidebar .auth-link.login {
+        border: 1px solid #ddd;
+    }
+
+    .navbar-sidebar .user-circle {
         display: none !important;
     }
+}
 
-    .navbar {
-        background: linear-gradient(135deg, #fdf9d4 0%, #eca8f2 100%) !important;
-    }
-
-    .navbar.home-nav {
-        background: rgba(10, 10, 26, 0.8) !important;
-    }
-
-    .logo-img {
-        height: 36px;
-    }
-
-    .navbar-brand {
-        margin-right: 0;
-        z-index: 10;
-        position: relative;
-        font-size: 1.2rem;
-        display: flex;
-        align-items: center;
-        gap: 2px;
-    }
-
-    .navbar-brand-grand,
-    .navbar-brand-el {
-        font-size: 1.7rem;
-    }
-
-    .navbar-search-section {
-        order: 2;
-        margin: 10px 0;
-    }
-
-    .heading {
-        display: none;
-    }
-
-    .mobile-user-icon {
-        position: relative;
-        margin-right: 1.2rem;
-        z-index: 10;
-    }
-
-    .mobile-user-icon .user-circle {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        border: 1px solid #ddd;
-        background: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .mobile-user-icon .dropdown-menu {
-        margin-top: 0.5rem;
-    }
-
-    .navbar>.container-fluid {
-        align-items: center;
-    }
-
-    .user-circle {
-        display: none;
-    }
-
-    .auth-links {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-top: 0.8rem;
-    }
-
-    .auth-link {
-        width: 100%;
-        padding: 0.6rem 1rem;
-    }
-
-    .auth-link::after {
-        display: none;
+/* ===== Navbar Brand Adjustments ===== */
+@media (max-width: 480px) {
+    .navbar-brand-text {
+        font-size: 1.5rem;
     }
 }

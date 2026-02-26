@@ -14,11 +14,7 @@ const Navbar = ({ currUser, onLogout }) => {
     const isListingsIndexPage = location.pathname === '/listings';
 
     const handleNavClose = () => {
-        if (navbarCollapseRef.current && navbarCollapseRef.current.classList.contains('show')) {
-            const bsCollapse = new window.bootstrap.Collapse(navbarCollapseRef.current, { toggle: false });
-            bsCollapse.hide();
-            setIsMenuOpen(false);
-        }
+        setIsMenuOpen(false);
     };
 
     useEffect(() => {
@@ -53,85 +49,94 @@ const Navbar = ({ currUser, onLogout }) => {
 
                 <div className="d-flex align-items-center ms-auto d-lg-none">
                     {currUser ? (
-                        <div className="mobile-user-icon dropdown">
+                        <div className="mobile-user-icon dropdown me-2">
                             <button className="user-circle" data-bs-toggle="dropdown">
                                 <i className="fa-solid fa-user"></i>
                             </button>
 
                             <ul className="dropdown-menu dropdown-menu-end shadow-sm">
                                 <li>
-                                    <Link className="dropdown-item" to="/profile" onClick={handleNavClose}>
+                                    <Link className="dropdown-item" to="/profile">
                                         <i className="fa-regular fa-user me-2"></i> Profile
                                     </Link>
                                 </li>
                                 {currUser.role === 'host' && (
                                     <li>
-                                        <Link className="dropdown-item" to="/profile/host" onClick={handleNavClose}>
+                                        <Link className="dropdown-item" to="/profile/host">
                                             <i className="fa-solid fa-tachometer-alt me-2"></i> Host Dashboard
                                         </Link>
                                     </li>
                                 )}
                                 <li><hr className="dropdown-divider" /></li>
                                 <li>
-                                    <button className="dropdown-item text-danger" onClick={handleLogoutAndClose}>
+                                    <button className="dropdown-item text-danger" onClick={onLogout}>
                                         <i className="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
                                     </button>
                                 </li>
                             </ul>
                         </div>
                     ) : null}
-                    {/* TOGGLER */}
+                    {/* CUSTOM TOGGLER */}
                     <button
-                        className="navbar-toggler"
+                        className={`navbar-toggler-custom ${isMenuOpen ? 'active' : ''}`}
                         type="button"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNavbar"
+                        onClick={toggleMenu}
                     >
-                        <span className="navbar-toggler-icon"></span>
+                        <span className="toggler-icon"></span>
+                        <span className="toggler-icon"></span>
+                        <span className="toggler-icon"></span>
                     </button>
                 </div>
 
-                {/* NAV CONTENT */}
-                <div className="collapse navbar-collapse" id="mainNavbar" ref={navbarCollapseRef}>
+                {/* SIDEBAR OVERLAY */}
+                {isMenuOpen && <div className="navbar-overlay" onClick={toggleMenu}></div>}
+
+                {/* NAV SIDEBAR CONTENT */}
+                <div className={`navbar-sidebar ${isMenuOpen ? 'open' : ''}`} id="mainNavbar">
+                    <div className="sidebar-header d-lg-none">
+                        <span className="sidebar-title">Menu</span>
+                        <button className="btn-close-custom" onClick={toggleMenu}>
+                            <i className="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
                     {/* LEFT */}
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/listings" onClick={handleNavClose}>Explore</Link>
+                            <Link className="nav-link" to="/listings">Explore</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/listings/new" onClick={handleNavClose}>Become a Host</Link>
+                            <Link className="nav-link" to="/listings/new">Become a Host</Link>
                         </li>
                     </ul>
 
                     {/* AUTH / USER */}
-                    <div className="navbar-nav ms-lg-3">
+                    <div className="navbar-nav-auth">
                         {!currUser ? (
                             <div className="auth-links">
-                                <Link to="/signup" className="auth-link signup" onClick={handleNavClose}>Sign up</Link>
-                                <Link to="/login" className="auth-link login" onClick={handleNavClose}>Log in</Link>
+                                <Link to="/signup" className="auth-link signup">Sign up</Link>
+                                <Link to="/login" className="auth-link login">Log in</Link>
                             </div>
                         ) : (
-                            <div className="dropdown ms-lg-3 mt-2 mt-lg-0">
+                            <div className="dropdown d-none d-lg-block">
                                 <button className="user-circle" data-bs-toggle="dropdown">
                                     <i className="fa-solid fa-user"></i>
                                 </button>
                                 <ul className="dropdown-menu dropdown-menu-end shadow-sm">
                                     <li>
-                                        <Link className="dropdown-item" to="/profile" onClick={handleNavClose}>
+                                        <Link className="dropdown-item" to="/profile">
                                             <i className="fa-regular fa-user me-2"></i> Profile
                                         </Link>
                                     </li>
                                     {currUser.role === 'host' && (
                                         <li>
-                                            <Link className="dropdown-item" to="/profile/host" onClick={handleNavClose}>
+                                            <Link className="dropdown-item" to="/profile/host">
                                                 <i className="fa-solid fa-tachometer-alt me-2"></i> Host Dashboard
                                             </Link>
                                         </li>
                                     )}
                                     <li><hr className="dropdown-divider" /></li>
                                     <li>
-                                        <button className="dropdown-item text-danger" onClick={handleLogoutAndClose}>
+                                        <button className="dropdown-item text-danger" onClick={onLogout}>
                                             <i className="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
                                         </button>
                                     </li>
