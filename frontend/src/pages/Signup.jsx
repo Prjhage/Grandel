@@ -64,7 +64,6 @@ const Signup = ({ onLogin, showFlash }) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             const isPending = sessionStorage.getItem('pending_google_signup') === 'true';
             if (user && isPending) {
-                console.log("onAuthStateChanged: Catching user for pending signup.");
                 await processGoogleUser(user);
                 sessionStorage.removeItem('pending_google_signup');
             }
@@ -73,7 +72,6 @@ const Signup = ({ onLogin, showFlash }) => {
         const processGoogleUser = async (firebaseUser) => {
             if (isProcessing.current) return;
             isProcessing.current = true;
-            console.log("🚀 Starting backend signup for user:", firebaseUser.email);
             setLoading(true);
             try {
                 const token = await firebaseUser.getIdToken();
@@ -89,8 +87,6 @@ const Signup = ({ onLogin, showFlash }) => {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
-                console.log("📡 Backend Signup response received:", res.status, res.data);
-
                 if (res.data.success) {
                     clearCache();
                     onLogin(res.data.user);
@@ -100,8 +96,6 @@ const Signup = ({ onLogin, showFlash }) => {
                     setError(res.data.message || "Signup refused by server.");
                     isProcessing.current = false;
                 }
-            } catch (err) {
-                console.error("💥 Backend Signup process error:", err);
                 isProcessing.current = false;
                 const backendMsg = err.response?.data?.message || err.message;
 
@@ -127,7 +121,6 @@ const Signup = ({ onLogin, showFlash }) => {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
             if (isMobile) {
-                console.log("📱 Mobile device detected. Starting Redirect (Signup)...");
                 await signInWithRedirect(auth, googleProvider);
             } else {
                 const result = await signInWithPopup(auth, googleProvider);

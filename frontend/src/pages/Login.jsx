@@ -64,8 +64,6 @@ const Login = ({ onLogin, showFlash }) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             const isPending = sessionStorage.getItem('pending_google_auth') === 'true';
             if (user && isPending) {
-                console.log("onAuthStateChanged: Catching user for pending login.");
-                // Aggressively try to process if user is authenticated in Firebase
                 await processGoogleUser(user);
                 sessionStorage.removeItem('pending_google_auth');
             }
@@ -76,11 +74,8 @@ const Login = ({ onLogin, showFlash }) => {
         const processGoogleUser = async (firebaseUser) => {
             if (isProcessing.current) return; // Use useRef
             isProcessing.current = true; // Use useRef
-            console.log("🚀 Starting backend handshake for user:", firebaseUser.email);
-            setLoading(true);
             try {
                 const token = await firebaseUser.getIdToken();
-                console.log("🔑 ID Token retrieved successfully.");
                 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 if (isMobile) {
                     // alert("Token retrieved, talking to backend...");
@@ -93,18 +88,14 @@ const Login = ({ onLogin, showFlash }) => {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
-                console.log("📡 Backend response received:", res.status, res.data);
-
                 if (res.data.success) {
                     clearCache();
                     onLogin(res.data.user);
                     showFlash('Logged in with Google!', 'success');
-                    // Small delay to ensure state updates
                     setTimeout(() => navigate('/listings'), 100);
                 } else {
-                    console.error("❌ Backend login refused:", res.data.message);
                     setError(res.data.message || "Login refused by server.");
-                    isProcessing.current = false; // Allow retry on failure
+                    isProcessing.current = false;
                 }
             } catch (err) {
                 isProcessing.current = false; // Reset on error
@@ -122,12 +113,11 @@ const Login = ({ onLogin, showFlash }) => {
         };
 
         const handleAuthError = (err) => {
-            console.error("Google Auth Error:", err.code, err.message);
             let msg = err.message;
             if (err.code === 'auth/unauthorized-domain') {
                 msg = "DOMAIN ERROR: This domain is not authorized in Firebase.";
             } else if (err.code === 'auth/popup-closed-by-user') {
-                return; // User closed popup
+                return;
             }
             setError(msg);
         };
@@ -144,7 +134,6 @@ const Login = ({ onLogin, showFlash }) => {
             sessionStorage.setItem('pending_google_auth', 'true');
 
             if (isMobile) {
-                console.log("📱 Mobile device detected. Starting Redirect...");
                 await signInWithRedirect(auth, googleProvider);
             } else {
                 const result = await signInWithPopup(auth, googleProvider);
@@ -157,7 +146,6 @@ const Login = ({ onLogin, showFlash }) => {
                 }, {
                     headers: { Authorization: `Bearer ${token}` }
                 }).catch(err => {
-                    console.error("Backend unreachable during popup login:", err);
                     const errorMsg = err.response?.data?.message || (err.code === 'ERR_NETWORK' ? "Cannot reach backend. Check VITE_API_BASE_URL." : err.message);
                     setError("BACKEND ERROR: " + errorMsg);
                     throw err;
@@ -171,7 +159,6 @@ const Login = ({ onLogin, showFlash }) => {
                 }
             }
         } catch (err) {
-            console.error("Google Login Error:", err);
             setError(err.response?.data?.message || err.message);
         } finally {
             if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -270,7 +257,7 @@ const Login = ({ onLogin, showFlash }) => {
                             </div>
                         </div>
 
-                        <div className="text-end mb-3">
+                        {/* <div className="text-end mb-3">
                             <Link
                                 to="/forgot-password"
                                 state={{ email: formData.email?.includes('@') ? formData.email : '' }}
@@ -280,7 +267,7 @@ const Login = ({ onLogin, showFlash }) => {
                             >
                                 Forgot Password?
                             </Link>
-                        </div>
+                        </div> */}
 
                         <button type="submit" className="login-btn" disabled={loading}>
                             {loading ? 'LOGGING IN...' : 'LOGIN'}
