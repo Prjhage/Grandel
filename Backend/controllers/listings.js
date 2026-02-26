@@ -139,6 +139,12 @@ module.exports.index = async (req, res) => {
 
   const bookedTodaySet = new Set(bookedTodayIds.map(id => id.toString()));
 
+  const listingsWithDiscount = allListings.map(l => {
+    const obj = { ...l };
+    obj.discountAvailable = obj.discount > 0 && !bookedTodaySet.has(obj._id.toString());
+    return obj;
+  });
+
   // 7. Paginate results
   const totalListings = listingsWithDiscount.length;
   const paginatedListings = listingsWithDiscount.slice(skip, skip + limit);
