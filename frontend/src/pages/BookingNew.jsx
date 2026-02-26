@@ -118,7 +118,7 @@ const BookingNew = ({ currUser, showFlash }) => {
                 currency: order.currency,
                 name: "Grandel Stays",
                 description: `Booking for ${listing.title} (20% Token Amount)`,
-                image: "https://res.cloudinary.com/dqu3s2x41/image/upload/v1707555555/logo_icon.png", // Start with a generic or app logo if you have one
+                image: "/images/icon.png", // Use local icon for reliability
                 order_id: order.id,
                 handler: async function (response) {
                     // 3. On Payment Success -> Verify & Create Booking

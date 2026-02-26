@@ -20,6 +20,11 @@ module.exports.createReview = async (req, res) => {
   listing.reviews.push(newReview);
   await newReview.save();
   await listing.save();
+  // Ensure cache is updated for this listing
+  const cacheService = require("../services/cacheService");
+  cacheService.del(`listing_show_${req.params.id}`);
+  cacheService.flush();
+
   res.json({ success: true, message: "Review created", review: newReview });
 };
 
@@ -41,6 +46,11 @@ module.exports.destroyReview = async (req, res) => {
   }
 
   await listing.save();
+
+  // Ensure cache is updated for this listing
+  const cacheService = require("../services/cacheService");
+  cacheService.del(`listing_show_${id}`);
+  cacheService.flush();
 
   res.json({ success: true, message: "Review deleted" });
 };

@@ -9,9 +9,15 @@ const cacheService = require("../services/cacheService");
 
 module.exports.index = async (req, res) => {
   let { q, sort, startDate, endDate, rooms, guests, lat, lng, category } = req.query;
-  const query = {};
+  // 1. Generate Cache Key
+  const cacheKey = `listings_index_${JSON.stringify(req.query)}_${req.user?._id || 'guest'}`;
+  const cachedData = cacheService.get(cacheKey);
+  if (cachedData) {
+    return res.json({ ...cachedData, fromCache: true });
+  }
 
-  // 1. Category Filtering
+  // 2. Category Filtering
+  const query = {};
   if (category) {
     query.category = category;
   }
@@ -140,12 +146,17 @@ module.exports.index = async (req, res) => {
     return obj;
   });
 
-  res.json({
+  const finalData = {
     allListings: listingsWithDiscount,
     userWishlist,
     isHost,
     sort,
-  });
+  };
+
+  // Cache for 5 minutes (reduced from default 1h because data might change)
+  cacheService.set(cacheKey, finalData, 300);
+
+  res.json(finalData);
 };
 
 module.exports.showListings = async (req, res) => {
@@ -376,6 +387,9 @@ module.exports.createListings = async (req, res) => {
       await req.user.save();
     }
 
+    // Invalidate listings index cache
+    cacheService.flush();
+
     res.status(201).json({
       success: true,
       message: "New Listing Created!",
@@ -519,6 +533,10 @@ module.exports.updateListings = async (req, res) => {
   /* ================= SAVE ================= */
   await listing.save();
 
+  // Invalidate cache for this listing and index
+  cacheService.del(`listing_show_${id}`);
+  cacheService.flush();
+
   res.json({ success: true, message: "Listing updated", listingId: id });
 };
 
@@ -526,6 +544,10 @@ module.exports.destroyListings = async (req, res) => {
   const { id } = req.params;
 
   await Listing.findByIdAndDelete(id);
+
+  // Invalidate cache
+  cacheService.del(`listing_show_${id}`);
+  cacheService.flush();
 
   res.json({ success: true, message: "Listing deleted" });
 };

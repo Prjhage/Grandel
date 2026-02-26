@@ -460,7 +460,7 @@ const ListingShow = ({ currUser, showFlash }) => {
                                         <div className="review-card">
                                             <div className="review-header">
                                                 <img
-                                                    src={review.author?.avatar || '/image/default-user.png'}
+                                                    src={review.author?.avatar || '/images/default-user.png'}
                                                     className="review-avatar"
                                                     alt="user"
                                                 />
@@ -751,11 +751,11 @@ const ListingShow = ({ currUser, showFlash }) => {
                             </div>
                             <div className="d-flex justify-content-between text-center border-top border-bottom py-3 mb-3">
                                 <div>
-                                    <strong className="d-block">{hostStats.reviewsCount}</strong>
+                                    <strong className="d-block">{hostStats?.reviewsCount || 0}</strong>
                                     <small style={{ fontSize: '0.8rem' }}>Reviews</small>
                                 </div>
                                 <div className="border-start border-end px-3">
-                                    <strong className="d-block">{hostStats.avgRating?.toFixed(1) || '0.0'}★</strong>
+                                    <strong className="d-block">{hostStats?.avgRating?.toFixed(1) || '0.0'}★</strong>
                                     <small style={{ fontSize: '0.8rem' }}>Rating</small>
                                 </div>
                                 <div>
