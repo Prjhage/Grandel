@@ -463,6 +463,7 @@ const ListingShow = ({ currUser, showFlash }) => {
                                                     src={review.author?.avatar || '/images/default-user.png'}
                                                     className="review-avatar"
                                                     alt="user"
+                                                    onError={(e) => { e.target.src = '/images/default-user.png'; }}
                                                 />
                                                 <div>
                                                     <strong>{review.author?.username || 'Anonymous'}</strong>
@@ -735,9 +736,10 @@ const ListingShow = ({ currUser, showFlash }) => {
                             <div className="d-flex align-items-center gap-3 mb-3">
                                 <div className="position-relative">
                                     <img
-                                        src="/images/default-user.png"
+                                        src={listing.Owner?.avatar || "/images/default-user.png"}
                                         style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover' }}
                                         alt="Host"
+                                        onError={(e) => { e.target.src = '/images/default-user.png'; }}
                                     />
                                     <span className="position-absolute bottom-0 end-0 bg-danger text-white rounded-circle d-flex align-items-center justify-content-center"
                                         style={{ width: '18px', height: '18px', fontSize: '10px', border: '2px solid white' }}>
