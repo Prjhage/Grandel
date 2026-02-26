@@ -91,7 +91,54 @@ const Navbar = ({ currUser, onLogout }) => {
                 {/* SIDEBAR OVERLAY */}
                 {isMenuOpen && <div className="navbar-overlay" onClick={toggleMenu}></div>}
 
-                {/* NAV SIDEBAR CONTENT */}
+                {/* DESKTOP NAV CONTENT (Horizontal) */}
+                <div className="collapse navbar-collapse d-none d-lg-flex" id="desktopNavbar">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/listings">Explore</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/listings/new">Become a Host</Link>
+                        </li>
+                    </ul>
+                    <div className="navbar-nav ms-auto">
+                        {!currUser ? (
+                            <div className="auth-links">
+                                <Link to="/signup" className="auth-link signup">Sign up</Link>
+                                <Link to="/login" className="auth-link login">Log in</Link>
+                            </div>
+                        ) : (
+                            <div className="dropdown">
+                                <button className="user-circle" data-bs-toggle="dropdown">
+                                    <i className="fa-solid fa-user"></i>
+                                </button>
+                                <ul className="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li>
+                                        <Link className="dropdown-item" to="/profile">
+                                            <i className="fa-regular fa-user me-2"></i> Profile
+                                        </Link>
+                                    </li>
+                                    {currUser.role === 'host' && (
+                                        <li>
+                                            <Link className="dropdown-item" to="/profile/host">
+                                                <i className="fa-solid fa-tachometer-alt me-2"></i> Host Dashboard
+                                            </Link>
+                                        </li>
+                                    )}
+                                    <li><hr className="dropdown-divider" /></li>
+                                    <li>
+                                        <button className="dropdown-item text-danger" onClick={onLogout}>
+                                            <i className="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+
+                {/* MOBILE NAV SIDEBAR CONTENT */}
                 <div className={`navbar-sidebar ${isMenuOpen ? 'open' : ''}`} id="mainNavbar">
                     <div className="sidebar-header d-lg-none">
                         <div className="sidebar-profile-card">

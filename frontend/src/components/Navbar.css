@@ -393,10 +393,26 @@
     color: #fe424d;
 }
 
-/* Desktop Hide Sidebar */
+/* Desktop Sidebar Hide */
 @media (min-width: 992px) {
     .navbar-sidebar {
         display: none !important;
+    }
+
+    /* Ensure horizontal links are visible and styled */
+    .collapse.navbar-collapse {
+        display: flex !important;
+        align-items: center;
+        width: 100%;
+    }
+
+    .navbar-nav .nav-link {
+        color: #222 !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #fe424d !important;
     }
 }
 
