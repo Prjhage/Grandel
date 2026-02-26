@@ -48,43 +48,18 @@ const Navbar = ({ currUser, onLogout }) => {
                 </div>
 
                 <div className="d-flex align-items-center ms-auto d-lg-none">
-                    {currUser ? (
-                        <div className="mobile-user-icon dropdown me-2">
-                            <button className="user-circle" data-bs-toggle="dropdown">
-                                <i className="fa-solid fa-user"></i>
-                            </button>
-
-                            <ul className="dropdown-menu dropdown-menu-end shadow-sm">
-                                <li>
-                                    <Link className="dropdown-item" to="/profile">
-                                        <i className="fa-regular fa-user me-2"></i> Profile
-                                    </Link>
-                                </li>
-                                {currUser.role === 'host' && (
-                                    <li>
-                                        <Link className="dropdown-item" to="/profile/host">
-                                            <i className="fa-solid fa-tachometer-alt me-2"></i> Host Dashboard
-                                        </Link>
-                                    </li>
-                                )}
-                                <li><hr className="dropdown-divider" /></li>
-                                <li>
-                                    <button className="dropdown-item text-danger" onClick={onLogout}>
-                                        <i className="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    ) : null}
-                    {/* CUSTOM TOGGLER */}
+                    {/* STYLIZED TOGGLER */}
                     <button
-                        className={`navbar-toggler-custom ${isMenuOpen ? 'active' : ''}`}
+                        className={`navbar-toggler-premium ${isMenuOpen ? 'active' : ''}`}
                         type="button"
                         onClick={toggleMenu}
+                        aria-label="Toggle navigation"
                     >
-                        <span className="toggler-icon"></span>
-                        <span className="toggler-icon"></span>
-                        <span className="toggler-icon"></span>
+                        <div className="toggler-container">
+                            <span className="line top"></span>
+                            <span className="line bottom"></span>
+                        </div>
+                        <span className="toggler-text">{isMenuOpen ? 'CLOSE' : 'MENU'}</span>
                     </button>
                 </div>
 

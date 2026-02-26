@@ -255,6 +255,76 @@
     overflow-y: auto;
 }
 
+.navbar-sidebar .navbar-toggler-premium {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 100px;
+    cursor: pointer;
+    z-index: 2100;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.navbar-toggler-premium:active {
+    transform: scale(0.95);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.toggler-container {
+    width: 20px;
+    height: 14px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.line {
+    width: 100%;
+    height: 2px;
+    background: #111;
+    border-radius: 4px;
+    transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.line.bottom {
+    width: 65%;
+    margin-left: auto;
+}
+
+.navbar-toggler-premium.active .line.top {
+    transform: translateY(6px) rotate(45deg);
+    width: 100%;
+}
+
+.navbar-toggler-premium.active .line.bottom {
+    transform: translateY(-6px) rotate(-45deg);
+    width: 100%;
+    margin-left: 0;
+}
+
+.toggler-text {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #111;
+}
+
+.navbar-toggler-premium.active {
+    background: #000;
+}
+
+.navbar-toggler-premium.active .line {
+    background: #fff;
+}
+
+.navbar-toggler-premium.active .toggler-text {
+    color: #fff;
+}
+
 .navbar-sidebar .navbar-nav {
     display: flex;
     flex-direction: column;
