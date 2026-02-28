@@ -495,9 +495,11 @@
         bottom: 20px;
     }
 
-    /* Hide chatbot when reserve form/drawer is open on mobile */
+    /* Hide chatbot when reserve form/drawer or main mobile menu is open */
     body.mobile-reserve-open .chatbot-toggle-wrapper,
-    body.mobile-reserve-open .chatbot-container {
+    body.mobile-reserve-open .chatbot-container,
+    body.mobile-menu-open .chatbot-toggle-wrapper,
+    body.mobile-menu-open .chatbot-container {
         display: none !important;
     }
 

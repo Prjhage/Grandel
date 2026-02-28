@@ -167,41 +167,60 @@
     width: 60%;
 }
 
-/* ===== Premium "Creative" Sidebar ===== */
+/* ===== Reference Sidebar ===== */
 .navbar-sidebar {
     position: fixed;
     top: 0;
     right: 0;
-    width: 340px;
+    width: 320px;
     max-width: 85%;
     height: 100vh;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    box-shadow: -20px 0 50px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
+    /* Soft, clean shadow */
     z-index: 2000;
     display: flex;
     flex-direction: column;
     padding: 0;
-    transform: perspective(1000px) rotateY(30deg) translateX(100%);
-    transform-origin: right center;
-    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-    opacity: 0;
-    pointer-events: none;
-    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* Smooth slide */
 }
 
 .navbar-sidebar.open {
-    transform: perspective(1000px) rotateY(0) translateX(0);
-    opacity: 1;
-    pointer-events: auto;
+    transform: translateX(0);
 }
 
-/* Sidebar Profile Card */
+.navbar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1500;
+    cursor: pointer;
+    animation: fadeInOverlay 0.3s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Sidebar Profile Header */
 .sidebar-header {
-    padding: 40px 30px 30px;
-    background: linear-gradient(135deg, rgba(0, 123, 255, 0.05) 0%, rgba(255, 107, 107, 0.05) 100%);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 40px 30px 20px 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #f0f0f0;
+    /* Crisp divider */
 }
 
 .profile-info-group {
@@ -210,72 +229,75 @@
     gap: 15px;
 }
 
-.user-avatar-premium {
-    width: 60px;
-    height: 60px;
-    border-radius: 20px;
-    background: #000;
-    color: #fff;
+.user-avatar-ref {
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    background: #f8f9fa;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
     overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    border: 2px solid #fff;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    /* Slight lift for avatar */
 }
 
-.user-avatar-premium img {
+.user-avatar-ref img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.user-details-premium {
-    display: flex;
-    flex-direction: column;
+.user-avatar-ref i {
+    color: #888;
 }
 
-.user-name {
-    font-weight: 800;
-    font-size: 1.2rem;
+.user-name-ref {
+    font-weight: 700;
+    font-size: 1.15rem;
     color: #111;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
 }
 
-.user-email {
-    font-size: 0.85rem;
-    color: #666;
-}
-
-/* Sidebar Body & Staggered Items */
+/* Sidebar Links */
 .sidebar-body {
     flex: 1;
-    padding: 30px;
+    padding: 25px 30px;
     overflow-y: auto;
 }
 
-.navbar-sidebar .navbar-toggler-premium {
+.navbar-toggler-premium {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(0, 0, 0, 0.05);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 100px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    /* Slightly stronger border for definition */
+    padding: 10px 20px;
+    border-radius: 50px;
     cursor: pointer;
     z-index: 2100;
-    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06), inset 0 -2px 4px rgba(0, 0, 0, 0.02);
+    /* Crisp shadow */
+}
+
+.navbar-toggler-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1), inset 0 -2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .navbar-toggler-premium:active {
-    transform: scale(0.95);
-    background: rgba(0, 0, 0, 0.1);
+    transform: scale(0.92) translateY(1px);
+    /* More pronounced "click" feel */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .toggler-container {
-    width: 20px;
-    height: 14px;
+    width: 22px;
+    height: 15px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -284,14 +306,16 @@
 
 .line {
     width: 100%;
-    height: 2px;
+    height: 2.5px;
     background: #111;
-    border-radius: 4px;
+    border-radius: 10px;
+    /* Fully rounded lines */
     transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    /* Bouncy cross animation */
 }
 
 .line.bottom {
-    width: 65%;
+    width: 60%;
     margin-left: auto;
 }
 
@@ -301,34 +325,35 @@
 }
 
 .navbar-toggler-premium.active .line.bottom {
-    transform: translateY(-6px) rotate(-45deg);
+    transform: translateY(-6.5px) rotate(-45deg);
     width: 100%;
     margin-left: 0;
 }
 
 .toggler-text {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 800;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     color: #111;
+    transition: color 0.3s ease;
 }
 
+/* Hide the toggler completely when the sidebar is open */
 .navbar-toggler-premium.active {
-    background: #000;
+    display: none !important;
 }
 
-.navbar-toggler-premium.active .line {
-    background: #fff;
-}
 
-.navbar-toggler-premium.active .toggler-text {
-    color: #fff;
-}
 
 .navbar-sidebar .navbar-nav {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    /* Spacing between links */
+}
+
+.navbar-sidebar .nav-item {
+    width: 100%;
 }
 
 .stagger-item {
@@ -365,29 +390,59 @@
 .navbar-sidebar .nav-link {
     display: flex;
     align-items: center;
-    font-size: 1.15rem !important;
+    font-size: 1.05rem !important;
     font-weight: 700 !important;
     color: #333 !important;
-    padding: 15px 20px !important;
-    border-radius: 15px;
-    transition: all 0.3s ease;
+    padding: 12px 10px !important;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
 }
 
 .navbar-sidebar .nav-link i {
-    width: 20px;
-    font-size: 1.2rem;
+    width: 30px;
+    /* Fixed width to align text perfectly */
+    font-size: 1.1rem;
     color: #fe424d;
+    /* Exact brand red */
+    text-align: center;
+    margin-right: 12px;
 }
 
 .navbar-sidebar .nav-link:hover {
-    background: rgba(0, 0, 0, 0.04);
-    transform: translateX(10px);
-    color: #000 !important;
+    background: #f8f9fa;
+    transform: none;
+    color: #111 !important;
 }
 
-/* Auth Section Sidebar */
+/* Auth / Logout Section */
 .navbar-auth-section {
-    margin-top: 40px;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.btn-logout-ref {
+    display: block;
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(254, 66, 77, 0.08);
+    /* Pale red background */
+    color: #fe424d;
+    /* Red text */
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-logout-ref:hover {
+    background: rgba(254, 66, 77, 0.12);
+}
+
+.btn-logout-ref i {
+    font-size: 1.1rem;
 }
 
 .auth-links-sidebar {
@@ -396,38 +451,28 @@
     gap: 12px;
 }
 
-.btn-signup-premium {
-    background: #000;
-    color: #fff !important;
-    text-align: center;
-    padding: 16px;
-    border-radius: 16px;
-    font-weight: 700;
-    text-decoration: none;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-}
-
-.btn-login-premium {
-    text-align: center;
-    padding: 16px;
-    border-radius: 16px;
-    font-weight: 700;
-    text-decoration: none;
-    color: #333 !important;
-    border: 1.5px solid #eee;
-    transition: all 0.3s ease;
-}
-
-.btn-logout-premium {
+.btn-signup-ref {
+    display: block;
     width: 100%;
-    padding: 16px;
-    border-radius: 16px;
-    border: none;
-    background: rgba(255, 107, 107, 0.1);
-    color: #ff6b6b;
+    text-align: center;
+    padding: 14px;
+    border-radius: 12px;
+    background: #fe424d;
+    color: #fff !important;
     font-weight: 700;
-    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-login-ref {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    color: #333 !important;
+    font-weight: 700;
+    text-decoration: none;
 }
 
 /* Sidebar Footer */
@@ -466,6 +511,10 @@
 /* Desktop Sidebar Hide */
 @media (min-width: 992px) {
     .navbar-sidebar {
+        display: none !important;
+    }
+
+    .navbar-overlay {
         display: none !important;
     }
 
