@@ -188,6 +188,11 @@ app.get("/", (req, res) => {
   res.redirect(redirectURL);
 });
 
+// API Route for Health Check (and Keep-Alive)
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 // API Route for Featured Listings
 app.get("/api/featured", async (req, res) => {
   try {
@@ -293,4 +298,27 @@ app.use((err, req, res, next) => {
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on http://localhost:${port}`);
+
+  // =================================================
+  // SELF-PING KEEP-ALIVE (Render Free Tier)
+  // =================================================
+  if (process.env.NODE_ENV === 'production' && process.env.RENDER_EXTERNAL_URL) {
+    const selfUrl = `${process.env.RENDER_EXTERNAL_URL}/api/health`;
+    console.log(`[KEEP-ALIVE] Monitoring started for: ${selfUrl}`);
+
+    // Ping every 10 minutes to prevent Render from spinning down
+    setInterval(async () => {
+      try {
+        const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+        const response = await fetch(selfUrl);
+        if (response.ok) {
+          console.log(`[KEEP-ALIVE] Self-ping successful at ${new Date().toISOString()}`);
+        } else {
+          console.warn(`[KEEP-ALIVE] Self-ping failed with status: ${response.status}`);
+        }
+      } catch (err) {
+        console.error(`[KEEP-ALIVE] Error during self-ping: ${err.message}`);
+      }
+    }, 10 * 60 * 1000); // 10 minutes
+  }
 });

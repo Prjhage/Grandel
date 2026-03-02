@@ -201,7 +201,12 @@ module.exports.showListings = async (req, res) => {
     const lng = listing.geometry.coordinates[0];
     const lat = listing.geometry.coordinates[1];
 
-    nearbyPlaces = await getNearbyPlaces(lat, lng);
+    try {
+      nearbyPlaces = await getNearbyPlaces(lat, lng);
+    } catch (err) {
+      console.error("[showListings] Error fetching nearby places:", err.message);
+      nearbyPlaces = [];
+    }
   }
 
   // Limit to 5 items
@@ -211,17 +216,28 @@ module.exports.showListings = async (req, res) => {
 
   // 🔹 Fetch images for Nearby Places (Overpass)
   if (nearbyPlaces.length > 0) {
-    nearbyPlaces = await Promise.all(
-      nearbyPlaces.map(async (place) => {
-        const img = await getImage(`${place.name} ${listing.location}`);
-        return {
-          ...place,
-          image:
-            img ||
-            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop",
-        };
-      }),
-    );
+    try {
+      nearbyPlaces = await Promise.all(
+        nearbyPlaces.map(async (place) => {
+          try {
+            const img = await getImage(`${place.name} ${listing.location}`);
+            return {
+              ...place,
+              image:
+                img ||
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop",
+            };
+          } catch (imgErr) {
+            return {
+              ...place,
+              image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop"
+            };
+          }
+        }),
+      );
+    } catch (err) {
+      console.error("[showListings] Error fetching images for nearby places:", err.message);
+    }
   }
 
   // 🔹 2. Latest travelCompanion data (food + places)
