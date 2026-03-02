@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from '../config/axios';
 import { useHostDashboardCache } from '../components/HostDashboardCacheContext';
 import SkeletonCard from '../components/SkeletonCard';
+import { optimizeUrl } from '../utils/cloudinaryHelper';
 import './HostDashboard.css';
 
 const HostDashboard = ({ currUser, showFlash }) => {

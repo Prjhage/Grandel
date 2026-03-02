@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
 import SkeletonCard from '../components/SkeletonCard';
+import { optimizeUrl } from '../utils/cloudinaryHelper';
 import './Profile.css';
 
 const Profile = ({ currUser, showFlash }) => {
@@ -245,7 +246,7 @@ const Profile = ({ currUser, showFlash }) => {
                     <div className="grid">
                         {wishlistListings?.map(listing => (
                             <div key={listing._id} className="card">
-                                <img src={listing.image?.url || '/images/fallback.jpg'} alt={listing.title} />
+                                <img src={optimizeUrl(listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'} alt={listing.title} loading="lazy" />
                                 <h5>{listing.title}</h5>
                                 <p className="price">₹ {listing.price?.toLocaleString('en-IN')} / night</p>
                                 <div className="p-3 mt-auto">
@@ -269,7 +270,7 @@ const Profile = ({ currUser, showFlash }) => {
                         {bookings?.map(booking => (
                             booking.listing && (
                                 <div key={booking._id} className="card">
-                                    <img src={booking.listing.image?.url || '/images/fallback.jpg'} alt={booking.listing.title} />
+                                    <img src={optimizeUrl(booking.listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'} alt={booking.listing.title} loading="lazy" />
                                     <h5>{booking.listing.title}</h5>
                                     <p>
                                         {new Date(booking.startDate).toDateString()} → {new Date(booking.endDate).toDateString()}
@@ -336,7 +337,7 @@ const Profile = ({ currUser, showFlash }) => {
                     <div className="grid">
                         {myListings?.map(listing => (
                             <div key={listing._id} className="card">
-                                <img src={listing.image?.url || '/images/fallback.jpg'} alt={listing.title} />
+                                <img src={optimizeUrl(listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'} alt={listing.title} loading="lazy" />
                                 <h5>{listing.title}</h5>
                                 <p className="price">₹ {listing.price?.toLocaleString('en-IN')} / night</p>
 

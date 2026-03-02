@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import axios from '../config/axios';
 import SkeletonCard from '../components/SkeletonCard';
 import { useListingCache } from '../components/ListingCacheContext';
+import { optimizeUrl } from '../utils/cloudinaryHelper';
 import './Listings.css';
 
 const Listings = ({ currUser }) => {
@@ -20,11 +21,24 @@ const Listings = ({ currUser }) => {
     const sort = searchParams.get('sort') || '';
 
     useEffect(() => {
-        setPage(1);
-        setListings([]);
-        setHasMore(true);
-        fetchListings(1, true);
-    }, [searchParams]);
+        const currentFilters = Object.fromEntries(searchParams.entries());
+        currentFilters.sort = sort;
+
+        // Check cache first for immediate display
+        const cached = getCachedData(currentFilters);
+        if (cached) {
+            setListings(cached.listings);
+            setUserWishlist(cached.userWishlist);
+            setLoading(false);
+            // Still fetch in background to sync (SWR pattern)
+            fetchListings(1, false);
+        } else {
+            setPage(1);
+            setListings([]);
+            setHasMore(true);
+            fetchListings(1, true);
+        }
+    }, [searchParams, sort]);
 
     const fetchListings = async (pageNum, isInitial = false) => {
         try {
@@ -39,9 +53,11 @@ const Listings = ({ currUser }) => {
             const fetchedListings = res.data.allListings || [];
             const fetchedWishlist = res.data.userWishlist || [];
 
-            if (isInitial) {
+            if (isInitial || pageNum === 1) {
                 setListings(fetchedListings);
                 setUserWishlist(fetchedWishlist);
+                // Update cache
+                setCachedData(fetchedListings, fetchedWishlist, currentFilters);
             } else {
                 setListings(prev => [...prev, ...fetchedListings]);
             }
@@ -147,9 +163,10 @@ const Listings = ({ currUser }) => {
                                 <div className="card col listing-card" data-id={listing._id}>
                                     <div className="card-img-container">
                                         <img
-                                            src={listing.image?.url || '/images/fallback.jpg'}
+                                            src={optimizeUrl(listing.image?.url, 'w_600,c_fill') || '/images/fallback.jpg'}
                                             className="card-img-top"
                                             alt="listing_image"
+                                            loading="lazy"
                                             onError={(e) => { e.target.src = '/images/fallback.jpg'; }}
                                         />
                                         {listing.discount > 0 && listing.discountAvailable && (
