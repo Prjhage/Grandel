@@ -22,27 +22,30 @@ const Home = ({ currUser }) => {
     const location = useLocation();
 
     useEffect(() => {
-        // Scroll Reveal Animation
-        const handleScroll = () => {
-            const reveals = document.querySelectorAll('.reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                const elementVisible = 150;
-
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add('active');
-                } else {
-                    reveals[i].classList.remove('active');
-                }
-            }
+        // Optimized Reveal Animation using IntersectionObserver
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px" // Trigger slightly before element enters
         };
 
-        window.addEventListener('scroll', handleScroll);
-        // Trigger once on load
-        handleScroll();
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    // Optional: remove if you want them to animate out on scroll up
+                    // entry.target.classList.remove('active');
+                }
+            });
+        }, observerOptions);
 
-        return () => window.removeEventListener('scroll', handleScroll);
+        const revealElements = document.querySelectorAll('.reveal');
+        revealElements.forEach(el => observer.observe(el));
+
+        return () => {
+            revealElements.forEach(el => observer.unobserve(el));
+            observer.disconnect();
+        };
     }, []);
 
     const { getCachedData, setCachedData, prefetchListing } = useListingCache();

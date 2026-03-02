@@ -234,6 +234,25 @@
     transform: translateY(-4px);
 }
 
+/* Mobile Performance Overrides */
+@media (max-width: 768px) {
+
+    .hero-glass-card,
+    .hero-floating-card,
+    .btn-secondary-custom,
+    .feature-card,
+    .step-card,
+    .video-wrapper,
+    .faq-item {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    .hero-floating-card {
+        animation: none !important;
+    }
+}
+
 /* Features Section - Glassmorphism Alignment */
 
 .features-section {
@@ -308,6 +327,17 @@
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.2);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+
+    .feature-card,
+    .step-card,
+    .video-wrapper,
+    .faq-item {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
 }
 
 .feature-icon {

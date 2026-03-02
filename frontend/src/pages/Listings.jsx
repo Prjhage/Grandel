@@ -11,7 +11,6 @@ const Listings = ({ currUser }) => {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
-    const [imagesLoaded, setImagesLoaded] = useState({});
     const [userWishlist, setUserWishlist] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -148,78 +147,15 @@ const Listings = ({ currUser }) => {
                         </div>
                     ))
                 ) : (
-                    listings.map((listing) => {
-                        const price = listing.price;
-                        const avgRating = listing.avgRating || 0;
-                        const reviewCount = listing.reviews?.length || 0;
-
-                        return (
-                            <Link
-                                key={listing._id}
-                                to={`/listings/${listing._id}`}
-                                state={{ listing }}
-                                className="stagger-item"
-                                style={{ textDecoration: 'none', color: 'black' }}
-                                onMouseEnter={() => prefetchListing(listing._id, axios)}
-                            >
-                                <div className="card col listing-card" data-id={listing._id}>
-                                    <div className="card-img-container">
-                                        <img
-                                            src={optimizeUrl(listing.image?.url, 'w_600,c_fill') || '/images/fallback.jpg'}
-                                            className={`card-img-top img-fade-in ${imagesLoaded[listing._id] ? 'loaded' : ''}`}
-                                            alt="listing_image"
-                                            loading="lazy"
-                                            onLoad={() => setImagesLoaded(prev => ({ ...prev, [listing._id]: true }))}
-                                            onError={(e) => { e.target.src = '/images/fallback.jpg'; }}
-                                        />
-                                        {listing.discount > 0 && listing.discountAvailable && (
-                                            <div className="early-bird-badge">
-                                                <i className="fa-solid fa-bolt"></i> {listing.discount}% Early Bird
-                                            </div>
-                                        )}
-                                        {reviewCount > 0 && (
-                                            <div className="image-overlay-info">
-                                                <span className="overlay-rating">
-                                                    <i className="fa-solid fa-star"></i> {avgRating.toFixed(1)}
-                                                </span>
-                                                <span className="overlay-divider">|</span>
-                                                <span className="overlay-reviews">
-                                                    {reviewCount}
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Wishlist Button */}
-                                    <button
-                                        type="button"
-                                        className={`wishlist-btn ${userWishlist.includes(listing._id) ? 'saved' : ''}`}
-                                        aria-label="Save to wishlist"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            toggleWishlist(listing._id);
-                                        }}
-                                    >
-                                        <i className="fa-regular fa-heart"></i>
-                                        <i className="fa-solid fa-heart"></i>
-                                    </button>
-
-                                    <div className="card-body">
-                                        <div className="d-flex justify-content-between align-items-start">
-                                            <b className="text-truncate listing-card-title" style={{ maxWidth: '80%', paddingLeft: '0.5rem' }}>{listing.title}</b>
-                                        </div>
-                                        <p className="card-text text-muted listing-card-location" style={{ fontSize: '0.9rem' }}>
-                                            {listing.location}, {listing.country}
-                                        </p>
-                                        <p className="card-text">
-                                            <span className="price-val">₹{Math.round(price).toLocaleString('en-IN')}</span>/night
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
-                        );
-                    })
+                    listings.map((listing) => (
+                        <ListingCard
+                            key={listing._id}
+                            listing={listing}
+                            isSaved={userWishlist.includes(listing._id)}
+                            toggleWishlist={toggleWishlist}
+                            prefetchListing={prefetchListing}
+                        />
+                    ))
                 )}
             </div>
 
@@ -243,5 +179,77 @@ const Listings = ({ currUser }) => {
         </div>
     );
 };
+
+
+const ListingCard = React.memo(({ listing, isSaved, toggleWishlist, prefetchListing }) => {
+    const [loaded, setLoaded] = React.useState(false);
+    const avgRating = listing.avgRating || 0;
+    const reviewCount = listing.reviews?.length || 0;
+
+    return (
+        <Link
+            to={`/listings/${listing._id}`}
+            state={{ listing }}
+            className="stagger-item col"
+            style={{ textDecoration: 'none', color: 'black' }}
+            onMouseEnter={() => prefetchListing(listing._id, axios)}
+        >
+            <div className="card listing-card" data-id={listing._id}>
+                <div className="card-img-container">
+                    <img
+                        src={optimizeUrl(listing.image?.url, 'w_600,c_fill') || '/images/fallback.jpg'}
+                        className={`card-img-top img-fade-in ${loaded ? 'loaded' : ''}`}
+                        alt="listing_image"
+                        loading="lazy"
+                        onLoad={() => setLoaded(true)}
+                        onError={(e) => { e.target.src = '/images/fallback.jpg'; }}
+                    />
+                    {listing.discount > 0 && listing.discountAvailable && (
+                        <div className="early-bird-badge">
+                            <i className="fa-solid fa-bolt"></i> {listing.discount}% Early Bird
+                        </div>
+                    )}
+                    {reviewCount > 0 && (
+                        <div className="image-overlay-info">
+                            <span className="overlay-rating">
+                                <i className="fa-solid fa-star"></i> {avgRating.toFixed(1)}
+                            </span>
+                            <span className="overlay-divider">|</span>
+                            <span className="overlay-reviews">
+                                {reviewCount}
+                            </span>
+                        </div>
+                    )}
+                </div>
+
+                <button
+                    type="button"
+                    className={`wishlist-btn ${isSaved ? 'saved' : ''}`}
+                    aria-label="Save to wishlist"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleWishlist(listing._id);
+                    }}
+                >
+                    <i className="fa-regular fa-heart"></i>
+                    <i className="fa-solid fa-heart"></i>
+                </button>
+
+                <div className="card-body">
+                    <div className="d-flex justify-content-between align-items-start">
+                        <b className="text-truncate listing-card-title" style={{ maxWidth: '80%', paddingLeft: '0.5rem' }}>{listing.title}</b>
+                    </div>
+                    <p className="card-text text-muted listing-card-location" style={{ fontSize: '0.9rem' }}>
+                        {listing.location}, {listing.country}
+                    </p>
+                    <p className="card-text">
+                        <span className="price-val">₹{Math.round(listing.price).toLocaleString('en-IN')}</span>/night
+                    </p>
+                </div>
+            </div>
+        </Link>
+    );
+});
 
 export default Listings;

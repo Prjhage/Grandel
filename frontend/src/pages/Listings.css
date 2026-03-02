@@ -257,11 +257,19 @@
     }
 }
 
+@media (max-width: 768px) {
+    .early-bird-badge {
+        animation: none !important;
+        /* Save GPU cycles */
+    }
+}
+
 .image-overlay-info {
     position: absolute;
     bottom: 12px;
     left: 12px;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.9);
+    /* Slightly more opaque for readability without blur */
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     padding: 6px 12px;
@@ -276,6 +284,14 @@
     z-index: 2;
     transition: transform 0.3s ease, background 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+    .image-overlay-info {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+    }
 }
 
 .overlay-rating i {
