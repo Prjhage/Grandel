@@ -52,6 +52,40 @@ export const ProfileCacheProvider = ({ children }) => {
     };
 
     /**
+     * Optimistically add a listing to the cached wishlist
+     * @param {Object} listing - Full listing object
+     */
+    const addToWishlist = (listing) => {
+        setCache(prev => {
+            if (!prev.wishlistListings) return prev;
+            // Avoid duplicates
+            if (prev.wishlistListings.some(l => l._id === listing._id)) return prev;
+
+            return {
+                ...prev,
+                wishlistListings: [listing, ...prev.wishlistListings],
+                timestamp: Date.now()
+            };
+        });
+    };
+
+    /**
+     * Optimistically remove a listing from the cached wishlist
+     * @param {string} id - Listing ID
+     */
+    const removeFromWishlist = (id) => {
+        setCache(prev => {
+            if (!prev.wishlistListings) return prev;
+
+            return {
+                ...prev,
+                wishlistListings: prev.wishlistListings.filter(l => l._id !== id),
+                timestamp: Date.now()
+            };
+        });
+    };
+
+    /**
      * Clear all cached data
      */
     const clearCache = () => {
@@ -67,6 +101,8 @@ export const ProfileCacheProvider = ({ children }) => {
         getCachedData,
         setCachedData,
         clearCache,
+        addToWishlist,
+        removeFromWishlist,
         hasCache: !!(cache.wishlistListings || cache.bookings || cache.myListings)
     };
 

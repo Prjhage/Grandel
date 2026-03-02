@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
+import { useListingCache } from '../components/ListingCacheContext';
 import SkeletonCard from '../components/SkeletonCard';
 import { optimizeUrl } from '../utils/cloudinaryHelper';
 import './Profile.css';
@@ -22,7 +23,8 @@ const Profile = ({ currUser, showFlash }) => {
     const [error, setError] = useState('');
 
     // Use the cache context
-    const { getCachedData, setCachedData } = useProfileCache();
+    const { getCachedData, setCachedData, removeFromWishlist: removeFromCache } = useProfileCache();
+    const { toggleCachedWishlist } = useListingCache();
 
     useEffect(() => {
         if (currUser) {
@@ -108,6 +110,31 @@ const Profile = ({ currUser, showFlash }) => {
             fetchProfileData();
         } catch (err) {
             showFlash('Failed to delete listing', 'error');
+        }
+    };
+
+    const toggleWishlist = async (listingId) => {
+        // Optimistic Remove from Local State
+        const removedListing = wishlistListings.find(l => l._id === listingId);
+        setWishlistListings(prev => prev.filter(l => l._id !== listingId));
+
+        // Update caches
+        removeFromCache(listingId);
+        toggleCachedWishlist(listingId);
+
+        try {
+            await axios.post(`/wishlist/${listingId}`);
+        } catch (err) {
+            console.error('Error toggling wishlist:', err);
+            // Revert
+            if (removedListing) {
+                setWishlistListings(prev => [removedListing, ...prev]);
+                // We should technically add it back to cache too, but since we are on Profile, 
+                // a simple alert or refresh is often safer on failure. 
+                // But let's try to be consistent.
+                // Note: addToWishlist is not exported here, but we can just clear cache to force refresh
+                showFlash('Failed to update wishlist. Reverting change.', 'error');
+            }
         }
     };
 
@@ -254,6 +281,34 @@ const Profile = ({ currUser, showFlash }) => {
                                     loading="lazy"
                                     onLoad={() => setImagesLoaded(prev => ({ ...prev, [listing._id]: true }))}
                                 />
+                                <button
+                                    className="wishlist-btn saved"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        toggleWishlist(listing._id);
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '12px',
+                                        right: '12px',
+                                        background: 'rgba(255, 255, 255, 0.9)',
+                                        border: 'none',
+                                        borderRadius: '50%',
+                                        width: '32px',
+                                        height: '32px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                        zIndex: 2,
+                                        color: '#ff385c',
+                                        fontSize: '16px'
+                                    }}
+                                >
+                                    <i className="fa-solid fa-heart"></i>
+                                </button>
                                 <h5>{listing.title}</h5>
                                 <p className="price">₹ {listing.price?.toLocaleString('en-IN')} / night</p>
                                 <div className="p-3 mt-auto">

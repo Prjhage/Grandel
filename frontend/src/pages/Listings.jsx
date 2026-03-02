@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import axios from '../config/axios';
 import SkeletonCard from '../components/SkeletonCard';
 import { useListingCache } from '../components/ListingCacheContext';
+import { useProfileCache } from '../components/ProfileCacheContext';
 import { optimizeUrl } from '../utils/cloudinaryHelper';
 import './Listings.css';
 
@@ -16,7 +17,8 @@ const Listings = ({ currUser }) => {
     const [hasMore, setHasMore] = useState(true);
 
     // Use the cache context
-    const { getCachedData, setCachedData, prefetchListing } = useListingCache();
+    const { getCachedData, setCachedData, prefetchListing, toggleCachedWishlist } = useListingCache();
+    const { addToWishlist, removeFromWishlist } = useProfileCache();
 
     const sort = searchParams.get('sort') || '';
 
@@ -89,23 +91,53 @@ const Listings = ({ currUser }) => {
     };
 
     const toggleWishlist = async (listingId) => {
-        // ... (existing logic)
         if (!currUser) {
             alert('Please login to save to wishlist');
             return;
         }
+
+        const isSaved = userWishlist.includes(listingId);
+
+        // Burst animation (manual trigger for effect)
         const btn = document.querySelector(`.listing-card[data-id="${listingId}"] .wishlist-btn`);
         if (btn) {
             btn.classList.add('burst');
             setTimeout(() => btn.classList.remove('burst'), 600);
         }
+
+        // 1. Optimistic Update (Local State)
+        if (isSaved) setUserWishlist(prev => prev.filter(id => id !== listingId));
+        else setUserWishlist(prev => [...prev, listingId]);
+
+        // 2. Sync Global Cache
+        toggleCachedWishlist(listingId);
+
+        // Sync with Profile Cache
+        if (isSaved) {
+            removeFromWishlist(listingId);
+        } else {
+            const fullListing = listings.find(l => l._id === listingId);
+            if (fullListing) addToWishlist(fullListing);
+        }
+
         try {
+            // 3. Backend Sync
             await axios.post(`/wishlist/${listingId}`);
-            const isSaved = userWishlist.includes(listingId);
-            if (isSaved) setUserWishlist(userWishlist.filter(id => id !== listingId));
-            else setUserWishlist([...userWishlist, listingId]);
         } catch (err) {
             console.error('Error toggling wishlist:', err);
+            // 4. Revert on failure
+            if (isSaved) setUserWishlist(prev => [...prev, listingId]);
+            else setUserWishlist(prev => prev.filter(id => id !== listingId));
+
+            // Also revert cache
+            toggleCachedWishlist(listingId);
+            if (isSaved) {
+                const fullListing = listings.find(l => l._id === listingId);
+                if (fullListing) addToWishlist(fullListing);
+            } else {
+                removeFromWishlist(listingId);
+            }
+            alert('Failed to update wishlist. Please try again.');
         }
     };
 

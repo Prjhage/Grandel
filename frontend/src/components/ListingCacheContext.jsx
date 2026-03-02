@@ -99,6 +99,27 @@ export const ListingCacheProvider = ({ children }) => {
     };
 
     /**
+     * Optimistically toggle a listing in the cached wishlist
+     * @param {string} id - Listing ID
+     */
+    const toggleCachedWishlist = (id) => {
+        setCache(prev => {
+            if (!prev.userWishlist) return prev;
+
+            const isSaved = prev.userWishlist.includes(id);
+            const newUserWishlist = isSaved
+                ? prev.userWishlist.filter(wishId => wishId !== id)
+                : [...prev.userWishlist, id];
+
+            return {
+                ...prev,
+                userWishlist: newUserWishlist,
+                timestamp: Date.now()
+            };
+        });
+    };
+
+    /**
      * Clear all cached data
      */
     const clearCache = () => {
@@ -136,6 +157,7 @@ export const ListingCacheProvider = ({ children }) => {
         setCachedShow,
         prefetchListing,
         clearCache,
+        toggleCachedWishlist,
         hasCache: !!cache.listings
     };
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from '../config/axios';
 import { useListingCache } from '../components/ListingCacheContext';
+import { useProfileCache } from '../components/ProfileCacheContext';
 import ListingShowSkeleton from '../components/ListingShowSkeleton';
 import './ListingShow.css';
 
@@ -39,7 +40,17 @@ const ListingShow = ({ currUser, showFlash }) => {
     const [hostStats, setHostStats] = useState({ reviewsCount: 0, avgRating: 0 });
     const [imageLoaded, setImageLoaded] = useState(false);
 
-    const { getCachedShow, setCachedShow } = useListingCache();
+    const { getCachedShow, setCachedShow, toggleCachedWishlist, getCachedData } = useListingCache();
+    const { addToWishlist, removeFromWishlist } = useProfileCache();
+    const [isSaved, setIsSaved] = useState(false);
+
+    useEffect(() => {
+        // Sync wishlist status from cache
+        const cached = getCachedData({});
+        if (cached?.userWishlist) {
+            setIsSaved(cached.userWishlist.includes(id));
+        }
+    }, [id, getCachedData]);
 
     useEffect(() => {
         const cached = getCachedShow(id);
@@ -250,6 +261,40 @@ const ListingShow = ({ currUser, showFlash }) => {
         setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
     };
 
+    const handleToggleWishlist = async () => {
+        if (!currUser) {
+            showFlash('Please login to save to wishlist', 'error');
+            return;
+        }
+
+        const newIsSaved = !isSaved;
+        // 1. Optimistic Update
+        setIsSaved(newIsSaved);
+
+        // 2. Sync Caches
+        toggleCachedWishlist(id);
+        if (newIsSaved) {
+            if (listing) addToWishlist(listing);
+        } else {
+            removeFromWishlist(id);
+        }
+
+        try {
+            await axios.post(`/wishlist/${id}`);
+        } catch (err) {
+            console.error('Error toggling wishlist:', err);
+            // Revert
+            setIsSaved(!newIsSaved);
+            toggleCachedWishlist(id);
+            if (!newIsSaved) {
+                if (listing) addToWishlist(listing);
+            } else {
+                removeFromWishlist(id);
+            }
+            showFlash('Failed to update wishlist', 'error');
+        }
+    };
+
     if (loading) {
         return <ListingShowSkeleton />;
     }
@@ -287,7 +332,23 @@ const ListingShow = ({ currUser, showFlash }) => {
         <div className="container mt-3 page-fade listing-show-page">
             <div className="row">
                 <div className="col-lg-8">
-                    <h3>{listing.title}</h3>
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                        <h3>{listing.title}</h3>
+                        <div className="d-flex gap-3 mt-1">
+                            <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2"
+                                onClick={() => {
+                                    navigator.share ? navigator.share({ title: listing.title, url: window.location.href }) : alert('Coppied to clipboard');
+                                }}>
+                                <i className="fa-solid fa-arrow-up-from-bracket"></i>
+                                <span className="text-decoration-underline">Share</span>
+                            </button>
+                            <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2"
+                                onClick={handleToggleWishlist}>
+                                <i className={`${isSaved ? 'fa-solid text-danger' : 'fa-regular'} fa-heart`}></i>
+                                <span className="text-decoration-underline">{isSaved ? 'Saved' : 'Save'}</span>
+                            </button>
+                        </div>
+                    </div>
                     <div className="listing-rating-summary mb-3 d-flex align-items-center gap-2">
                         <span className="fw-bold">★ {listing.avgRating?.toFixed(1) || 'N/A'}</span>
                         <span className="text-muted">·</span>

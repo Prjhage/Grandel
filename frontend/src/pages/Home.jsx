@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from '../config/axios';
+import { useListingCache } from '../components/ListingCacheContext';
+import { useProfileCache } from '../components/ProfileCacheContext';
 import SkeletonCard from '../components/SkeletonCard';
 import { useListingCache } from '../components/ListingCacheContext';
 import './Home.css';
@@ -49,7 +51,17 @@ const Home = ({ currUser }) => {
         };
     }, [loading, featuredListings]); // Re-run when content is loaded
 
-    const { getCachedData, setCachedData, prefetchListing } = useListingCache();
+    const { getCachedData, setCachedData, prefetchListing, toggleCachedWishlist } = useListingCache();
+    const { addToWishlist, removeFromWishlist } = useProfileCache();
+    const [userWishlist, setUserWishlist] = useState([]);
+
+    useEffect(() => {
+        // Sync wishlist from cache if available
+        const cached = getCachedData({});
+        if (cached?.userWishlist) {
+            setUserWishlist(cached.userWishlist);
+        }
+    }, [getCachedData]);
 
     useEffect(() => {
         const fetchListings = async () => {
@@ -120,13 +132,53 @@ const Home = ({ currUser }) => {
         try {
             setLoading(true);
             const res = await axios.get('/seed-db');
-            alert(res.data);
+            alert(res.data.message);
             window.location.reload();
         } catch (err) {
             console.error("Seeding error:", err);
             const msg = err.response?.data || err.message || "Unknown error";
             alert(`Seeding Failed: ${msg}`);
             setLoading(false);
+        }
+    };
+
+    const handleToggleWishlist = async (listingId) => {
+        if (!currUser) {
+            alert('Please login to save to wishlist');
+            return;
+        }
+
+        const isSaved = userWishlist.includes(listingId);
+
+        // 1. Optimistic Update
+        if (isSaved) setUserWishlist(prev => prev.filter(id => id !== listingId));
+        else setUserWishlist(prev => [...prev, listingId]);
+
+        // 2. Sync Caches
+        toggleCachedWishlist(listingId);
+        if (isSaved) {
+            removeFromWishlist(listingId);
+        } else {
+            const fullListing = featuredListings.find(l => l._id === listingId);
+            if (fullListing) addToWishlist(fullListing);
+        }
+
+        try {
+            await axios.post(`/wishlist/${listingId}`);
+        } catch (err) {
+            console.error('Error toggling wishlist:', err);
+            // Revert
+            if (isSaved) setUserWishlist(prev => [...prev, listingId]);
+            else setUserWishlist(prev => prev.filter(id => id !== listingId));
+
+            toggleCachedWishlist(listingId); // Revert cache too
+            if (isSaved) {
+                const fullListing = featuredListings.find(l => l._id === listingId);
+                if (fullListing) addToWishlist(fullListing);
+            } else {
+                removeFromWishlist(listingId);
+            }
+            alert('Failed to update wishlist');
         }
     };
 
@@ -342,8 +394,38 @@ const Home = ({ currUser }) => {
                                         className="listing-card stagger-item"
                                         onClick={() => navigate(`/listings/${listing._id}`, { state: { listing } })}
                                         onMouseEnter={() => prefetchListing(listing._id, axios)}
+                                        style={{ position: 'relative' }}
                                     >
                                         <img src={listing.image?.url || '/images/fallback.jpg'} alt={listing.title} className="listing-image" />
+
+                                        <button
+                                            className={`wishlist-btn ${userWishlist.includes(listing._id) ? 'saved' : ''}`}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                handleToggleWishlist(listing._id);
+                                            }}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '12px',
+                                                right: '12px',
+                                                background: 'rgba(255, 255, 255, 0.9)',
+                                                border: 'none',
+                                                borderRadius: '50%',
+                                                width: '32px',
+                                                height: '32px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                                zIndex: 2,
+                                                color: userWishlist.includes(listing._id) ? '#ff385c' : '#717171',
+                                                fontSize: '16px'
+                                            }}
+                                        >
+                                            <i className={`fa-${userWishlist.includes(listing._id) ? 'solid' : 'regular'} fa-heart`}></i>
+                                        </button>
                                         <div className="listing-content">
                                             <h3 className="listing-title">{listing.title}</h3>
                                             <div className="listing-location">
