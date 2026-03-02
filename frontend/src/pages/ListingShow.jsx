@@ -691,49 +691,49 @@ const ListingShow = ({ currUser, showFlash }) => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {/* Pricing Breakdown */}
-                                {(guests.rooms.length > 1 || guests.animals > 0) && (
-                                    <div className="mt-3 p-3 rounded-3 bg-light border-dashed">
-                                        <div className="d-flex justify-content-between small text-muted mb-1">
-                                            <span>{guests.rooms.length} room{guests.rooms.length > 1 ? 's' : ''} × ₹{listing.price.toLocaleString('en-IN')}</span>
-                                            <span>₹{(listing.price * guests.rooms.length).toLocaleString('en-IN')}</span>
-                                        </div>
-                                        {guests.animals > 0 && (
-                                            <div className="d-flex justify-content-between small text-muted">
-                                                <span>{guests.animals} pet{guests.animals > 1 ? 's' : ''} × ₹{(listing.petChargePerNight || 300).toLocaleString('en-IN')}</span>
-                                                <span>₹{(guests.animals * (listing.petChargePerNight || 300)).toLocaleString('en-IN')}</span>
+                                    {/* Pricing Breakdown */}
+                                    {(guests.rooms.length > 1 || guests.animals > 0) && (
+                                        <div className="mt-3 p-3 rounded-3 bg-light border-dashed">
+                                            <div className="d-flex justify-content-between small text-muted mb-1">
+                                                <span>{guests.rooms.length} room{guests.rooms.length > 1 ? 's' : ''} × ₹{listing.price.toLocaleString('en-IN')}</span>
+                                                <span>₹{(listing.price * guests.rooms.length).toLocaleString('en-IN')}</span>
                                             </div>
+                                            {guests.animals > 0 && (
+                                                <div className="d-flex justify-content-between small text-muted">
+                                                    <span>{guests.animals} pet{guests.animals > 1 ? 's' : ''} × ₹{(listing.petChargePerNight || 300).toLocaleString('en-IN')}</span>
+                                                    <span>₹{(guests.animals * (listing.petChargePerNight || 300)).toLocaleString('en-IN')}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    <button className="reserve-btn mt-3" onClick={() => {
+                                        if (!currUser) {
+                                            showFlash('Please login to reserve', 'error');
+                                            return;
+                                        }
+                                        const params = new URLSearchParams({
+                                            roomsData: JSON.stringify(guests.rooms),
+                                            animals: guests.animals
+                                        });
+                                        navigate(`/listings/${id}/book?${params.toString()}`);
+                                    }}>Reserve</button>
+
+                                    <div className="charge-details-box mt-3 p-2 rounded">
+                                        <p className="m-0 small text-muted">
+                                            <i className="fa-solid fa-circle-info me-1"></i>
+                                            Base price is per room.
+                                        </p>
+                                        {listing.petsAllowed && (
+                                            <p className="m-0 small text-muted mt-1">
+                                                <i className="fa-solid fa-paw me-1"></i>
+                                                Pet charge: ₹{(listing.petChargePerNight || 300).toLocaleString('en-IN')}/night.
+                                            </p>
                                         )}
                                     </div>
-                                )}
-
-                                <button className="reserve-btn mt-3" onClick={() => {
-                                    if (!currUser) {
-                                        showFlash('Please login to reserve', 'error');
-                                        return;
-                                    }
-                                    const params = new URLSearchParams({
-                                        roomsData: JSON.stringify(guests.rooms),
-                                        animals: guests.animals
-                                    });
-                                    navigate(`/listings/${id}/book?${params.toString()}`);
-                                }}>Reserve</button>
-
-                                <div className="charge-details-box mt-3 p-2 rounded">
-                                    <p className="m-0 small text-muted">
-                                        <i className="fa-solid fa-circle-info me-1"></i>
-                                        Base price is per room.
-                                    </p>
-                                    {listing.petsAllowed && (
-                                        <p className="m-0 small text-muted mt-1">
-                                            <i className="fa-solid fa-paw me-1"></i>
-                                            Pet charge: ₹{(listing.petChargePerNight || 300).toLocaleString('en-IN')}/night.
-                                        </p>
-                                    )}
+                                    <p className="charge-note text-center mt-2 mb-0 text-muted small">You won't be charged yet</p>
                                 </div>
-                                <p className="charge-note text-center mt-2 mb-0 text-muted small">You won't be charged yet</p>
                             </div>
                         </div>
 
@@ -932,7 +932,6 @@ const ListingShow = ({ currUser, showFlash }) => {
                 <div className="mobile-drawer-overlay" onClick={() => setShowMobileReserve(false)}></div>
             )}
 
-            {/* Image Modal */}
             {selectedImage && (
                 <div className="image-modal active" onClick={() => setSelectedImage(null)}>
                     <button className="close-modal" onClick={() => setSelectedImage(null)}>×</button>

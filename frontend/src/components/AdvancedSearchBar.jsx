@@ -167,7 +167,10 @@ const AdvancedSearchBar = () => {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         const days = [];
-        for (let i = 0; i < firstDay; i++) days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
+        // Lead-in empty days
+        for (let i = 0; i < firstDay; i++) {
+            days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
+        }
 
         for (let d = 1; d <= daysInMonth; d++) {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
@@ -181,20 +184,32 @@ const AdvancedSearchBar = () => {
                 <div
                     key={dateStr}
                     className={`calendar-day ${isSelected ? 'selected' : ''} ${isInRange ? 'in-range' : ''} ${isStart ? 'range-start' : ''} ${isEnd ? 'range-end' : ''} ${isPast ? 'disabled' : ''}`}
-                    onClick={(e) => { e.stopPropagation(); if (!isPast) handleDateSelect(dateStr); }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        if (!isPast) handleDateSelect(dateStr);
+                    }}
                 >
-                    {d}
+                    <span className="day-number">{d}</span>
                 </div>
             );
+        }
+
+        // Fill trailing empty days to keep the grid even (optional, but good for some layouts)
+        const totalCells = days.length;
+        const trailingEmpty = (7 - (totalCells % 7)) % 7;
+        for (let j = 0; j < trailingEmpty; j++) {
+            days.push(<div key={`trailing-${j}`} className="calendar-day empty"></div>);
         }
 
         return (
             <div className="calendar-month">
                 <div className="calendar-month-header">{monthName} {year}</div>
-                <div className="calendar-weekdays">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => <div key={d}>{d}</div>)}
+                <div className="calendar-grid">
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
+                        <div key={d} className="calendar-weekday">{d}</div>
+                    ))}
+                    {days}
                 </div>
-                <div className="calendar-days-grid">{days}</div>
             </div>
         );
     };
