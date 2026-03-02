@@ -346,6 +346,7 @@
     margin-bottom: 2rem;
     height: auto;
     border: 1px solid #ddd;
+    position: relative;
 }
 
 .price-info {
@@ -409,36 +410,24 @@
     display: grid;
     grid-template-rows: 0fr;
     opacity: 0;
-    visibility: hidden;
+    transition: grid-template-rows 0.4s ease, opacity 0.3s ease, margin-top 0.4s ease;
     overflow: hidden;
-    transition: grid-template-rows 0.4s cubic-bezier(0.33, 1, 0.68, 1),
-        opacity 0.3s ease,
-        transform 0.4s cubic-bezier(0.33, 1, 0.68, 1),
-        visibility 0.4s;
-    margin-top: 0;
-    border: 1px solid transparent;
+    background: white;
+    border: 1px solid #eee;
     border-radius: 12px;
-    background: #fff;
-    z-index: 100;
-    transform: translateY(-8px) scale(0.99);
-    transform-origin: top center;
-    will-change: grid-template-rows, opacity, transform;
+    margin-top: 0;
+    width: 100%;
 }
 
 .guest-dropdown.open {
     grid-template-rows: 1fr;
     opacity: 1;
-    visibility: visible;
-    margin-top: 8px;
+    margin-top: 15px;
     border-color: #ddd;
-    transform: translateY(0) scale(1);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 }
 
 .guest-dropdown-inner {
     min-height: 0;
-    display: flex;
-    flex-direction: column;
 }
 
 .rooms-scroll-area {
@@ -582,19 +571,7 @@
     box-shadow: 0 8px 20px rgba(56, 76, 255, 0.3);
 }
 
-.charge-details-box {
-    background: #fdf2f4;
-    border: 1px dashed #ff385c;
-    line-height: 1.4;
-}
 
-.charge-details-box p {
-    font-size: 0.8rem !important;
-}
-
-.charge-details-box i {
-    color: #ff385c;
-}
 
 .charge-note {
     text-align: center;
