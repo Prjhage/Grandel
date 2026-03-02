@@ -79,7 +79,7 @@ const HostDashboard = ({ currUser, showFlash }) => {
         }
 
         return list.map(booking => (
-            <div key={booking._id} className={`booking-card ${booking.status}`}>
+            <div key={booking._id} className={`booking-card ${booking.status} stagger-item`}>
                 <div className="card-body">
                     <h5 className="card-title">
                         <i className="fas fa-home text-primary me-2"></i>

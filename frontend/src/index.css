@@ -117,7 +117,7 @@ ul {
   background: #fe424d;
 }
 
-/* Original Page Fade */
+/* Page Fade */
 .page-fade {
   animation: pageFade 0.5s ease;
 }
@@ -132,4 +132,81 @@ ul {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Staggered Fade-in Animation */
+@keyframes fadeInUpSubtle {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-item {
+  opacity: 0;
+  animation: fadeInUpSubtle 0.6s ease forwards;
+}
+
+/* Stagger delays for up to 12 items */
+.stagger-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.stagger-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.stagger-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.stagger-item:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.stagger-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.stagger-item:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+.stagger-item:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+.stagger-item:nth-child(8) {
+  animation-delay: 0.4s;
+}
+
+.stagger-item:nth-child(9) {
+  animation-delay: 0.45s;
+}
+
+.stagger-item:nth-child(10) {
+  animation-delay: 0.5s;
+}
+
+.stagger-item:nth-child(11) {
+  animation-delay: 0.55s;
+}
+
+.stagger-item:nth-child(12) {
+  animation-delay: 0.6s;
+}
+
+/* Image Fade-in Utility */
+.img-fade-in {
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.img-fade-in.loaded {
+  opacity: 1;
 }

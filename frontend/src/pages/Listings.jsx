@@ -11,6 +11,7 @@ const Listings = ({ currUser }) => {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [imagesLoaded, setImagesLoaded] = useState({});
     const [userWishlist, setUserWishlist] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -157,6 +158,7 @@ const Listings = ({ currUser }) => {
                                 key={listing._id}
                                 to={`/listings/${listing._id}`}
                                 state={{ listing }}
+                                className="stagger-item"
                                 style={{ textDecoration: 'none', color: 'black' }}
                                 onMouseEnter={() => prefetchListing(listing._id, axios)}
                             >
@@ -164,9 +166,10 @@ const Listings = ({ currUser }) => {
                                     <div className="card-img-container">
                                         <img
                                             src={optimizeUrl(listing.image?.url, 'w_600,c_fill') || '/images/fallback.jpg'}
-                                            className="card-img-top"
+                                            className={`card-img-top img-fade-in ${imagesLoaded[listing._id] ? 'loaded' : ''}`}
                                             alt="listing_image"
                                             loading="lazy"
+                                            onLoad={() => setImagesLoaded(prev => ({ ...prev, [listing._id]: true }))}
                                             onError={(e) => { e.target.src = '/images/fallback.jpg'; }}
                                         />
                                         {listing.discount > 0 && listing.discountAvailable && (

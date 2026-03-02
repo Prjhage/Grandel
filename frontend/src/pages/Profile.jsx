@@ -12,6 +12,7 @@ const Profile = ({ currUser, showFlash }) => {
     const [bookings, setBookings] = useState([]);
     const [myListings, setMyListings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [imagesLoaded, setImagesLoaded] = useState({});
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [profileForm, setProfileForm] = useState({
@@ -245,8 +246,14 @@ const Profile = ({ currUser, showFlash }) => {
                     )}
                     <div className="grid">
                         {wishlistListings?.map(listing => (
-                            <div key={listing._id} className="card">
-                                <img src={optimizeUrl(listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'} alt={listing.title} loading="lazy" />
+                            <div key={listing._id} className="card stagger-item">
+                                <img
+                                    src={optimizeUrl(listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'}
+                                    className={`img-fade-in ${imagesLoaded[listing._id] ? 'loaded' : ''}`}
+                                    alt={listing.title}
+                                    loading="lazy"
+                                    onLoad={() => setImagesLoaded(prev => ({ ...prev, [listing._id]: true }))}
+                                />
                                 <h5>{listing.title}</h5>
                                 <p className="price">₹ {listing.price?.toLocaleString('en-IN')} / night</p>
                                 <div className="p-3 mt-auto">
@@ -269,8 +276,14 @@ const Profile = ({ currUser, showFlash }) => {
                     <div className="grid">
                         {bookings?.map(booking => (
                             booking.listing && (
-                                <div key={booking._id} className="card">
-                                    <img src={optimizeUrl(booking.listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'} alt={booking.listing.title} loading="lazy" />
+                                <div key={booking._id} className="card stagger-item">
+                                    <img
+                                        src={optimizeUrl(booking.listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'}
+                                        className={`img-fade-in ${imagesLoaded[booking._id] ? 'loaded' : ''}`}
+                                        alt={booking.listing.title}
+                                        loading="lazy"
+                                        onLoad={() => setImagesLoaded(prev => ({ ...prev, [booking._id]: true }))}
+                                    />
                                     <h5>{booking.listing.title}</h5>
                                     <p>
                                         {new Date(booking.startDate).toDateString()} → {new Date(booking.endDate).toDateString()}
@@ -336,8 +349,14 @@ const Profile = ({ currUser, showFlash }) => {
                     )}
                     <div className="grid">
                         {myListings?.map(listing => (
-                            <div key={listing._id} className="card">
-                                <img src={optimizeUrl(listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'} alt={listing.title} loading="lazy" />
+                            <div key={listing._id} className="card stagger-item">
+                                <img
+                                    src={optimizeUrl(listing.image?.url, 'w_400,c_fill') || '/images/fallback.jpg'}
+                                    className={`img-fade-in ${imagesLoaded[listing._id + '_host'] ? 'loaded' : ''}`}
+                                    alt={listing.title}
+                                    loading="lazy"
+                                    onLoad={() => setImagesLoaded(prev => ({ ...prev, [listing._id + '_host']: true }))}
+                                />
                                 <h5>{listing.title}</h5>
                                 <p className="price">₹ {listing.price?.toLocaleString('en-IN')} / night</p>
 

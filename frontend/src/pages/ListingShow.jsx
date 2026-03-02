@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from '../config/axios';
 import { useListingCache } from '../components/ListingCacheContext';
+import ListingShowSkeleton from '../components/ListingShowSkeleton';
 import './ListingShow.css';
 
 const amenityIcons = {
@@ -36,6 +37,7 @@ const ListingShow = ({ currUser, showFlash }) => {
     const [travelCompanion, setTravelCompanion] = useState(location.state?.listing?.travelCompanion || { places: [], food: [] });
     const [nearbyPlaces, setNearbyPlaces] = useState(location.state?.listing?.nearbyPlaces || []);
     const [hostStats, setHostStats] = useState({ reviewsCount: 0, avgRating: 0 });
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     const { getCachedShow, setCachedShow } = useListingCache();
 
@@ -249,7 +251,7 @@ const ListingShow = ({ currUser, showFlash }) => {
     };
 
     if (loading) {
-        return <div className="container mt-5"><h3>Loading...</h3></div>;
+        return <ListingShowSkeleton />;
     }
 
     if (!listing) {
@@ -319,6 +321,8 @@ const ListingShow = ({ currUser, showFlash }) => {
                                         key={currentImageIndex}
                                         src={allImages[currentImageIndex]?.url || '/images/fallback.jpg'}
                                         alt={`View ${currentImageIndex + 1}`}
+                                        className={`img-fade-in ${imageLoaded ? 'loaded' : ''}`}
+                                        onLoad={() => setImageLoaded(true)}
                                         onClick={() => setSelectedImage(allImages[currentImageIndex]?.url || '/images/fallback.jpg')}
                                     />
                                 </div>
@@ -562,7 +566,7 @@ const ListingShow = ({ currUser, showFlash }) => {
                     <div className="sidebar-sticky">
                         {/* Reserve Card (Desktop) */}
                         <div className="d-none d-md-block">
-                            <div className="reserve-card p-3 border rounded shadow-sm bg-white mb-3">
+                            <div className="reserve-card">
                                 <div className="price-info mb-3">
                                     <span className="final-price">₹{calculatePrice().toLocaleString('en-IN')}</span>
                                     <span className="night-text"> / night</span>
@@ -592,97 +596,99 @@ const ListingShow = ({ currUser, showFlash }) => {
                                 )}
 
                                 <div className={`guest-dropdown ${showGuestDropdown ? 'open' : ''}`}>
-                                    <div className="rooms-scroll-area pt-2 px-3">
-                                        {guests.rooms.map((room, idx) => (
-                                            <div key={idx} className="room-allocation-block mb-3 pb-2 border-bottom">
-                                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                                    <h6 className="m-0">Room {idx + 1}</h6>
-                                                    {guests.rooms.length > 1 && (
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-sm btn-outline-danger py-0 px-2"
-                                                            style={{ fontSize: '0.7rem' }}
-                                                            onClick={(e) => { e.stopPropagation(); updateGuestRooms('removeRoom', idx); }}
-                                                        >
-                                                            Remove
-                                                        </button>
-                                                    )}
-                                                </div>
+                                    <div className="guest-dropdown-inner">
+                                        <div className="rooms-scroll-area pt-2 px-3">
+                                            {guests.rooms.map((room, idx) => (
+                                                <div key={idx} className="room-allocation-block mb-3 pb-2 border-bottom">
+                                                    <div className="d-flex justify-content-between align-items-center mb-2">
+                                                        <h6 className="m-0">Room {idx + 1}</h6>
+                                                        {guests.rooms.length > 1 && (
+                                                            <button
+                                                                type="button"
+                                                                className="btn btn-sm btn-outline-danger py-0 px-2"
+                                                                style={{ fontSize: '0.7rem' }}
+                                                                onClick={(e) => { e.stopPropagation(); updateGuestRooms('removeRoom', idx); }}
+                                                            >
+                                                                Remove
+                                                            </button>
+                                                        )}
+                                                    </div>
 
-                                                <div className="guest-row">
-                                                    <div>
-                                                        <strong>Adults</strong>
-                                                        <small>Ages 13+</small>
+                                                    <div className="guest-row">
+                                                        <div>
+                                                            <strong>Adults</strong>
+                                                            <small>Ages 13+</small>
+                                                        </div>
+                                                        <div className="counter">
+                                                            <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'adults', -1); }}>−</button>
+                                                            <span>{room.adults}</span>
+                                                            <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'adults', 1); }}>+</button>
+                                                        </div>
                                                     </div>
-                                                    <div className="counter">
-                                                        <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'adults', -1); }}>−</button>
-                                                        <span>{room.adults}</span>
-                                                        <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'adults', 1); }}>+</button>
+
+                                                    <div className="guest-row">
+                                                        <div>
+                                                            <strong>Children</strong>
+                                                            <small>Ages 2-12</small>
+                                                        </div>
+                                                        <div className="counter">
+                                                            <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'children', -1); }}>−</button>
+                                                            <span>{room.children}</span>
+                                                            <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'children', 1); }}>+</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="guest-row">
+                                                        <div>
+                                                            <strong>Infants</strong>
+                                                            <small>Under 2</small>
+                                                        </div>
+                                                        <div className="counter">
+                                                            <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'infants', -1); }}>−</button>
+                                                            <span>{room.infants}</span>
+                                                            <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'infants', 1); }}>+</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div className="guest-row">
-                                                    <div>
-                                                        <strong>Children</strong>
-                                                        <small>Ages 2-12</small>
-                                                    </div>
-                                                    <div className="counter">
-                                                        <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'children', -1); }}>−</button>
-                                                        <span>{room.children}</span>
-                                                        <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'children', 1); }}>+</button>
-                                                    </div>
-                                                </div>
-
-                                                <div className="guest-row">
-                                                    <div>
-                                                        <strong>Infants</strong>
-                                                        <small>Under 2</small>
-                                                    </div>
-                                                    <div className="counter">
-                                                        <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'infants', -1); }}>−</button>
-                                                        <span>{room.infants}</span>
-                                                        <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateGuest', idx, 'infants', 1); }}>+</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="px-3 pb-2">
-                                        <div className="d-flex justify-content-between align-items-center mb-3 mt-2">
-                                            <button
-                                                type="button"
-                                                className="btn btn-outline-dark btn-sm w-100"
-                                                disabled={guests.rooms.length >= (listing?.numRooms || 1)}
-                                                onClick={(e) => { e.stopPropagation(); updateGuestRooms('addRoom'); }}
-                                            >
-                                                <i className="fa-solid fa-plus me-1"></i> Add Room
-                                            </button>
+                                            ))}
                                         </div>
 
-                                        {listing.petsAllowed && (
-                                            <div className="guest-row border-top pt-2">
-                                                <div>
-                                                    <strong>Pets</strong>
-                                                    <small>Allowed</small>
-                                                </div>
-                                                <div className="counter">
-                                                    <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateAnimals', null, null, -1); }}>−</button>
-                                                    <span>{guests.animals}</span>
-                                                    <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateAnimals', null, null, 1); }}>+</button>
-                                                </div>
+                                        <div className="px-3 pb-2">
+                                            <div className="d-flex justify-content-between align-items-center mb-3 mt-2">
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-outline-dark btn-sm w-100"
+                                                    disabled={guests.rooms.length >= (listing?.numRooms || 1)}
+                                                    onClick={(e) => { e.stopPropagation(); updateGuestRooms('addRoom'); }}
+                                                >
+                                                    <i className="fa-solid fa-plus me-1"></i> Add Room
+                                                </button>
                                             </div>
-                                        )}
-                                    </div>
 
-                                    <div className="guest-dropdown-info border-top pt-2">
-                                        <div className="info-item">
-                                            <i className="fa-solid fa-hotel"></i>
-                                            <span>Max {listing.numRooms || 1} room{listing.numRooms > 1 ? 's' : ''} available</span>
+                                            {listing.petsAllowed && (
+                                                <div className="guest-row border-top pt-2">
+                                                    <div>
+                                                        <strong>Pets</strong>
+                                                        <small>Allowed</small>
+                                                    </div>
+                                                    <div className="counter">
+                                                        <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateAnimals', null, null, -1); }}>−</button>
+                                                        <span>{guests.animals}</span>
+                                                        <button type="button" onClick={(e) => { e.stopPropagation(); updateGuestRooms('updateAnimals', null, null, 1); }}>+</button>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="info-item">
-                                            <i className="fa-solid fa-users"></i>
-                                            <span>Max {listing.guestsPerRoom || 2} guest{listing.guestsPerRoom > 1 ? 's' : ''} per room</span>
+
+                                        <div className="guest-dropdown-info border-top pt-2">
+                                            <div className="info-item">
+                                                <i className="fa-solid fa-hotel"></i>
+                                                <span>Max {listing.numRooms || 1} room{listing.numRooms > 1 ? 's' : ''} available</span>
+                                            </div>
+                                            <div className="info-item">
+                                                <i className="fa-solid fa-users"></i>
+                                                <span>Max {listing.guestsPerRoom || 2} guest{listing.guestsPerRoom > 1 ? 's' : ''} per room</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
