@@ -32,21 +32,22 @@ const Home = ({ currUser }) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                } else {
-                    // Optional: remove if you want them to animate out on scroll up
-                    // entry.target.classList.remove('active');
                 }
             });
         }, observerOptions);
 
-        const revealElements = document.querySelectorAll('.reveal');
-        revealElements.forEach(el => observer.observe(el));
+        let revealElements = [];
+        const rafId = requestAnimationFrame(() => {
+            revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => observer.observe(el));
+        });
 
         return () => {
+            cancelAnimationFrame(rafId);
             revealElements.forEach(el => observer.unobserve(el));
             observer.disconnect();
         };
-    }, []);
+    }, [loading, featuredListings]); // Re-run when content is loaded
 
     const { getCachedData, setCachedData, prefetchListing } = useListingCache();
 
@@ -338,7 +339,7 @@ const Home = ({ currUser }) => {
                                 .map((listing) => (
                                     <div
                                         key={listing._id}
-                                        className="listing-card reveal"
+                                        className="listing-card stagger-item"
                                         onClick={() => navigate(`/listings/${listing._id}`, { state: { listing } })}
                                         onMouseEnter={() => prefetchListing(listing._id, axios)}
                                     >
