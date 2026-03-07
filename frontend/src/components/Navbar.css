@@ -136,9 +136,12 @@
 @media (max-width: 991px) {
     .navbar-search-section {
         display: none !important;
+        position: static !important;
+        transform: none !important;
         order: 3;
         width: 100%;
         margin-top: 10px;
+        margin-bottom: 4px;
         padding: 0 10px;
     }
 
@@ -157,6 +160,12 @@
 
     .navbar-glass {
         border-radius: 16px !important;
+        height: auto !important;
+    }
+
+    .navbar-glass.navbar-glass-expanded {
+        padding-bottom: 12px !important;
+        align-items: flex-start;
     }
 }
 

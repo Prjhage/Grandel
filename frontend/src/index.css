@@ -2,6 +2,24 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Hide scrollbar on mobile while keeping scroll functionality */
+@media (max-width: 768px) {
+  * {
+    scrollbar-width: none !important;
+    /* Firefox */
+    -ms-overflow-style: none !important;
+    /* IE/Edge */
+  }
+
+  *::-webkit-scrollbar {
+    display: none !important;
+    /* Chrome/Safari/WebKit */
+    width: 0 !important;
+    height: 0 !important;
+  }
 }
 
 :root {
@@ -35,10 +53,13 @@ body {
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .main-content {
   flex-grow: 1;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Padding added to all pages EXCEPT Home so they aren't hidden under the fixed transparent navbar */

@@ -120,10 +120,66 @@
         padding: 0 15px 15px 15px !important;
     }
 
-    /* Titles and Header Info Padding */
-    .listing-show-page h2,
-    .listing-rating-summary {
-        padding: 0 15px;
+    .listing-show-v3-header-wrapper {
+        padding: 0 !important;
+        margin-top: 15px !important;
+        display: block !important;
+    }
+
+    .listing-show-v3-title-row {
+        padding: 0 15px !important;
+        width: 100% !important;
+    }
+
+    .listing-show-v3-title {
+        font-size: 1.45rem !important;
+        font-weight: 700 !important;
+        color: #222 !important;
+        line-height: 1.25 !important;
+        display: block !important;
+    }
+
+    .listing-show-v3-middle-row {
+        padding: 0 15px !important;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-top: 4px !important;
+    }
+
+    .listing-show-v3-rating-summary {
+        font-size: 0.9rem !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+
+    .listing-show-v3-actions-wrap {
+        display: flex !important;
+        gap: 8px !important;
+    }
+
+    .listing-show-v3-actions-wrap .btn {
+        padding: 6px 10px !important;
+        font-size: 0.8rem !important;
+        background: #f7f7f7 !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+        border: none !important;
+    }
+
+    .listing-show-v3-location-row {
+        padding: 0 15px !important;
+        width: 100% !important;
+        margin-top: 4px !important;
+    }
+
+    .listing-show-v3-location-box {
+        font-size: 0.9rem !important;
+        display: flex !important;
+        align-items: center !important;
+        color: #717171 !important;
     }
 
 

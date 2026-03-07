@@ -7,21 +7,38 @@ body {
     overflow-x: hidden;
 }
 
-::-webkit-scrollbar {
-    width: 8px;
+/* Custom Desktop Scrollbar */
+@media (min-width: 769px) {
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #fe424d;
+    }
 }
 
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
+/* Hide Scrollbar Completely on Mobile */
+@media (max-width: 768px) {
+    ::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        background: transparent !important;
+    }
 
-::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #fe424d;
+    * {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
 }
 
 ::selection {

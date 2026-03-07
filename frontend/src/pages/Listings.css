@@ -464,6 +464,10 @@
 }
 
 @media (max-width: 768px) {
+    .listings-page {
+        padding-top: 60px;
+    }
+
     .filters-wrapper {
         flex-direction: row;
         align-items: center;

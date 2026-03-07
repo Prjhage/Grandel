@@ -332,51 +332,62 @@ const ListingShow = ({ currUser, showFlash }) => {
         <div className="container mt-3 page-fade listing-show-page">
             <div className="row">
                 <div className="col-lg-8">
-                    <div className="d-flex justify-content-between align-items-start mb-2">
-                        <h3>{listing.title}</h3>
-                        <div className="d-flex gap-3 mt-1">
-                            <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2 rounded-pill px-3 py-2"
-                                style={{ transition: 'background 0.2s' }}
-                                onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
-                                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                                onClick={() => {
-                                    navigator.share ? navigator.share({ title: listing.title, url: window.location.href }) : alert('Coppied to clipboard');
-                                }}>
-                                <i className="fa-solid fa-arrow-up-right-from-square fs-6"></i>
-                                <span className="text-decoration-underline">Share</span>
-                            </button>
-                            <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2 rounded-pill px-3 py-2"
-                                style={{ transition: 'background 0.2s' }}
-                                onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
-                                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                                onClick={handleToggleWishlist}>
-                                <i className={`${isSaved ? 'fa-solid text-danger' : 'fa-regular'} fa-heart fs-6`} style={{ transition: 'transform 0.2s', transform: isSaved ? 'scale(1.15)' : 'scale(1)' }}></i>
-                                <span className="text-decoration-underline">{isSaved ? 'Saved' : 'Save'}</span>
-                            </button>
+                    <div className="listing-show-v3-header-wrapper mb-3">
+                        {/* Line 1: Title */}
+                        <div className="listing-show-v3-title-row mb-2">
+                            <h3 className="listing-show-v3-title text-dark m-0">{listing.title}</h3>
                         </div>
-                    </div>
-                    <div className="listing-rating-summary mb-3 d-flex align-items-center gap-2">
-                        <span className="fw-bold">★ {listing.avgRating?.toFixed(1) || 'N/A'}</span>
-                        <span className="text-muted">·</span>
-                        <span
-                            className="text-decoration-underline fw-medium"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })}
-                        >
-                            {listing.reviews?.length || 0} reviews
-                        </span>
-                        {listing.location && (
-                            <>
+
+                        {/* Line 2: Ratings, Reviews, Share, Save */}
+                        <div className="listing-show-v3-middle-row d-flex justify-content-between align-items-center mb-2 px-1">
+                            <div className="listing-show-v3-rating-summary d-flex align-items-center gap-2">
+                                <span className="fw-bold text-dark">★ {listing.avgRating?.toFixed(1) || 'N/A'}</span>
                                 <span className="text-muted">·</span>
                                 <span
-                                    className="text-decoration-underline fw-medium"
+                                    className="text-decoration-underline fw-medium text-dark"
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' })}
+                                    onClick={() => document.getElementById('reviews-section')?.scrollIntoView({ behavior: 'smooth' })}
                                 >
-                                    {listing.location}, {listing.country}
+                                    {listing.reviews?.length || 0} reviews
                                 </span>
-                            </>
-                        )}
+                            </div>
+
+                            <div className="listing-show-v3-actions-wrap d-flex gap-2">
+                                <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2 rounded-pill px-3 py-2 share-btn"
+                                    style={{ transition: 'background 0.2s' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                                    onClick={() => {
+                                        navigator.share ? navigator.share({ title: listing.title, url: window.location.href }) : alert('Coppied to clipboard');
+                                    }}>
+                                    <i className="fa-solid fa-arrow-up-right-from-square fs-6"></i>
+                                    <span className="text-decoration-underline">Share</span>
+                                </button>
+                                <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2 rounded-pill px-3 py-2 save-btn"
+                                    style={{ transition: 'background 0.2s' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                                    onClick={handleToggleWishlist}>
+                                    <i className={`${isSaved ? 'fa-solid text-danger' : 'fa-regular'} fa-heart fs-6`} style={{ transition: 'transform 0.2s', transform: isSaved ? 'scale(1.15)' : 'scale(1)' }}></i>
+                                    <span className="text-decoration-underline">{isSaved ? 'Saved' : 'Save'}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Line 3: Location */}
+                        <div className="listing-show-v3-location-row px-1">
+                            {listing.location && (
+                                <div className="listing-show-v3-location-box d-flex align-items-center gap-1">
+                                    <span
+                                        className="text-decoration-underline fw-medium text-muted"
+                                        style={{ cursor: 'pointer', fontSize: '0.9rem' }}
+                                        onClick={() => document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' })}
+                                    >
+                                        {listing.location}, {listing.country}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {/* Image Gallery */}

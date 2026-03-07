@@ -41,8 +41,8 @@ const Navbar = ({ currUser, onLogout }) => {
 
     return (
         <div className="navbar-float-wrapper">
-            <nav className="navbar navbar-expand-lg navbar-light bg-transparent border-0 navbar-glass" style={{ height: '75px' }}>
-                <div className="container-fluid" style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+            <nav className={`navbar navbar-expand-lg navbar-light bg-transparent border-0 navbar-glass ${isListingsIndexPage ? 'navbar-glass-expanded' : ''}`} style={{ minHeight: '85px' }}>
+                <div className="container-fluid" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                     {/* LOGO */}
                     <Link className="navbar-brand fw-bold" to="/" onClick={handleNavClose}>
                         <div className="navbar-brand-text">
