@@ -1,3 +1,38 @@
+/* ===== Floating Navbar Wrapper ===== */
+.navbar-float-wrapper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    padding: 15px 8px 0;
+    pointer-events: none;
+    /* let clicks through the gap — reduced horizontal padding to widen navbar pill */
+    background: transparent;
+}
+
+/* ===== Frosted Glass Navbar ===== */
+.navbar-glass {
+    position: relative;
+    z-index: 1040;
+    pointer-events: all;
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.09),
+        0 1px 4px rgba(0, 0, 0, 0.04);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar-glass:hover {
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.13),
+        0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
 /* ===== Navbar Brand ===== */
 .navbar-brand {
     display: inline-flex;
@@ -93,8 +128,8 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        width: auto;
-        max-width: 1250px;
+        width: 100%;
+        max-width: 700px;
     }
 }
 
@@ -116,9 +151,12 @@
     }
 
     /* Collapse search in navbar for mobile if too crowded */
-    .navbar {
-        height: auto !important;
-        padding: 10px 0;
+    .navbar-float-wrapper {
+        padding: 8px 10px 0;
+    }
+
+    .navbar-glass {
+        border-radius: 16px !important;
     }
 }
 

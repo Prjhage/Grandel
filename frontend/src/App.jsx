@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Flash from './components/Flash';
@@ -27,13 +27,14 @@ import axios from './config/axios';
 
 import './App.css';
 
-function App() {
+function AppContent() {
   const [currUser, setCurrUser] = useState(() => {
     // Initial check from local storage for instant UI
     const savedUser = localStorage.getItem('grand_user_metadata');
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [flash, setFlash] = useState(null);
+  const location = useLocation();
 
   // Helper to show flash messages
   const showFlash = useCallback((message, type = 'success') => {
@@ -86,40 +87,48 @@ function App() {
     }
   }, [showFlash]);
 
+  const isHomePage = location.pathname === '/';
+
+  return (
+    <div className="d-flex flex-column min-vh-100">
+      <ScrollToTop />
+      <Navbar currUser={currUser} onLogout={handleLogout} />
+
+      <div className={`flex-grow-1 main-content ${!isHomePage ? 'pt-app-nav' : ''}`}>
+        <Flash message={flash?.message} type={flash?.type} onClose={() => setFlash(null)} />
+
+        <Routes>
+          <Route path="/" element={<Home currUser={currUser} />} />
+          <Route path="/listings" element={<Listings currUser={currUser} />} />
+          <Route path="/listings/new" element={<NewListing currUser={currUser} showFlash={showFlash} />} />
+          <Route path="/listings/:id" element={<ListingShow currUser={currUser} showFlash={showFlash} />} />
+          <Route path="/listings/:id/edit" element={<EditListing currUser={currUser} showFlash={showFlash} />} />
+          <Route path="/listings/:id/book" element={<BookingNew currUser={currUser} showFlash={showFlash} />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} showFlash={showFlash} />} />
+          <Route path="/signup" element={<Signup onLogin={handleLogin} showFlash={showFlash} />} />
+          <Route path="/profile" element={<Profile currUser={currUser} showFlash={showFlash} />} />
+          <Route path="/profile/host" element={<HostDashboard currUser={currUser} showFlash={showFlash} />} />
+          <Route path="/profile/host/scanner" element={<HostScanner currUser={currUser} showFlash={showFlash} />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="*" element={<div>404 Not Found</div>} />
+        </Routes>
+      </div>
+
+      <Chatbot currUser={currUser} />
+      <Footer />
+    </div>
+  );
+}
+
+function App() {
   return (
     <ListingCacheProvider>
       <ProfileCacheProvider>
         <HostDashboardCacheProvider>
-          <div className="d-flex flex-column min-vh-100">
-            <ScrollToTop />
-            <Navbar currUser={currUser} onLogout={handleLogout} />
-
-            <div className="flex-grow-1 main-content">
-              <Flash message={flash?.message} type={flash?.type} onClose={() => setFlash(null)} />
-
-              <Routes>
-                <Route path="/" element={<Home currUser={currUser} />} />
-                <Route path="/listings" element={<Listings currUser={currUser} />} />
-                <Route path="/listings/new" element={<NewListing currUser={currUser} showFlash={showFlash} />} />
-                <Route path="/listings/:id" element={<ListingShow currUser={currUser} showFlash={showFlash} />} />
-                <Route path="/listings/:id/edit" element={<EditListing currUser={currUser} showFlash={showFlash} />} />
-                <Route path="/listings/:id/book" element={<BookingNew currUser={currUser} showFlash={showFlash} />} />
-                <Route path="/login" element={<Login onLogin={handleLogin} showFlash={showFlash} />} />
-                <Route path="/signup" element={<Signup onLogin={handleLogin} showFlash={showFlash} />} />
-                <Route path="/profile" element={<Profile currUser={currUser} showFlash={showFlash} />} />
-                <Route path="/profile/host" element={<HostDashboard currUser={currUser} showFlash={showFlash} />} />
-                <Route path="/profile/host/scanner" element={<HostScanner currUser={currUser} showFlash={showFlash} />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password/:token" element={<ResetPassword />} />
-                <Route path="*" element={<div>404 Not Found</div>} />
-              </Routes>
-            </div>
-
-            <Chatbot currUser={currUser} />
-            <Footer />
-          </div>
+          <AppContent />
         </HostDashboardCacheProvider>
       </ProfileCacheProvider>
     </ListingCacheProvider>

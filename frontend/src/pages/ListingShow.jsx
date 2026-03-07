@@ -335,16 +335,22 @@ const ListingShow = ({ currUser, showFlash }) => {
                     <div className="d-flex justify-content-between align-items-start mb-2">
                         <h3>{listing.title}</h3>
                         <div className="d-flex gap-3 mt-1">
-                            <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2"
+                            <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2 rounded-pill px-3 py-2"
+                                style={{ transition: 'background 0.2s' }}
+                                onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
+                                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                                 onClick={() => {
                                     navigator.share ? navigator.share({ title: listing.title, url: window.location.href }) : alert('Coppied to clipboard');
                                 }}>
-                                <i className="fa-solid fa-arrow-up-from-bracket"></i>
+                                <i className="fa-solid fa-arrow-up-right-from-square fs-6"></i>
                                 <span className="text-decoration-underline">Share</span>
                             </button>
-                            <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2"
+                            <button className="btn btn-link text-dark text-decoration-none p-0 fw-medium d-flex align-items-center gap-2 rounded-pill px-3 py-2"
+                                style={{ transition: 'background 0.2s' }}
+                                onMouseEnter={(e) => e.currentTarget.style.background = '#f7f7f7'}
+                                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                                 onClick={handleToggleWishlist}>
-                                <i className={`${isSaved ? 'fa-solid text-danger' : 'fa-regular'} fa-heart`}></i>
+                                <i className={`${isSaved ? 'fa-solid text-danger' : 'fa-regular'} fa-heart fs-6`} style={{ transition: 'transform 0.2s', transform: isSaved ? 'scale(1.15)' : 'scale(1)' }}></i>
                                 <span className="text-decoration-underline">{isSaved ? 'Saved' : 'Save'}</span>
                             </button>
                         </div>

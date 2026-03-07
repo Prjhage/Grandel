@@ -37,6 +37,15 @@ body {
   width: 100%;
 }
 
+.main-content {
+  flex-grow: 1;
+}
+
+/* Padding added to all pages EXCEPT Home so they aren't hidden under the fixed transparent navbar */
+.pt-app-nav {
+  padding-top: 100px;
+}
+
 a {
   text-decoration: none;
   color: inherit;

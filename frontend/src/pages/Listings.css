@@ -1,6 +1,18 @@
 /* Wrapper */
 .listings-page {
     padding-bottom: 2rem;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Full-viewport background — covers Bootstrap container gutters without touching layout */
+.listings-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-color: #f7f5f2;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .filters-wrapper {

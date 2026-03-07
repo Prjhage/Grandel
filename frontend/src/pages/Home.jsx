@@ -4,7 +4,6 @@ import axios from '../config/axios';
 import { useListingCache } from '../components/ListingCacheContext';
 import { useProfileCache } from '../components/ProfileCacheContext';
 import SkeletonCard from '../components/SkeletonCard';
-import { useListingCache } from '../components/ListingCacheContext';
 import './Home.css';
 
 const Home = ({ currUser }) => {
@@ -206,22 +205,25 @@ const Home = ({ currUser }) => {
 
                     {/* Precision Elements - Floating Cards */}
                     <div className="hero-floating-card card-1">
-                        <div className="card-icon" style={{ background: 'rgba(255, 56, 92, 0.2)', padding: '10px', borderRadius: '12px' }}>
-                            <i className="fas fa-star" style={{ color: '#ff385c' }}></i>
+                        <div className="fcard-badge fcard-badge--star">
+                            <span className="fcard-pulse"></span>
+                            <i className="fas fa-star"></i>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>Top Rated</div>
-                            <div style={{ fontWeight: '700' }}>Premium Stays</div>
+                            <div style={{ fontSize: '0.75rem', opacity: 0.6, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Top Rated</div>
+                            <div style={{ fontWeight: '700', fontSize: '0.95rem' }}>Premium Stays</div>
                         </div>
                     </div>
 
                     <div className="hero-floating-card card-2">
-                        <div className="card-icon" style={{ background: 'rgba(67, 206, 162, 0.2)', padding: '10px', borderRadius: '12px' }}>
-                            <i className="fas fa-shield-check" style={{ color: '#43cea2' }}></i>
+                        <div className="fcard-badge fcard-badge--shield">
+                            <span className="fcard-ring"></span>
+                            <i className="fas fa-shield-halved"></i>
+                            <span className="fcard-check"><i className="fas fa-check"></i></span>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>Verified</div>
-                            <div style={{ fontWeight: '700' }}>Host Guarantee</div>
+                            <div style={{ fontSize: '0.75rem', opacity: 0.6, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Verified</div>
+                            <div style={{ fontWeight: '700', fontSize: '0.95rem' }}>Host Guarantee</div>
                         </div>
                     </div>
                 </div>
