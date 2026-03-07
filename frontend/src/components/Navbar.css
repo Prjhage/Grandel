@@ -47,7 +47,7 @@
     align-items: center;
     font-weight: 800;
     letter-spacing: -0.03em;
-    font-size: 2rem;
+    font-size: 1.8rem;
     background: linear-gradient(135deg, #007bff 0%, #00c6ff 50%, #ff6b6b 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -129,20 +129,39 @@
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
-        max-width: 700px;
+        max-width: 650px;
+        z-index: 10;
+        pointer-events: none;
+        /* Let clicks pass through the container to links below if any overlap */
+    }
+
+    .navbar-search-section>* {
+        pointer-events: all;
+        /* Reactivate clicks for the actual search bar */
     }
 }
 
 @media (max-width: 991px) {
+    .navbar-brand {
+        order: 1;
+        margin-right: auto;
+    }
+
+    .ms-auto.d-lg-none {
+        order: 2;
+        margin-left: auto !important;
+    }
+
     .navbar-search-section {
         display: none !important;
         position: static !important;
         transform: none !important;
         order: 3;
-        width: 100%;
-        margin-top: 10px;
-        margin-bottom: 4px;
-        padding: 0 10px;
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        margin-top: 15px !important;
+        margin-bottom: 8px !important;
+        padding: 0 !important;
     }
 
     .navbar-search-section.is-listings-index {
@@ -565,20 +584,33 @@
         display: none !important;
     }
 
-    /* Ensure horizontal links are visible and styled */
+    /* Ensure horizontal links are visible and styled on one row */
     .collapse.navbar-collapse {
         display: flex !important;
         align-items: center;
-        width: 100%;
+        flex: 1;
+        width: auto !important;
+        /* Remove width 100% to prevent wrapping */
+    }
+
+    .navbar-nav {
+        flex-direction: row !important;
+        align-items: center;
     }
 
     .navbar-nav .nav-link {
         color: #222 !important;
         padding: 0.5rem 1rem !important;
+        white-space: nowrap;
     }
 
     .navbar-nav .nav-link:hover {
         color: #fe424d !important;
+    }
+
+    /* Adjust brand spacing to not overlap with links */
+    .navbar-brand {
+        margin-right: 2rem;
     }
 }
 
