@@ -52,6 +52,9 @@ const Signup = ({ onLogin, showFlash }) => {
             }
 
             try {
+                // Always try to catch a redirect result if it exists
+                let result = await getRedirectResult(auth);
+
                 if (result) {
                     console.log("✅ getRedirectResult found a user (Signup):", result.user.email);
                     await processGoogleUser(result.user);

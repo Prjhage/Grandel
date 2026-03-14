@@ -32,7 +32,7 @@ console.log(`[INIT] Frontend URL: ${frontendURL}`);
 const cleanFrontendURL = frontendURL.replace(/\/$/, "");
 
 const corsOptions = {
-  origin: true,
+  origin: [cleanFrontendURL, 'http://localhost:5173', 'http://127.0.0.1:5173'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -191,6 +191,20 @@ app.get("/", (req, res) => {
 // API Route for Health Check (and Keep-Alive)
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+// 🔍 Temporary Diagnostic Route (Admin/Local only if sensitive)
+app.get("/api/debug-env", (req, res) => {
+  const envStatus = {
+    FIREBASE_PROJECT_ID: !!process.env.FIREBASE_PROJECT_ID,
+    FIREBASE_CLIENT_EMAIL: !!process.env.FIREBASE_CLIENT_EMAIL,
+    FIREBASE_PRIVATE_KEY: !!process.env.FIREBASE_PRIVATE_KEY,
+    ATLASDB_URL: !!process.env.ATLASDB_URL,
+    FRONTEND_URL: process.env.FRONTEND_URL,
+    NODE_ENV: process.env.NODE_ENV,
+    FIREBASE_ADMIN_INIT: !!admin.apps.length
+  };
+  res.json(envStatus);
 });
 
 // API Route for Featured Listings

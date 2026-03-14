@@ -111,7 +111,9 @@ const Login = ({ onLogin, showFlash }) => {
 
                 // Check if we got an HTML response (indicates 404/wrong URL)
                 if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
-                    setError("API ERROR: Backend returned HTML. Your API link might be wrong.");
+                    setError("API ERROR: Backend returned HTML (404/Wrong URL). Check VITE_API_BASE_URL.");
+                } else if (err.code === 'ERR_NETWORK') {
+                    setError("NETWORK ERROR: Cannot reach backend. It might be sleeping or the URL is wrong.");
                 } else {
                     setError(backendMsg);
                 }

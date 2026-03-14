@@ -103,10 +103,10 @@ module.exports.firebaseLogin = async (req, res, next) => {
             // Log the user in to create a session
             req.login(user, (err) => {
                 if (err) {
-                    console.log(`req.login failed: ${err.message}`);
+                    console.log(`[AUTH-DEBUG] req.login failed: ${err.message}`);
                     return next(err);
                 }
-                console.log("Firebase login successful.");
+                console.log(`[AUTH-DEBUG] Firebase login successful for: ${user.email}`);
                 const redirectUrl = res.locals.redirectUrl || "/listings";
                 return res.status(200).json({
                     success: true,
@@ -117,7 +117,7 @@ module.exports.firebaseLogin = async (req, res, next) => {
             });
         } else if (email && password) {
             // Fallback for existing users without Firebase Auth
-            console.log(`Email/Password login attempt for: ${email}`);
+            console.log(`[AUTH-DEBUG] Email/Password login attempt for: ${email}`);
             // Try to find user by email first, then by username if email fails
             let user = await User.findOne({ email });
 
@@ -178,11 +178,15 @@ module.exports.firebaseLogin = async (req, res, next) => {
             return res.status(400).json({ success: false, message: "Invalid login request." });
         }
     } catch (e) {
-        console.log(`Login Exception: ${e.message}`);
+        console.log(`[AUTH-DEBUG] Login Exception: ${e.message}`);
         console.error("Firebase Login Error:", e);
         res
             .status(401)
-            .json({ success: false, message: "Authentication failed. Please try again." });
+            .json({ 
+                success: false, 
+                message: "Authentication failed. Server error.", 
+                error: isProd ? "Auth Exception" : e.message 
+            });
     }
 };
 
