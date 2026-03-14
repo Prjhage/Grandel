@@ -25,6 +25,7 @@ console.log("🔗 API Endpoint:", baseURL);
 const axiosInstance = axios.create({
     baseURL: baseURL,
     withCredentials: true,
+    timeout: 15000, // 15 seconds timeout
     headers: {
 
     }

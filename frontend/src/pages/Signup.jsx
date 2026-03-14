@@ -65,7 +65,16 @@ const Signup = ({ onLogin, showFlash }) => {
                 console.error("❌ Signup Redirect Error:", err);
                 setError(err.message);
             } finally {
-                if (!isRedirectBack && !isPending) setLoading(false);
+                // Clear loading unless we are processing a found user
+                if (!isProcessing.current) {
+                    setLoading(false);
+                }
+                
+                // If we've been waiting for a result but none came, clear the flag
+                if (isPending && !result) {
+                    console.log("ℹ️ No signup result found, clearing flag.");
+                    localStorage.removeItem('pending_google_signup');
+                }
             }
         };
 
@@ -107,7 +116,9 @@ const Signup = ({ onLogin, showFlash }) => {
             } catch (err) {
                 const backendMsg = err.response?.data?.message || err.message;
 
-                if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
+                if (err.code === 'ECONNABORTED') {
+                    setError("TIMEOUT: Backend is taking too long. It might be waking up.");
+                } else if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
                     setError("API ERROR: Backend returned HTML. Your API link might be wrong.");
                 } else {
                     setError(backendMsg);
@@ -206,7 +217,9 @@ const Signup = ({ onLogin, showFlash }) => {
             }
 
             let msg = 'Signup failed. Please try again.';
-            if (err.response?.data?.message) {
+            if (err.code === 'ECONNABORTED') {
+                msg = 'TIMEOUT: Server is taking too long to respond. Please try again.';
+            } else if (err.response?.data?.message) {
                 msg = err.response.data.message;
             } else if (err.code === 'ERR_NETWORK') {
                 msg = 'Cannot reach the server. It might be waking up, please try again.';

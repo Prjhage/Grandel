@@ -63,8 +63,18 @@ const Login = ({ onLogin, showFlash }) => {
                 localStorage.removeItem('pending_google_auth');
                 handleAuthError(err);
             } finally {
-                // If we didn't find a result and weren't clearly redirecting, stop loading
-                if (!isRedirectBack && !isPending) setLoading(false);
+                // Always clear loading after result check is done, 
+                // unless we are in the middle of processing a found user
+                if (!isProcessing.current) {
+                    setLoading(false);
+                }
+                
+                // If we've been waiting for a redirect check but found nothing, 
+                // clear the flag so the user isn't stuck "logging in" on every refresh.
+                if (isPending && !result) {
+                    console.log("ℹ️ No redirect result found, clearing pending flag.");
+                    localStorage.removeItem('pending_google_auth');
+                }
             }
         };
 
@@ -109,8 +119,9 @@ const Login = ({ onLogin, showFlash }) => {
                 isProcessing.current = false; // Reset on error
                 const backendMsg = err.response?.data?.message || err.message;
 
-                // Check if we got an HTML response (indicates 404/wrong URL)
-                if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
+                if (err.code === 'ECONNABORTED') {
+                    setError("TIMEOUT: Backend is taking too long to respond. It might be waking up.");
+                } else if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
                     setError("API ERROR: Backend returned HTML (404/Wrong URL). Check VITE_API_BASE_URL.");
                 } else if (err.code === 'ERR_NETWORK') {
                     setError("NETWORK ERROR: Cannot reach backend. It might be sleeping or the URL is wrong.");
@@ -207,7 +218,9 @@ const Login = ({ onLogin, showFlash }) => {
         } catch (err) {
             console.error(err);
             let msg = err.response?.data?.message || 'Login failed. Please check your connection.';
-            if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || (err.response && err.response.status === 401)) {
+            if (err.code === 'ECONNABORTED') {
+                msg = 'TIMEOUT: Server is taking too long to respond. Try again in a few seconds.';
+            } else if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || (err.response && err.response.status === 401)) {
                 msg = 'Invalid email or password.';
             } else if (err.code === 'ERR_NETWORK') {
                 msg = 'Cannot reach the server. It might be waking up, please try again in a few seconds.';
