@@ -20,7 +20,12 @@ const Login = ({ onLogin, showFlash }) => {
         password: ''
     });
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(() => {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isPending = localStorage.getItem('pending_google_auth') === 'true';
+        const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
+        return isRedirectBack || (isMobile && isPending);
+    });
     const navigate = useNavigate();
     const isProcessing = useRef(false);
 
@@ -37,10 +42,10 @@ const Login = ({ onLogin, showFlash }) => {
         const handleAuthResult = async () => {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
-            const isPending = sessionStorage.getItem('pending_google_auth') === 'true';
+            const isPending = localStorage.getItem('pending_google_auth') === 'true';
 
-            // Only show loading if we are actually expecting a redirect result
             if (isRedirectBack || (isMobile && isPending)) {
+                console.log("🔥 Detected pending Google Auth on mobile/redirect. Setting loading...");
                 setLoading(true);
             }
 
@@ -49,11 +54,13 @@ const Login = ({ onLogin, showFlash }) => {
                 let result = await getRedirectResult(auth);
 
                 if (result) {
+                    console.log("✅ getRedirectResult found a user:", result.user.email);
                     await processGoogleUser(result.user);
-                    sessionStorage.removeItem('pending_google_auth');
+                    localStorage.removeItem('pending_google_auth');
                 }
             } catch (err) {
-                sessionStorage.removeItem('pending_google_auth');
+                console.error("❌ getRedirectResult error:", err);
+                localStorage.removeItem('pending_google_auth');
                 handleAuthError(err);
             } finally {
                 // If we didn't find a result and weren't clearly redirecting, stop loading
@@ -62,10 +69,11 @@ const Login = ({ onLogin, showFlash }) => {
         };
 
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            const isPending = sessionStorage.getItem('pending_google_auth') === 'true';
+            const isPending = localStorage.getItem('pending_google_auth') === 'true';
             if (user && isPending) {
+                console.log("🔄 onAuthStateChanged triggered for pending user:", user.email);
                 await processGoogleUser(user);
-                sessionStorage.removeItem('pending_google_auth');
+                localStorage.removeItem('pending_google_auth');
             }
         });
 
@@ -92,7 +100,7 @@ const Login = ({ onLogin, showFlash }) => {
                     clearCache();
                     onLogin(res.data.user);
                     showFlash('Logged in with Google!', 'success');
-                    setTimeout(() => navigate('/listings'), 100);
+                    navigate('/listings');
                 } else {
                     setError(res.data.message || "Login refused by server.");
                     isProcessing.current = false;
@@ -131,9 +139,9 @@ const Login = ({ onLogin, showFlash }) => {
         setError('');
         try {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            sessionStorage.setItem('pending_google_auth', 'true');
 
             if (isMobile) {
+                localStorage.setItem('pending_google_auth', 'true');
                 await signInWithRedirect(auth, googleProvider);
             } else {
                 const result = await signInWithPopup(auth, googleProvider);
@@ -284,8 +292,17 @@ const Login = ({ onLogin, showFlash }) => {
                             disabled={loading}
                             style={{ borderRadius: '10px', padding: '10px', fontSize: '0.9rem', fontWeight: '500' }}
                         >
-                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', marginRight: '10px' }} />
-                            Login with Google
+                            {loading && (window.location.search.includes('apiKey=') || localStorage.getItem('pending_google_auth') === 'true') ? (
+                                <>
+                                    <i className="fa-solid fa-circle-notch fa-spin me-2"></i>
+                                    LOGGING IN...
+                                </>
+                            ) : (
+                                <>
+                                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', marginRight: '10px' }} />
+                                    Login with Google
+                                </>
+                            )}
                         </button>
                     </form>
 

@@ -5,9 +5,9 @@ import Footer from './components/Footer';
 import Flash from './components/Flash';
 import Chatbot from './components/Chatbot';
 import ScrollToTop from './components/ScrollToTop';
-import { ListingCacheProvider } from './components/ListingCacheContext';
-import { ProfileCacheProvider } from './components/ProfileCacheContext';
-import { HostDashboardCacheProvider } from './components/HostDashboardCacheContext';
+import { ListingCacheProvider, useListingCache } from './components/ListingCacheContext';
+import { ProfileCacheProvider, useProfileCache } from './components/ProfileCacheContext';
+import { HostDashboardCacheProvider, useHostDashboardCache } from './components/HostDashboardCacheContext';
 import Home from './pages/Home';
 import Listings from './pages/Listings';
 import ListingShow from './pages/ListingShow';
@@ -76,16 +76,25 @@ function AppContent() {
     localStorage.setItem('grand_user_metadata', JSON.stringify(userMetadata));
   }, []);
 
+  const { clearCache: clearListingCache } = useListingCache();
+  const { clearCache: clearProfileCache } = useProfileCache();
+  const { clearCache: clearHostCache } = useHostDashboardCache();
+
   const handleLogout = useCallback(async () => {
     try {
       await axios.get('/logout');
+      // Clear all caches immediately
+      clearListingCache();
+      clearProfileCache();
+      clearHostCache();
+      
       setCurrUser(null);
       localStorage.removeItem('grand_user_metadata');
       showFlash("Logged out successfully");
     } catch (err) {
       showFlash("Logout failed", "error");
     }
-  }, [showFlash]);
+  }, [showFlash, clearListingCache, clearProfileCache, clearHostCache]);
 
   const isHomePage = location.pathname === '/';
 

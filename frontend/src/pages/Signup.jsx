@@ -22,7 +22,12 @@ const Signup = ({ onLogin, showFlash }) => {
         email: '',
         password: ''
     });
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(() => {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isPending = localStorage.getItem('pending_google_signup') === 'true';
+        const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
+        return isRedirectBack || (isMobile && isPending);
+    });
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const isProcessing = useRef(false);
@@ -40,21 +45,21 @@ const Signup = ({ onLogin, showFlash }) => {
         const handleAuthResult = async () => {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
-            const isPending = sessionStorage.getItem('pending_google_signup') === 'true';
+            const isPending = localStorage.getItem('pending_google_signup') === 'true';
 
             if (isRedirectBack || (isMobile && isPending)) {
                 setLoading(true);
             }
 
             try {
-                const result = await getRedirectResult(auth);
                 if (result) {
+                    console.log("✅ getRedirectResult found a user (Signup):", result.user.email);
                     await processGoogleUser(result.user);
-                    sessionStorage.removeItem('pending_google_signup');
+                    localStorage.removeItem('pending_google_signup');
                 }
             } catch (err) {
-                sessionStorage.removeItem('pending_google_signup');
-                console.error("Signup Redirect Error:", err);
+                localStorage.removeItem('pending_google_signup');
+                console.error("❌ Signup Redirect Error:", err);
                 setError(err.message);
             } finally {
                 if (!isRedirectBack && !isPending) setLoading(false);
@@ -62,10 +67,11 @@ const Signup = ({ onLogin, showFlash }) => {
         };
 
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            const isPending = sessionStorage.getItem('pending_google_signup') === 'true';
+            const isPending = localStorage.getItem('pending_google_signup') === 'true';
             if (user && isPending) {
+                console.log("🔄 onAuthStateChanged triggered for pending signup:", user.email);
                 await processGoogleUser(user);
-                sessionStorage.removeItem('pending_google_signup');
+                localStorage.removeItem('pending_google_signup');
             }
         });
 
@@ -91,12 +97,11 @@ const Signup = ({ onLogin, showFlash }) => {
                     clearCache();
                     onLogin(res.data.user);
                     showFlash('Signed up with Google successfully!', 'success');
-                    setTimeout(() => navigate('/listings'), 100);
+                    navigate('/listings');
                 } else {
                     setError(res.data.message || "Signup refused by server.");
-                    isProcessing.current = false;
                 }
-                isProcessing.current = false;
+            } catch (err) {
                 const backendMsg = err.response?.data?.message || err.message;
 
                 if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
@@ -105,6 +110,7 @@ const Signup = ({ onLogin, showFlash }) => {
                     setError(backendMsg);
                 }
             } finally {
+                isProcessing.current = false;
                 setLoading(false);
             }
         };
@@ -116,11 +122,11 @@ const Signup = ({ onLogin, showFlash }) => {
     const handleGoogleSignup = async () => {
         setLoading(true);
         setError('');
-        sessionStorage.setItem('pending_google_signup', 'true');
         try {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
             if (isMobile) {
+                localStorage.setItem('pending_google_signup', 'true');
                 await signInWithRedirect(auth, googleProvider);
             } else {
                 const result = await signInWithPopup(auth, googleProvider);
@@ -296,8 +302,17 @@ const Signup = ({ onLogin, showFlash }) => {
                             disabled={loading}
                             style={{ borderRadius: '10px', padding: '10px', fontSize: '0.9rem', fontWeight: '500' }}
                         >
-                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', marginRight: '10px' }} />
-                            Sign up with Google
+                            {loading && (window.location.search.includes('apiKey=') || localStorage.getItem('pending_google_signup') === 'true') ? (
+                                <>
+                                    <i className="fa-solid fa-circle-notch fa-spin me-2"></i>
+                                    CREATING ACCOUNT...
+                                </>
+                            ) : (
+                                <>
+                                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', marginRight: '10px' }} />
+                                    Sign up with Google
+                                </>
+                            )}
                         </button>
                     </form>
 

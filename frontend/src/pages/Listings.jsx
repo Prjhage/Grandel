@@ -23,6 +23,10 @@ const Listings = ({ currUser }) => {
     const sort = searchParams.get('sort') || '';
 
     useEffect(() => {
+        if (!currUser) {
+            setUserWishlist([]);
+        }
+        
         const currentFilters = Object.fromEntries(searchParams.entries());
         currentFilters.sort = sort;
 
@@ -30,7 +34,7 @@ const Listings = ({ currUser }) => {
         const cached = getCachedData(currentFilters);
         if (cached) {
             setListings(cached.listings);
-            setUserWishlist(cached.userWishlist);
+            setUserWishlist(cached.userWishlist || []);
             setLoading(false);
             // Still fetch in background to sync (SWR pattern)
             fetchListings(1, false);
@@ -40,7 +44,7 @@ const Listings = ({ currUser }) => {
             setHasMore(true);
             fetchListings(1, true);
         }
-    }, [searchParams, sort]);
+    }, [searchParams, sort, currUser]);
 
     const fetchListings = async (pageNum, isInitial = false) => {
         try {

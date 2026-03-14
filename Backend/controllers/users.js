@@ -6,6 +6,8 @@ const admin = require("firebase-admin");
 const passport = require("passport");
 const crypto = require("crypto");
 const mailService = require("../services/mailService");
+const logToFile = require("../utils/fileLogger");
+
 
 
 
@@ -23,11 +25,11 @@ module.exports.firebaseRegister = async (req, res, next) => {
             if (existingUser.username === username) {
                 return res
                     .status(409)
-                    .json({ message: "Username already exists. Please choose another." });
+                    .json({ success: false, message: "Username already exists. Please choose another." });
             } else {
                 return res
                     .status(409)
-                    .json({ message: "Email is already registered. Please log in." });
+                    .json({ success: false, message: "Email is already registered. Please log in." });
             }
         }
 
@@ -62,7 +64,7 @@ module.exports.firebaseRegister = async (req, res, next) => {
         });
     } catch (e) {
         console.error("Firebase Registration Error:", e);
-        res.status(500).json({ message: e.message });
+        res.status(500).json({ success: false, message: e.message });
     }
 };
 
@@ -88,7 +90,7 @@ module.exports.firebaseLogin = async (req, res, next) => {
                 console.log("User not found in local DB for Firebase login.");
                 return res
                     .status(404)
-                    .json({ message: "User not found. Please sign up first." });
+                    .json({ success: false, message: "User not found. Please sign up first." });
             }
 
             // Update firebaseUid for legacy users (Migration)
@@ -129,7 +131,7 @@ module.exports.firebaseLogin = async (req, res, next) => {
                 console.log("User not found.");
                 return res
                     .status(404)
-                    .json({ message: "User not found. Please sign up first." });
+                    .json({ success: false, message: "User not found. Please sign up first." });
             }
 
             if (!user.hash || !user.salt) {
@@ -155,7 +157,7 @@ module.exports.firebaseLogin = async (req, res, next) => {
                     }
                     if (!authenticatedUser) {
                         logToFile(`Authentication failed. Info: ${JSON.stringify(info)}`);
-                        return res.status(401).json({ message: "Invalid credentials." });
+                        return res.status(401).json({ success: false, message: "Invalid credentials." });
                     }
 
                     req.login(authenticatedUser, (err) => {
@@ -173,14 +175,14 @@ module.exports.firebaseLogin = async (req, res, next) => {
             }
         } else {
             logToFile("Invalid login request: Missing credentials.");
-            return res.status(400).json({ message: "Invalid login request." });
+            return res.status(400).json({ success: false, message: "Invalid login request." });
         }
     } catch (e) {
         console.log(`Login Exception: ${e.message}`);
         console.error("Firebase Login Error:", e);
         res
             .status(401)
-            .json({ message: "Authentication failed. Please try again." });
+            .json({ success: false, message: "Authentication failed. Please try again." });
     }
 };
 

@@ -19,6 +19,7 @@ if (!baseURL) {
     }
 }
 console.log("🔗 Axios connecting to:", baseURL || "(relative)");
+console.log("🌐 Current Location:", window.location.href);
 
 // Create axios instance with default config
 const axiosInstance = axios.create({

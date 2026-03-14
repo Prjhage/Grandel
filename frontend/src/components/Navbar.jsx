@@ -198,13 +198,8 @@ const Navbar = ({ currUser, onLogout }) => {
                         </div>
 
                         <div className="sidebar-footer">
-                            <div className="sidebar-brand-mini">
+                            <div className="sidebar-brand-mini text-center w-100">
                                 <span className="grand">GRAND</span><span className="el">EL</span>
-                            </div>
-                            <div className="social-links-mini">
-                                <i className="fa-brands fa-instagram"></i>
-                                <i className="fa-brands fa-twitter"></i>
-                                <i className="fa-brands fa-facebook-f"></i>
                             </div>
                         </div>
                     </div>

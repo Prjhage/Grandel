@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import './AdvancedSearchBar.css';
 
@@ -380,8 +381,7 @@ const AdvancedSearchBar = () => {
                 </button>
             </div>
 
-            {/* Mobile Search Overlay */}
-            {isMobileModalOpen && (
+            {isMobileModalOpen && createPortal(
                 <div className="mobile-search-overlay">
                     <div className="overlay-header">
                         <button className="btn-close-overlay" onClick={() => setIsMobileModalOpen(false)}>
@@ -485,10 +485,11 @@ const AdvancedSearchBar = () => {
                         <button className="btn-clear-all" onClick={(e) => clearAllFilters(e)}>Clear all</button>
                         <button className="btn-mobile-search" onClick={executeSearch}>
                             <i className="fa-solid fa-magnifying-glass me-2"></i>
-                            Search
+                            SEARCH
                         </button>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </>
     );
