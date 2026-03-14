@@ -104,7 +104,7 @@ const Listing = require("./models/listing.js");
 // FIREBASE ADMIN SDK INITIALIZATION
 // =================================================
 // Initialized in config/firebaseAdmin.js
-require("./config/firebaseAdmin");
+const admin = require("./config/firebaseAdmin");
 // =================================================
 // =================================================
 

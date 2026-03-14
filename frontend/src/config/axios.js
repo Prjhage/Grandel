@@ -14,8 +14,8 @@ if (!baseURL) {
         console.log("📱 Mobile/IP access detected. Using baseURL:", baseURL);
     } else {
         // PRODUCTION FALLBACK: If VITE_API_BASE_URL is missing, we try to guess it or warn.
-        // For Grandel, the likely Render URL is:
-        baseURL = 'https://grandel-backend.onrender.com'; 
+        // Based on your Render dashboard, the URL is:
+        baseURL = 'https://grandel.onrender.com'; 
         console.warn("⚠️ VITE_API_BASE_URL is missing! Defaulting to production backend:", baseURL);
     }
 }
