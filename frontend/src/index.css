@@ -225,22 +225,34 @@ ul {
   opacity: 1;
 }
 
-/* 📱 Aggressive Mobile Scrollbar Removal (Must be at the bottom) */
+/* 📱 Aggressive Mobile Scrollbar Removal (Universal & Absolute) */
 @media (max-width: 768px) {
-  html, body, #root, .main-content, * {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    overflow-x: hidden !important;
+  /* Universal scrollbar hide for all elements */
+  * {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE/Edge */
   }
 
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar,
-  #root::-webkit-scrollbar,
-  .main-content::-webkit-scrollbar,
-  *::-webkit-scrollbar {
+  /* Webkit-specific nuke for all elements */
+  ::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
     background: transparent !important;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-button,
+  ::-webkit-scrollbar-corner {
+    display: none !important;
+    background: transparent !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Force layout to respect the hide */
+  html, body, #root, .main-content {
+    overflow-x: hidden !important;
   }
 }
