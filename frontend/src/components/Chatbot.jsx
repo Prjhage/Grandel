@@ -193,7 +193,9 @@ const Chatbot = ({ currUser }) => {
                 <div className="chatbot-container">
                     <div className="chatbot-header">
                         <div className="chatbot-title">
-                            <i className="fa-solid fa-robot chatbot-header-icon"></i>
+                            <span className="chatbot-icon-wrapper">
+                                <i className="fa-solid fa-robot chatbot-header-icon"></i>
+                            </span>
                             <h4>Grandel Assistant</h4>
                         </div>
                         <button className="chatbot-close" onClick={toggleChatbot}>✕</button>
@@ -281,7 +283,7 @@ const Chatbot = ({ currUser }) => {
                             setShowHint(false);
                         }}
                     >
-                        <i className="fa-solid fa-comment-dots"></i>
+                        <i className="fa-solid fa-robot"></i>
                         <span className="pulse-ring"></span>
                     </button>
                 </div>
