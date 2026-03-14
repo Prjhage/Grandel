@@ -5,23 +5,7 @@ html {
   overflow-x: hidden;
 }
 
-/* Hide scrollbar on mobile while keeping scroll functionality */
-@media (max-width: 768px) {
-  html, body, #root, * {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar,
-  #root::-webkit-scrollbar,
-  *::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-  }
-}
-
+/* Global Theme Settings */
 :root {
   --primary: #fe424d;
   --primary-hover: #e01666;
@@ -239,4 +223,24 @@ ul {
 
 .img-fade-in.loaded {
   opacity: 1;
+}
+
+/* 📱 Aggressive Mobile Scrollbar Removal (Must be at the bottom) */
+@media (max-width: 768px) {
+  html, body, #root, .main-content, * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    overflow-x: hidden !important;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  #root::-webkit-scrollbar,
+  .main-content::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
 }
