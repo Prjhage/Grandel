@@ -10,16 +10,16 @@ if (!baseURL) {
     if (isLocal) {
         baseURL = 'http://localhost:8080';
     } else if (isIP) {
-        // If accessed via IP (e.g. 192.168.x.x on mobile), assume backend is on same IP, port 8080
         baseURL = `http://${hostname}:8080`;
         console.log("📱 Mobile/IP access detected. Using baseURL:", baseURL);
     } else {
-        baseURL = '';
-        console.warn("⚠️ VITE_API_BASE_URL is missing! Defaulting to relative paths.");
+        // PRODUCTION FALLBACK: If VITE_API_BASE_URL is missing, we try to guess it or warn.
+        // For Grandel, the likely Render URL is:
+        baseURL = 'https://grandel-backend.onrender.com'; 
+        console.warn("⚠️ VITE_API_BASE_URL is missing! Defaulting to production backend:", baseURL);
     }
 }
-console.log("🔗 Axios connecting to:", baseURL || "(relative)");
-console.log("🌐 Current Location:", window.location.href);
+console.log("🔗 API Endpoint:", baseURL);
 
 // Create axios instance with default config
 const axiosInstance = axios.create({

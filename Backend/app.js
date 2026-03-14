@@ -306,10 +306,10 @@ app.listen(port, '0.0.0.0', () => {
     const selfUrl = `${process.env.RENDER_EXTERNAL_URL}/api/health`;
     console.log(`[KEEP-ALIVE] Monitoring started for: ${selfUrl}`);
 
-    // Ping every 10 minutes to prevent Render from spinning down
+    // Ping every 14 minutes to prevent Render from spinning down (15m timeout)
     setInterval(async () => {
       try {
-        const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+        // Use native fetch (available in Node 22)
         const response = await fetch(selfUrl);
         if (response.ok) {
           console.log(`[KEEP-ALIVE] Self-ping successful at ${new Date().toISOString()}`);
@@ -319,6 +319,6 @@ app.listen(port, '0.0.0.0', () => {
       } catch (err) {
         console.error(`[KEEP-ALIVE] Error during self-ping: ${err.message}`);
       }
-    }, 10 * 60 * 1000); // 10 minutes
+    }, 14 * 60 * 1000); // 14 minutes
   }
 });
