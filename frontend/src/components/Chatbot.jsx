@@ -89,7 +89,12 @@ const Chatbot = ({ currUser }) => {
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesEndRef.current) {
+            const container = messagesEndRef.current.closest('.chatbot-messages');
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
     };
 
     useEffect(() => {
@@ -261,6 +266,7 @@ const Chatbot = ({ currUser }) => {
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyPress={handleKeyPress}
+                            autoComplete="off"
                         />
                         <button className="chatbot-send-btn" onClick={handleSendMessage}>
                             <i className="fas fa-paper-plane"></i>

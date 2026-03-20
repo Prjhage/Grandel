@@ -362,36 +362,13 @@
     .sidebar-sticky {
         position: sticky;
         top: 80px;
-        /* Reduced top offset for more vertical space */
         z-index: 10;
-        max-height: calc(100vh - 100px);
-        /* Strictly limit height to viewport */
-        overflow-y: auto;
-        /* Enable internal scrolling for very tall content */
-        padding-right: 6px;
-        /* Space for scrollbar */
-        padding-bottom: 20px;
-        scrollbar-gutter: stable;
-        /* Prevent layout shift */
     }
+}
 
-    /* Clean, thin scrollbar for the sidebar */
-    .sidebar-sticky::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    .sidebar-sticky::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .sidebar-sticky::-webkit-scrollbar-thumb {
-        background: #eee;
-        border-radius: 10px;
-    }
-
-    .sidebar-sticky:hover::-webkit-scrollbar-thumb {
-        background: #ddd;
-    }
+/* Ensure the row stretches both columns to the same height so sticky has room to work */
+.listing-show-row {
+    align-items: stretch;
 }
 
 .reserve-card {

@@ -1,11 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+@media (max-width: 768px) {
+  html {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+    overflow-y: auto !important;
+  }
+  html::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+}
+
+@media (min-width: 769px) {
+  html {
+    overflow-y: scroll;
+  }
 }
 
 /* Global Theme Settings */
+
 :root {
   --primary: #fe424d;
   --primary-hover: #e01666;
@@ -20,16 +39,27 @@ html {
   box-sizing: border-box;
 }
 
-
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   margin: 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-color: var(--light);
   color: var(--dark);
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+@media (max-width: 768px) {
+  body {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+  body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
 }
 
 #root {
@@ -37,16 +67,29 @@ body {
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+@media (max-width: 768px) {
+  #root {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+  #root::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
 }
 
 .main-content {
   flex-grow: 1;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Padding added to all pages EXCEPT Home so they aren't hidden under the fixed transparent navbar */
+
 .pt-app-nav {
   padding-top: 100px;
 }
@@ -74,6 +117,7 @@ ul {
 }
 
 /* Common Layout */
+
 .container {
   max-width: 1280px;
   margin: 0 auto;
@@ -90,12 +134,12 @@ ul {
 }
 
 /* Animations */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -113,25 +157,58 @@ ul {
   transform: translateY(0);
 }
 
-/* Original Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* Custom Scrollbars - Desktop Only */
+
+@media (min-width: 769px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #fe424d;
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
+/* Hide Scrollbar on Mobile */
 
-::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #fe424d;
+@media (max-width: 768px) {
+  html {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+  html::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  body {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+  body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  #root {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+  #root::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
 }
 
 /* Page Fade */
+
 .page-fade {
   animation: pageFade 0.5s ease;
 }
@@ -141,20 +218,29 @@ ul {
     opacity: 0;
     transform: translateY(8px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+/* Override for listing show page: no transform in animation so position:sticky works on sidebar */
+.listing-show-page.page-fade {
+  animation: pageFadeSimple 0.5s ease;
+}
+
+@keyframes pageFadeSimple {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* Staggered Fade-in Animation */
+
 @keyframes fadeInUpSubtle {
   from {
     opacity: 0;
     transform: translateY(15px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -167,6 +253,7 @@ ul {
 }
 
 /* Stagger delays for up to 12 items */
+
 .stagger-item:nth-child(1) {
   animation-delay: 0.05s;
 }
@@ -216,6 +303,7 @@ ul {
 }
 
 /* Image Fade-in Utility */
+
 .img-fade-in {
   opacity: 0;
   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -226,13 +314,15 @@ ul {
 }
 
 /* 📱 Aggressive Mobile Scrollbar Removal (Universal & Absolute) */
+
 @media (max-width: 768px) {
   /* Universal scrollbar hide for all elements */
   * {
-    scrollbar-width: none !important; /* Firefox */
-    -ms-overflow-style: none !important; /* IE/Edge */
+    scrollbar-width: none !important;
+    /* Firefox */
+    -ms-overflow-style: none !important;
+    /* IE/Edge */
   }
-
   /* Webkit-specific nuke for all elements */
   ::-webkit-scrollbar {
     display: none !important;
@@ -240,7 +330,6 @@ ul {
     height: 0 !important;
     background: transparent !important;
   }
-
   ::-webkit-scrollbar-track,
   ::-webkit-scrollbar-thumb,
   ::-webkit-scrollbar-button,
@@ -250,9 +339,11 @@ ul {
     width: 0 !important;
     height: 0 !important;
   }
-
   /* Force layout to respect the hide */
-  html, body, #root, .main-content {
+  html,
+  body,
+  #root,
+  .main-content {
     overflow-x: hidden !important;
   }
 }

@@ -330,7 +330,7 @@ const ListingShow = ({ currUser, showFlash }) => {
 
     return (
         <div className="container mt-3 page-fade listing-show-page">
-            <div className="row">
+            <div className="row listing-show-row">
                 <div className="col-lg-8">
                     <div className="listing-show-v3-header-wrapper mb-3">
                         {/* Line 1: Title */}
