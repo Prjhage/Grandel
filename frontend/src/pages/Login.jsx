@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
     getAuth,
     signInWithEmailAndPassword,
-    signInWithPopup,
-    signInWithRedirect,
-    getRedirectResult,
-    onAuthStateChanged
+    signInWithPopup
 } from 'firebase/auth';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
@@ -20,171 +17,50 @@ const Login = ({ onLogin, showFlash }) => {
         password: ''
     });
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(() => {
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const isPending = localStorage.getItem('pending_google_auth') === 'true';
-        const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
-        return isRedirectBack || (isMobile && isPending);
-    });
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const isProcessing = useRef(false);
 
     useEffect(() => {
         if (error) {
-            const timer = setTimeout(() => {
-                setError('');
-            }, 3000);
+            const timer = setTimeout(() => setError(''), 3000);
             return () => clearTimeout(timer);
         }
     }, [error]);
-
-    useEffect(() => {
-        const handleAuthResult = async () => {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
-            const isPending = localStorage.getItem('pending_google_auth') === 'true';
-
-            if (isRedirectBack || (isMobile && isPending)) {
-                console.log("🔥 Detected pending Google Auth on mobile/redirect. Setting loading...");
-                setLoading(true);
-            }
-
-            try {
-                // Always try to catch a redirect result if it exists
-                let result = await getRedirectResult(auth);
-
-                if (result) {
-                    console.log("✅ getRedirectResult found a user:", result.user.email);
-                    await processGoogleUser(result.user);
-                    localStorage.removeItem('pending_google_auth');
-                }
-            } catch (err) {
-                console.error("❌ getRedirectResult error:", err);
-                localStorage.removeItem('pending_google_auth');
-                handleAuthError(err);
-            } finally {
-                // Always clear loading after result check is done, 
-                // unless we are in the middle of processing a found user
-                if (!isProcessing.current) {
-                    setLoading(false);
-                }
-                
-                // If we've been waiting for a redirect check but found nothing, 
-                // clear the flag so the user isn't stuck "logging in" on every refresh.
-                if (isPending && !result) {
-                    console.log("ℹ️ No redirect result found, clearing pending flag.");
-                    localStorage.removeItem('pending_google_auth');
-                }
-            }
-        };
-
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            const isPending = localStorage.getItem('pending_google_auth') === 'true';
-            if (user && isPending) {
-                console.log("🔄 onAuthStateChanged triggered for pending user:", user.email);
-                await processGoogleUser(user);
-                localStorage.removeItem('pending_google_auth');
-            }
-        });
-
-        // Removed: let isProcessing = false; // This was a local variable, now using useRef
-
-        const processGoogleUser = async (firebaseUser) => {
-            if (isProcessing.current) return; // Use useRef
-            isProcessing.current = true; // Use useRef
-            try {
-                const token = await firebaseUser.getIdToken();
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                if (isMobile) {
-                    // alert("Token retrieved, talking to backend...");
-                }
-
-                const res = await axios.post('/login', {
-                    idToken: token,
-                    token: token
-                }, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
-                if (res.data.success) {
-                    clearCache();
-                    onLogin(res.data.user);
-                    showFlash('Logged in with Google!', 'success');
-                    navigate('/listings');
-                } else {
-                    setError(res.data.message || "Login refused by server.");
-                    isProcessing.current = false;
-                }
-            } catch (err) {
-                isProcessing.current = false; // Reset on error
-                const backendMsg = err.response?.data?.message || err.message;
-
-                if (err.code === 'ECONNABORTED') {
-                    setError("TIMEOUT: Backend is taking too long to respond. It might be waking up.");
-                } else if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
-                    setError("API ERROR: Backend returned HTML (404/Wrong URL). Check VITE_API_BASE_URL.");
-                } else if (err.code === 'ERR_NETWORK') {
-                    setError("NETWORK ERROR: Cannot reach backend. It might be sleeping or the URL is wrong.");
-                } else {
-                    setError(backendMsg);
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        const handleAuthError = (err) => {
-            let msg = err.message;
-            if (err.code === 'auth/unauthorized-domain') {
-                msg = "DOMAIN ERROR: This domain is not authorized in Firebase.";
-            } else if (err.code === 'auth/popup-closed-by-user') {
-                return;
-            }
-            setError(msg);
-        };
-
-        handleAuthResult();
-        return () => unsubscribe();
-    }, [auth, navigate, onLogin, clearCache, showFlash]);
 
     const handleGoogleLogin = async () => {
         setLoading(true);
         setError('');
         try {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const result = await signInWithPopup(auth, googleProvider);
+            const token = await result.user.getIdToken();
 
-            if (isMobile) {
-                localStorage.setItem('pending_google_auth', 'true');
-                await signInWithRedirect(auth, googleProvider);
+            const res = await axios.post('/login', {
+                idToken: token,
+                token: token
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.data.success) {
+                clearCache();
+                onLogin(res.data.user);
+                showFlash('Logged in with Google!', 'success');
+                navigate('/listings');
             } else {
-                const result = await signInWithPopup(auth, googleProvider);
-                const user = result.user;
-                const token = await user.getIdToken();
-
-                const res = await axios.post('/login', {
-                    idToken: token,
-                    token: token
-                }, {
-                    headers: { Authorization: `Bearer ${token}` }
-                }).catch(err => {
-                    const errorMsg = err.response?.data?.message || (err.code === 'ERR_NETWORK' ? "Cannot reach backend. Check VITE_API_BASE_URL." : err.message);
-                    setError("BACKEND ERROR: " + errorMsg);
-                    throw err;
-                });
-
-                if (res.data.success) {
-                    clearCache();
-                    onLogin(res.data.user);
-                    showFlash('Logged in with Google!', 'success');
-                    navigate('/listings');
-                }
+                setError(res.data.message || 'Login refused by server.');
             }
         } catch (err) {
-            setError(err.response?.data?.message || err.message);
-        } finally {
-            if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                setLoading(false);
+            if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+                // User closed the popup — not an error
+            } else if (err.code === 'auth/unauthorized-domain') {
+                setError('This domain is not authorized. Check Firebase console.');
+            } else if (err.code === 'ERR_NETWORK') {
+                setError('Cannot reach the server. Please try again.');
+            } else {
+                setError(err.response?.data?.message || err.message);
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -307,7 +183,7 @@ const Login = ({ onLogin, showFlash }) => {
                             disabled={loading}
                             style={{ borderRadius: '10px', padding: '10px', fontSize: '0.9rem', fontWeight: '500' }}
                         >
-                            {loading && (window.location.search.includes('apiKey=') || localStorage.getItem('pending_google_auth') === 'true') ? (
+                            {loading ? (
                                 <>
                                     <i className="fa-solid fa-circle-notch fa-spin me-2"></i>
                                     LOGGING IN...

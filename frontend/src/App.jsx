@@ -43,6 +43,10 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
+    // Clean up stale keys left by the old signInWithRedirect flow
+    localStorage.removeItem('pending_google_auth');
+    localStorage.removeItem('pending_google_signup');
+
     const checkUser = async () => {
       try {
         const res = await axios.get('/current-user');

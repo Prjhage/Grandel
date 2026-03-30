@@ -1,14 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
     getAuth,
     createUserWithEmailAndPassword,
     deleteUser,
     signInWithEmailAndPassword,
-    signInWithPopup,
-    signInWithRedirect,
-    getRedirectResult,
-    onAuthStateChanged
+    signInWithPopup
 } from 'firebase/auth';
 import axios from '../config/axios';
 import { useProfileCache } from '../components/ProfileCacheContext';
@@ -22,153 +19,53 @@ const Signup = ({ onLogin, showFlash }) => {
         email: '',
         password: ''
     });
-    const [loading, setLoading] = useState(() => {
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const isPending = localStorage.getItem('pending_google_signup') === 'true';
-        const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
-        return isRedirectBack || (isMobile && isPending);
-    });
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const isProcessing = useRef(false);
 
     useEffect(() => {
         if (error) {
-            const timer = setTimeout(() => {
-                setError('');
-            }, 3000);
+            const timer = setTimeout(() => setError(''), 3000);
             return () => clearTimeout(timer);
         }
     }, [error]);
-
-    useEffect(() => {
-        const handleAuthResult = async () => {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const isRedirectBack = window.location.search.includes('apiKey=') || window.location.hash.includes('apiKey=');
-            const isPending = localStorage.getItem('pending_google_signup') === 'true';
-
-            if (isRedirectBack || (isMobile && isPending)) {
-                setLoading(true);
-            }
-
-            try {
-                // Always try to catch a redirect result if it exists
-                let result = await getRedirectResult(auth);
-
-                if (result) {
-                    console.log("✅ getRedirectResult found a user (Signup):", result.user.email);
-                    await processGoogleUser(result.user);
-                    localStorage.removeItem('pending_google_signup');
-                }
-            } catch (err) {
-                localStorage.removeItem('pending_google_signup');
-                console.error("❌ Signup Redirect Error:", err);
-                setError(err.message);
-            } finally {
-                // Clear loading unless we are processing a found user
-                if (!isProcessing.current) {
-                    setLoading(false);
-                }
-                
-                // If we've been waiting for a result but none came, clear the flag
-                if (isPending && !result) {
-                    console.log("ℹ️ No signup result found, clearing flag.");
-                    localStorage.removeItem('pending_google_signup');
-                }
-            }
-        };
-
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            const isPending = localStorage.getItem('pending_google_signup') === 'true';
-            if (user && isPending) {
-                console.log("🔄 onAuthStateChanged triggered for pending signup:", user.email);
-                await processGoogleUser(user);
-                localStorage.removeItem('pending_google_signup');
-            }
-        });
-
-        const processGoogleUser = async (firebaseUser) => {
-            if (isProcessing.current) return;
-            isProcessing.current = true;
-            setLoading(true);
-            try {
-                const token = await firebaseUser.getIdToken();
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                if (isMobile) {
-                    // alert("Signup Token retrieved, talking to backend...");
-                }
-                const res = await axios.post('/signup', {
-                    username: firebaseUser.displayName || firebaseUser.email.split('@')[0],
-                    email: firebaseUser.email,
-                    idToken: token
-                }, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
-                if (res.data.success) {
-                    clearCache();
-                    onLogin(res.data.user);
-                    showFlash('Signed up with Google successfully!', 'success');
-                    navigate('/listings');
-                } else {
-                    setError(res.data.message || "Signup refused by server.");
-                }
-            } catch (err) {
-                const backendMsg = err.response?.data?.message || err.message;
-
-                if (err.code === 'ECONNABORTED') {
-                    setError("TIMEOUT: Backend is taking too long. It might be waking up.");
-                } else if (typeof err.response?.data === 'string' && err.response.data.includes('<!DOCTYPE html>')) {
-                    setError("API ERROR: Backend returned HTML. Your API link might be wrong.");
-                } else {
-                    setError(backendMsg);
-                }
-            } finally {
-                isProcessing.current = false;
-                setLoading(false);
-            }
-        };
-
-        handleAuthResult();
-        return () => unsubscribe();
-    }, [auth, navigate, onLogin, clearCache, showFlash]);
 
     const handleGoogleSignup = async () => {
         setLoading(true);
         setError('');
         try {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+            const token = await user.getIdToken();
 
-            if (isMobile) {
-                localStorage.setItem('pending_google_signup', 'true');
-                await signInWithRedirect(auth, googleProvider);
+            const res = await axios.post('/signup', {
+                username: user.displayName || user.email.split('@')[0],
+                email: user.email,
+                idToken: token
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.data.success) {
+                clearCache();
+                onLogin(res.data.user);
+                showFlash('Signed up with Google successfully!', 'success');
+                navigate('/listings');
             } else {
-                const result = await signInWithPopup(auth, googleProvider);
-                const user = result.user;
-                const token = await user.getIdToken();
-
-                const res = await axios.post('/signup', {
-                    username: user.displayName || user.email.split('@')[0],
-                    email: user.email,
-                    idToken: token
-                }, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
-                if (res.data.success) {
-                    clearCache();
-                    onLogin(res.data.user);
-                    showFlash('Signed up with Google successfully!', 'success');
-                    navigate('/listings');
-                }
+                setError(res.data.message || 'Signup refused by server.');
             }
         } catch (err) {
-            console.error("Google Signup Error:", err);
-            setError(err.response?.data?.message || err.message);
-        } finally {
-            if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                setLoading(false);
+            if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+                // User closed the popup — not an error
+            } else if (err.code === 'auth/unauthorized-domain') {
+                setError('This domain is not authorized. Check Firebase console.');
+            } else if (err.code === 'ERR_NETWORK') {
+                setError('Cannot reach the server. Please try again.');
+            } else {
+                setError(err.response?.data?.message || err.message);
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -318,7 +215,7 @@ const Signup = ({ onLogin, showFlash }) => {
                             disabled={loading}
                             style={{ borderRadius: '10px', padding: '10px', fontSize: '0.9rem', fontWeight: '500' }}
                         >
-                            {loading && (window.location.search.includes('apiKey=') || localStorage.getItem('pending_google_signup') === 'true') ? (
+                            {loading ? (
                                 <>
                                     <i className="fa-solid fa-circle-notch fa-spin me-2"></i>
                                     CREATING ACCOUNT...
