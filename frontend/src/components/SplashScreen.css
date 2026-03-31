@@ -1,0 +1,164 @@
+/* SplashScreen.css */
+.splash-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background-color: #0b0b0b; z-index: 10000;
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+/* --- AMBIENT MESH GRADIENT --- */
+.splash-ambient-light {
+    position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%;
+    filter: blur(80px); opacity: 0.15; z-index: 0; pointer-events: none; mix-blend-mode: screen;
+}
+.light-1 {
+    top: -10%; left: -10%; background: radial-gradient(circle, #fe424d, transparent 70%);
+    animation: floatAmbient 12s ease-in-out infinite alternate;
+}
+.light-2 {
+    bottom: -10%; right: -10%; background: radial-gradient(circle, #fe424d, transparent 70%);
+    animation: floatAmbient 15s ease-in-out infinite alternate-reverse;
+}
+@keyframes floatAmbient {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(100px, 100px) scale(1.2); }
+}
+
+.splash-content {
+    position: relative; z-index: 2; text-align: center;
+    padding: 50px 60px; background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: contentPopIn 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes contentPopIn {
+    0% { transform: scale(0.9) translateY(30px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* --- LOGO & SHOCKWAVE --- */
+.splash-logo-wrapper {
+    position: relative; margin-bottom: 25px; display: flex; justify-content: center; align-items: center;
+}
+.splash-icon-img {
+    width: 140px; height: 140px; object-fit: contain; opacity: 0;
+    transform: scale(0.6) translateY(30px);
+    animation: splashIconEntrance 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s forwards;
+    z-index: 2; filter: drop-shadow(0 0 20px rgba(254, 66, 77, 0.2));
+    image-rendering: -webkit-optimize-contrast;
+}
+@keyframes splashIconEntrance {
+    0% { opacity: 0; transform: scale(0.6) translateY(30px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.splash-shockwave {
+    position: absolute; width: 100px; height: 100px; border: 2px solid #fe424d; border-radius: 50%; opacity: 0;
+    animation: shockwaveExpand 2s cubic-bezier(0, 0.5, 0.5, 1) 1.2s infinite;
+}
+@keyframes shockwaveExpand {
+    0% { transform: scale(1); opacity: 0.8; border-width: 2px; }
+    100% { transform: scale(3.5); opacity: 0; border-width: 0.5px; }
+}
+
+/* --- BRAND & METALLIC SHIMMER --- */
+.splash-brand-wrapper {
+    position: relative; display: inline-block; overflow: hidden; margin-bottom: 10px;
+}
+.splash-brand {
+    font-size: 4.5rem; font-weight: 800; letter-spacing: -3px; margin: 0;
+    color: #ffffff; display: flex; justify-content: center; -webkit-font-smoothing: antialiased;
+}
+.splash-letter {
+    display: inline-block; opacity: 0; transform: translateY(100%) scale(1.2);
+    animation: letterSpringReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+@keyframes letterSpringReveal {
+    0% { opacity: 0; transform: translateY(100%) scale(1.2); }
+    100% { opacity: 1; transform: translateY(0) scale(1.1); }
+}
+.splash-brand-shimmer {
+    position: absolute; top: 0; left: -150%; width: 80%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    transform: skewX(-25deg); animation: shimmerSweep 4s ease-in-out infinite;
+    animation-delay: 2s;
+}
+@keyframes shimmerSweep { 0% { left: -150%; } 40%, 100% { left: 150%; } }
+
+/* --- ADVANCED LOADER --- */
+.splash-loader-container {
+    margin-top: 50px; width: 320px; margin-left: auto; margin-right: auto;
+    opacity: 0; animation: fadeIn 0.5s ease 1.5s forwards;
+}
+
+.splash-loader-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 8px; font-weight: 700; font-family: monospace;
+}
+
+.splash-loader-status {
+    font-size: 0.6rem; color: #fe424d; letter-spacing: 2px;
+    animation: flickerStatus 0.1s infinite alternate;
+}
+
+@keyframes flickerStatus { 
+    0% { opacity: 0.8; } 100% { opacity: 1; } 
+}
+
+.splash-loader-percentage {
+    font-size: 0.9rem; color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.splash-loader-bar {
+    width: 100%; height: 4px; background: rgba(255, 255, 255, 0.03);
+    border-radius: 2px; overflow: hidden; position: relative;
+}
+
+.splash-loader-progress {
+    height: 100%; background: #fe424d; position: relative;
+    box-shadow: 0 0 15px rgba(254, 66, 77, 0.5);
+    transition: width 0.3s cubic-bezier(0.1, 0, 0.1, 1);
+}
+
+/* THE SCANNING BEAM */
+.splash-loader-beam {
+    position: absolute; top: 0; right: 0; width: 40px; height: 100%;
+    background: linear-gradient(90deg, transparent, #ffffff, transparent);
+    opacity: 0.8; animation: beamSweep 1.5s infinite;
+}
+
+@keyframes beamSweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.splash-loader-decor {
+    display: flex; align-items: center; justify-content: center; margin-top: 15px; opacity: 0.2;
+}
+.decor-line { height: 1px; width: 40px; background: #ffffff; }
+.decor-dot { width: 4px; height: 4px; background: #fe424d; border-radius: 50%; margin: 0 10px; animation: pulseDot 1s infinite; }
+
+@keyframes pulseDot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
+
+/* --- EXIT ANIMATION --- */
+.splash-exit {
+    opacity: 0; pointer-events: none; transition: opacity 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.splash-exit .splash-content { transform: scale(1.05) translateY(-20px); transition: all 0.6s ease; }
+
+/* --- FILM GRAIN OVERLAY --- */
+.splash-grain-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+    opacity: 0.05; pointer-events: none; z-index: 10;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .splash-brand { font-size: 3rem; }
+    .splash-content { padding: 30px; width: 90vw; }
+    .splash-loader-container { width: 100%; }
+}

@@ -442,7 +442,7 @@
     .mobile-search-overlay {
         position: fixed;
         inset: 0 !important;
-        width: 100vw !important;
+        width: 100% !important;
         height: 100dvh !important;
         background: #f7f7f7;
         z-index: 10000 !important;

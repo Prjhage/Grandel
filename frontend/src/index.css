@@ -1,14 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
+
 html {
   scroll-behavior: smooth;
-  overflow-x: clip;
+  overflow-x: hidden !important;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
   html {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
-    overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
   html::-webkit-scrollbar {
     display: none !important;
@@ -17,11 +19,6 @@ html {
   }
 }
 
-@media (min-width: 769px) {
-  html {
-    overflow-y: scroll;
-  }
-}
 
 /* Global Theme Settings */
 
@@ -47,7 +44,8 @@ body {
   min-height: 100vh;
   background-color: var(--light);
   color: var(--dark);
-  overflow-x: clip;
+  overflow-x: hidden !important;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -62,19 +60,23 @@ body {
   }
 }
 
+
 #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {
   #root {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
   }
+
   #root::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
@@ -82,11 +84,13 @@ body {
   }
 }
 
+
 .main-content {
   flex-grow: 1;
   width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
+
 
 /* Padding added to all pages EXCEPT Home so they aren't hidden under the fixed transparent navbar */
 
@@ -140,6 +144,7 @@ ul {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -163,49 +168,38 @@ ul {
   ::-webkit-scrollbar {
     width: 8px;
   }
+
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
+
   ::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 10px;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: #fe424d;
   }
 }
 
-/* Hide Scrollbar on Mobile */
-
 @media (max-width: 768px) {
-  html {
+  /* Nuclear scrollbar hide for ALL elements on mobile */
+  html, body, #root, *, *::before, *::after {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
+    touch-action: pan-y; /* Prevent horizontal gesture jump */
   }
-  html::-webkit-scrollbar {
+  ::-webkit-scrollbar, *::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
-  }
-  body {
-    -ms-overflow-style: none !important;
-    scrollbar-width: none !important;
-  }
-  body::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-  }
-  #root {
-    -ms-overflow-style: none !important;
-    scrollbar-width: none !important;
-  }
-  #root::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
+    background: transparent !important;
   }
 }
+
+
+
 
 /* Page Fade */
 
@@ -218,6 +212,7 @@ ul {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -230,8 +225,13 @@ ul {
 }
 
 @keyframes pageFadeSimple {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* Staggered Fade-in Animation */
@@ -241,6 +241,7 @@ ul {
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -316,6 +317,7 @@ ul {
 /* 📱 Aggressive Mobile Scrollbar Removal (Universal & Absolute) */
 
 @media (max-width: 768px) {
+
   /* Universal scrollbar hide for all elements */
   * {
     scrollbar-width: none !important;
@@ -323,6 +325,7 @@ ul {
     -ms-overflow-style: none !important;
     /* IE/Edge */
   }
+
   /* Webkit-specific nuke for all elements */
   ::-webkit-scrollbar {
     display: none !important;
@@ -330,6 +333,7 @@ ul {
     height: 0 !important;
     background: transparent !important;
   }
+
   ::-webkit-scrollbar-track,
   ::-webkit-scrollbar-thumb,
   ::-webkit-scrollbar-button,
@@ -339,11 +343,13 @@ ul {
     width: 0 !important;
     height: 0 !important;
   }
+
   /* Force layout to respect the hide */
   html,
   body,
   #root,
   .main-content {
     overflow-x: hidden !important;
+    max-width: 100vw !important;
   }
 }

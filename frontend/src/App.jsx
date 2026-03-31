@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Flash from './components/Flash';
 import Chatbot from './components/Chatbot';
+import SplashScreen from './components/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
 import { ListingCacheProvider, useListingCache } from './components/ListingCacheContext';
 import { ProfileCacheProvider, useProfileCache } from './components/ProfileCacheContext';
@@ -34,6 +35,7 @@ function AppContent() {
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [flash, setFlash] = useState(null);
+  const [showSplash, setShowSplash] = useState(true);
   const location = useLocation();
 
   // Helper to show flash messages
@@ -104,6 +106,7 @@ function AppContent() {
 
   return (
     <div className="d-flex flex-column min-vh-100">
+      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
       <ScrollToTop />
       <Navbar currUser={currUser} onLogout={handleLogout} />
 
