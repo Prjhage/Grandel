@@ -180,6 +180,10 @@
     .navbar-glass {
         border-radius: 16px !important;
         height: auto !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.98) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
     }
 
     .navbar-glass.navbar-glass-expanded {

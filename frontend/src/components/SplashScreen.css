@@ -141,11 +141,17 @@
 
 @keyframes pulseDot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
 
-/* --- EXIT ANIMATION --- */
+/* --- EXIT & NOISE --- */
 .splash-exit {
     opacity: 0; pointer-events: none; transition: opacity 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
 .splash-exit .splash-content { transform: scale(1.05) translateY(-20px); transition: all 0.6s ease; }
+
+/* --- PERFORMANCE OVERRIDES --- */
+.splash-icon-img, .splash-letter, .splash-loader-progress, .splash-shockwave {
+    will-change: transform, opacity;
+    transform: translate3d(0,0,0); /* Force GPU acceleration */
+}
 
 /* --- FILM GRAIN OVERLAY --- */
 .splash-grain-overlay {
@@ -156,9 +162,26 @@
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* Responsive */
 @media (max-width: 768px) {
     .splash-brand { font-size: 3rem; }
-    .splash-content { padding: 30px; width: 90vw; }
+    .splash-content { 
+        padding: 30px; 
+        width: 90vw;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(11, 11, 11, 0.98) !important; /* Solid opaque for performance */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
     .splash-loader-container { width: 100%; }
+    
+    /* Disable expensive rendering elements on mobile */
+    .splash-ambient-light, 
+    .splash-grain-overlay,
+    .splash-brand-shimmer {
+        display: none !important;
+    }
+
+    .splash-letter {
+        animation-duration: 0.4s !important; /* Faster for snappier mobile feel */
+    }
 }
