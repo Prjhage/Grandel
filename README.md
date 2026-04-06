@@ -44,7 +44,7 @@ Grandel is a modern, full-stack travel booking application designed to provide u
 <img width="1906" height="910" alt="image" src="https://github.com/user-attachments/assets/63b05274-4f22-4bfa-b384-787c2b251b8b" />
 
 ## User WorkFlow Diagram
-<img width="1024" height="1536" alt="user workflow diagram" src="https://github.com/user-attachments/assets/42c16143-ff71-4c87-974b-0bdd7e2b70b2" />
+<img width="600" height="900" alt="user workflow diagram" src="https://github.com/user-attachments/assets/42c16143-ff71-4c87-974b-0bdd7e2b70b2" />
 
 ## 📂 Project Structure
 
