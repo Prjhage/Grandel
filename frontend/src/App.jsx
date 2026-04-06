@@ -133,7 +133,7 @@ function AppContent() {
         </Routes>
       </div>
 
-      <Chatbot currUser={currUser} />
+      {currUser && <Chatbot currUser={currUser} />}
       <Footer />
     </div>
   );
