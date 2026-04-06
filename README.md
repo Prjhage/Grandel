@@ -1,4 +1,4 @@
-# Grandel - Travel & Stay Booking Platform
+# Grandel - AI-Powered Hotel Booking Platform
 
 Grandel is a modern, full-stack travel booking application designed to provide users with a seamless experience for finding and booking unique stays. It combines powerful search capabilities with AI-driven travel assistance.
 
