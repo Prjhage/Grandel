@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+*.pem
+firebaseServiceKey.json
+
+# Build outputs
+dist/
+build/
+.next/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Local scratch & cache
+.cache/
+.eslintcache

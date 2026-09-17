@@ -1,120 +1,316 @@
-# Grandel - AI-Powered Hotel Booking Platform
+# Grandel - AI-Powered Hotel & Travel Booking Platform
 
-Grandel is a modern, full-stack travel booking application designed to provide users with a seamless experience for finding and booking unique stays. It combines powerful search capabilities with AI-driven travel assistance.
+[![Node.js](https://img.shields.io/badge/Node.js-v22+-green.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
+[![Express](https://img.shields.io/badge/Express-5.x-lightgrey.svg)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen.svg)](https://www.mongodb.com/)
+[![License](https://img.shields.io/badge/License-ISC-purple.svg)](LICENSE)
 
-## 🚀 Key Features
+> **Grandel** is a next-generation travel booking and hospitality management web application that combines intuitive stay reservations, geospatial discovery, Razorpay token payments, QR-based check-in verification, and real-time AI assistance grounded directly in platform data.
 
--   **Advanced Stay Search**: Discover unique accommodations using a map-integrated search interface powered by Leaflet.
--   **AI Travel Assistant**: Integrated chatbot powered by Google Gemini/Groq for personalized travel recommendations and assistance.
--   **Secure Booking System**: Complete booking workflow with Razorpay payment gateway integration.
--   **Host Dashboard**: Manage property listings, bookings, and reviews in a comprehensive host interface.
--   **Secure Authentication**: Multi-layered security using Passport.js for local auth and Firebase for social/cloud identity.
--   **Dynamic Media Management**: Image uploads and storage handled efficiently through Cloudinary.
--   **PDF Invoicing**: Automated receipt generation for successful bookings.
+---
 
-## 🛠️ Tech Stack
+## 📖 Table of Contents
+- [Project Overview](#-project-overview)
+- [Problem Statement](#-problem-statement)
+- [Objectives](#-objectives)
+- [Core Features](#-core-features)
+- [Technology Stack](#-technology-stack)
+- [System Architecture](#-system-architecture)
+- [Application Workflows](#-application-workflows)
+  - [Authentication](#1-authentication)
+  - [Booking Workflow](#2-booking-workflow)
+  - [Payment Workflow](#3-payment-workflow)
+  - [QR Verification](#4-qr-verification)
+  - [Notification System](#5-notification-system)
+  - [AI Travel Chatbot](#6-ai-travel-chatbot)
+  - [Review System](#7-review-system)
+  - [Host Dashboard](#8-host-dashboard)
+- [Database Overview](#-database-overview)
+- [API Overview](#-api-overview)
+- [Installation & Quickstart](#-installation--quickstart)
+- [Environment Variables](#-environment-variables)
+- [Documentation Index](#-documentation-index)
+
+---
+
+## 🌟 Project Overview
+Grandel re-imagines online travel bookings by bridging guests and property hosts through intelligent automation. Beyond standard listing directories, Grandel provides interactive Leaflet map exploration, an AI assistant powered by Groq Llama-3 that directly surfaces live hotel inventory and generates booking actions, an automated 20% token reservation model, instant PDF invoice generation with check-in QR barcodes, and a dedicated host verification scanner.
+
+---
+
+## 🎯 Problem Statement
+Traditional travel booking platforms suffer from:
+1. **Disjointed User Experience**: Users constantly switch between map apps, search filters, and external recommendation guides.
+2. **High Upfront Financial Friction**: Demanding 100% upfront payment discourages early bookings and increases cancellation disputes.
+3. **Manual Check-in Bottlenecks**: Arrival verification at boutique properties relies on printouts or manual ID checks prone to delays and fraud.
+4. **Static Chatbots**: Most customer support bots offer generic FAQs without real-time inventory knowledge or actionable booking integration.
+
+---
+
+## 🚀 Objectives
+- Provide **geospatial search** with MongoDB 2dsphere indexing and interactive Leaflet map view.
+- Introduce an **AI-driven conversational booking agent** (Groq Llama-3.3-70B) grounded in live database listings that produces direct in-chat reservation triggers.
+- Support **dual authentication** using Firebase Social/Token Auth linked to persistent Passport.js MongoStore sessions.
+- Implement a **flexible 20% token deposit** payment structure powered by Razorpay with HMAC-SHA256 signature verification.
+- Automate **QR code invoice generation** (`bwip-js` + `pdfkit`) and host check-in scanning (`html5-qrcode`).
+- Enable **event-driven notifications** via secured `n8n` webhooks for guest confirmations and host alerts.
+
+---
+
+## ⚡ Core Features
+
+| Feature | Description |
+| :--- | :--- |
+| **Interactive Map Discovery** | Visual listing markers with Leaflet, radius queries, and category browsing (beach, mountain, castles, urban, etc.). |
+| **Smart Booking Engine** | Overlap prevention, capacity validation, pet fees, 18% GST calculation, and daily Early Bird discounts. |
+| **Split-Payment Security** | Pay 20% token online to secure dates; settle the remaining 80% balance directly upon hotel check-in. |
+| **Digital QR Check-in** | Downloadable branded PDF invoices containing check-in QR codes verifiable only by the listing's authorized host. |
+| **AI Travel Companion** | Automated day-by-day travel itineraries and local attractions generated by Google Gemini 2.5 Flash. |
+| **Live Database Chatbot** | Groq-powered AI support bot with live database inventory injection and structured `[RESERVE:...]` actions. |
+| **Host Operations Suite** | Host dashboard for managing listings, viewing guest rosters, updating booking statuses, and tracking revenues. |
+| **Dynamic Reviews & Ratings** | Star ratings (1-5) and feedback with atomic weighted average rating recalculations on MongoDB. |
+
+---
+
+## 🛠 Technology Stack
 
 ### Frontend
--   **Framework**: [React](https://reactjs.org/) (Vite)
--   **Styling**: [Bootstrap 5](https://getbootstrap.com/), CSS
--   **Maps**: [Leaflet](https://leafletjs.com/) & [React-Leaflet](https://react-leaflet.js.org/)
--   **API Client**: [Axios](https://axios-http.com/)
--   **Routing**: [React Router v7](https://reactrouter.com/)
+- **Framework**: React 19 (Vite build system)
+- **Routing**: React Router v7
+- **Styling**: Bootstrap 5 + Custom Modern Vanilla CSS
+- **Maps**: Leaflet & React-Leaflet
+- **QR Scanner**: HTML5-QRCode
+- **HTTP Client**: Axios with baseURL auto-detection and credential interceptors
 
 ### Backend
--   **Runtime**: [Node.js](https://nodejs.org/) (v22+)
--   **Framework**: [Express.js](https://expressjs.com/)
--   **Database**: [MongoDB](https://www.mongodb.com/) (via Mongoose)
--   **AI Engines**: [Google Generative AI](https://ai.google.dev/), [Groq SDK](https://groq.ai/)
--   **Payment Gateway**: [Razorpay](https://razorpay.com/)
--   **Security**: [Helmet](https://helmetjs.github.io/), [Express-rate-limit](https://github.com/nfriedly/express-rate-limit), [HPP](https://github.com/ictv/hpp)
--   **Storage**: [Cloudinary](https://cloudinary.com/)
-  
-## ScreenShots
-### Home Page 
-<img width="1906" height="910" alt="Screenshot 2026-02-19 145139" src="https://github.com/user-attachments/assets/13ab7186-6d7b-4f9d-9925-68f9cc724598" />
+- **Runtime**: Node.js v22+
+- **Server Framework**: Express 5.1.0
+- **Database**: MongoDB Atlas with Mongoose ODM
+- **Authentication**: Passport.js (Local & Session) + Firebase Admin SDK
+- **Session Store**: connect-mongo with encrypted cookie jars
+- **Security**: Helmet, HPP, Express-Rate-Limit, custom NoSQL injection sanitizer, bcrypt
+- **File & Media Storage**: Cloudinary via Multer-Storage-Cloudinary
+- **Invoicing & QR**: PDFKit + bwip-js
+- **Cache**: Node-Cache (in-memory caching for stats, featured listings, and queries)
 
-### Listings Page
-<img width="1906" height="910" alt="image" src="https://github.com/user-attachments/assets/903e82a0-2f90-4591-ad6d-b8bf8acf36cc" />
+### External Services & AI
+- **AI Chatbot**: Groq SDK (`llama-3.3-70b-versatile`)
+- **Travel Companion**: Google Generative AI (`gemini-2.5-flash`)
+- **Payments**: Razorpay API
+- **Workflow Automation**: n8n Webhook Service
+- **Direct Mail**: Nodemailer SMTP
 
-### Profile Page
-<img width="1906" height="910" alt="image" src="https://github.com/user-attachments/assets/1507071e-5e0d-4d89-9df9-9a1aa4efeee3" />
+---
 
-### Show Listing Page
-<img width="1906" height="910" alt="image" src="https://github.com/user-attachments/assets/63b05274-4f22-4bfa-b384-787c2b251b8b" />
+## 🏛 System Architecture
 
-## User WorkFlow Diagram
-<img width="600" height="900" alt="user workflow diagram" src="https://github.com/user-attachments/assets/42c16143-ff71-4c87-974b-0bdd7e2b70b2" />
-
-## 📂 Project Structure
-
-```text
-Grandel/
-├── Backend/                # Node/Express server
-│   ├── config/             # Database and API configurations
-│   ├── controllers/        # Business logic for routes
-│   ├── models/             # Mongoose schemas
-│   ├── routes/             # API endpoints
-│   ├── services/           # External service integrations (AI, Email, etc.)
-│   └── app.js              # Server entry point
-├── frontend/               # React/Vite application
-│   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Application views/screens
-│   │   ├── config/         # Frontend configurations
-│   │   └── App.jsx         # Main application component
-└── render.yaml             # Deployment configuration
+```
+                    ┌────────────────────────┐
+                    │      React Client      │
+                    │   (Vite + Bootstrap)   │
+                    └───────────┬────────────┘
+                                │ HTTP / JSON / Credentials
+                                ▼
+                    ┌────────────────────────┐
+                    │     REST API Layer     │
+                    │   (Express 5 / Node)   │
+                    └───────────┬────────────┘
+         ┌──────────────────────┼──────────────────────┐
+         ▼                      ▼                      ▼
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│  Authentication  │  │  Booking & Pay   │  │ Property & Review│
+│ (Passport/Fireb) │  │(Razorpay/PDF/QR) │  │ (Leaflet/Cloud)  │
+└────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘
+         └──────────────────────┼──────────────────────┘
+                                ▼
+                    ┌────────────────────────┐
+                    │     MongoDB Atlas      │
+                    │(Users/Listings/Bookings│
+                    └───────────┬────────────┘
+                                │
+   ┌─────────────┬──────────────┼──────────────┬─────────────┐
+   ▼             ▼              ▼              ▼             ▼
+Firebase     Cloudinary     Razorpay       Groq/Gemini      n8n
+  Auth         Media        Gateway         AI Engines    Webhooks
 ```
 
-## ⚙️ Getting Started
+*For editable Draw.io source and detailed architecture documentation, see [docs/architecture/](docs/architecture/).*
+
+---
+
+## 🔄 Application Workflows
+
+### 1. Authentication
+- Supports email/password registration and Google social login via Firebase Client SDK.
+- The Firebase ID token is exchanged with `POST /firebase-login`, verified by `firebase-admin`, and linked to a MongoDB `User` document.
+- Secure, cross-domain sessions are persisted using `express-session` with `connect-mongo`.
+
+### 2. Booking Workflow
+- The guest selects check-in/check-out dates and guest breakdown (adults, children, infants, pets).
+- The system checks for date collisions, calculates night counts, extra guest charges, pet fees, 18% GST, and daily early bird discounts.
+
+### 3. Payment Workflow
+- Guest clicks *Reserve* -> `POST /listings/:id/book/initiate` generates a Razorpay Order for a **20% token deposit**.
+- The guest completes checkout in the Razorpay popup.
+- `POST /listings/:id/book/verify` validates the Razorpay cryptographic signature (`HMAC-SHA256`) before committing the booking to MongoDB.
+
+### 4. QR Verification
+- Upon confirmation, a tamper-proof PDF invoice is generated with an embedded QR code containing the `bookingId`.
+- At check-in, the hotel reception host scans the guest's QR code using `/profile/host/scanner`.
+- The system validates that the scanning host owns the property, retrieves guest details, and computes the 80% balance due.
+
+### 5. Notification System
+- Booking transitions (`pending`, `confirmed`, `completed`) trigger outbound calls via `n8nService` to an authenticated n8n webhook.
+- n8n dispatches tailored email notifications: `guest_confirmation`, `host_notification`, and `guest_thanks`.
+- Critical transactional alerts (e.g., password resets) utilize direct SMTP via Nodemailer.
+
+### 6. AI Travel Chatbot
+- Powered by Groq's `llama-3.3-70b-versatile`.
+- Live listings and user booking state are injected into the system prompt.
+- Answers user inquiries with exact prices, locations, and ratings, appending clickable `[RESERVE:...]` tags for direct booking.
+
+### 7. Review System
+- Authenticated guests who stayed at a property can leave a 1-5 star review and comment.
+- MongoDB updates the listing's `ratingCount` and `avgRating` atomically and flushes cached listing data.
+
+### 8. Host Dashboard
+- Hosts access listing analytics, active reservations, guest arrival schedules, and booking approval controls (`pending` -> `confirmed` -> `completed`).
+
+---
+
+## 🗄 Database Overview
+
+Grandel stores data across 4 primary collections in MongoDB:
+
+```
+User (1) ──────────< Listings (N) ──────────< Reviews (N)
+  │                      │
+  │                      │
+  └──────────< Bookings (N) >────────────────┘
+```
+
+- **Users**: Authentication identifiers (`email`, `username`, `phoneHash`, `firebaseUid`), roles (`user`, `host`), wishlist references, profile avatars.
+- **Listings**: Properties with titles, pricing, multi-image arrays, GeoJSON coordinates with `2dsphere` geospatial indexing, room/guest rules, and discounts.
+- **Bookings**: Reservation records with start/end dates, guest count breakdown, pricing/GST details, Razorpay transaction IDs, booking lifecycle status, and AI travel plans.
+- **Reviews**: Feedback ratings (1-5), textual commentary, timestamps, and author references.
+
+*For complete schema diagrams and fields, see [docs/database/](docs/database/).*
+
+---
+
+## 🔌 API Overview
+
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/signup` / `/login` | User registration & login | Public |
+| `POST` | `/firebase-login` | Firebase token exchange | Public (Bearer Token) |
+| `GET` | `/current-user` | Current session user details | Public |
+| `GET` | `/listings` | Paginated, searchable listing list | Public |
+| `POST` | `/listings` | Create new property listing | Logged In |
+| `GET` | `/listings/:id` | Detailed listing info with reviews | Public |
+| `POST` | `/listings/:id/book/initiate` | Create 20% Razorpay order | Logged In |
+| `POST` | `/listings/:id/book/verify` | Verify payment & confirm booking | Logged In |
+| `GET` | `/bookings/:id/pdf` | Download booking PDF invoice | Logged In |
+| `GET` | `/bookings/verify/:id` | Host check-in QR verification | Logged In (Host) |
+| `POST` | `/listings/:id/reviews` | Submit property review | Logged In |
+| `GET` | `/profile/host` | Host dashboard analytics | Logged In (Host) |
+| `POST` | `/api/chatbot/chat` | Send message to AI assistant | Logged In |
+
+*For complete endpoint specifications, see [docs/api/api-documentation.md](docs/api/api-documentation.md).*
+
+---
+
+## 💻 Installation & Quickstart
 
 ### Prerequisites
-- Node.js (v22 or higher)
-- MongoDB account (Atlas or Local)
-- API Keys for: Cloudinary, Razorpay, Google AI, and Firebase
+- Node.js v22.x or higher
+- MongoDB Atlas cluster or local MongoDB instance
+- Free accounts for Cloudinary, Razorpay, and Firebase
 
-### Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd Backend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file and add your credentials:
-   ```env
-   # Example .env
-   MONGODB_URI=your_mongodb_uri
-   CLOUDINARY_CLOUD_NAME=your_cloud_name
-   CLOUDINARY_KEY=your_key
-   CLOUDINARY_SECRET=your_secret
-   RAZORPAY_KEY_ID=your_key_id
-   RAZORPAY_KEY_SECRET=your_key_secret
-   GEMINI_API_KEY=your_gemini_api_key
-   SECRET=your_session_secret
-   ```
-4. Start the server:
-   ```bash
-   npm start
-   ```
+### 1. Clone & Install
+```bash
+git clone https://github.com/your-username/Grandel.git
+cd Grandel
 
-### Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file:
-   ```env
-   VITE_API_BASE_URL=http://localhost:8080
-   VITE_FIREBASE_API_KEY=your_firebase_key
-   ```
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
+# Install all dependencies (root, backend, frontend)
+npm run install:all
+```
 
+### 2. Configure Environment Variables
+Create `.env` in `Backend/` and `frontend/` (see section below).
+
+### 3. Run Locally
+```bash
+# Run both Backend (port 8080) and Frontend (port 5173)
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 🔑 Environment Variables
+
+### Backend (`Backend/.env`)
+```env
+PORT=8080
+ATLASDB_URL=mongodb+srv://<user>:<password>@cluster.mongodb.net/grandel
+SECRET=your_express_session_secret
+FRONTEND_URL=http://localhost:5173
+
+# Cloudinary
+CLOUD_NAME=your_cloudinary_name
+CLOUD_API_KEY=your_cloudinary_api_key
+CLOUD_API_SECRET=your_cloudinary_api_secret
+
+# Razorpay
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+
+# AI Providers
+GROQ_API_KEY=your_groq_api_key
+GEMINI_API_KEY=your_gemini_api_key
+WEATHER_API_KEY=your_openweathermap_api_key
+
+# Firebase Admin SDK
+FIREBASE_PROJECT_ID=your_firebase_project_id
+FIREBASE_CLIENT_EMAIL=your_firebase_client_email
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+
+# n8n & Email
+N8N_EMAIL_WEBHOOK_URL=http://localhost:5678/webhook/...
+N8N_API_KEY=your_n8n_secret_key
+EMAIL_USER=your_smtp_email@gmail.com
+EMAIL_PASS=your_smtp_app_password
+```
+
+### Frontend (`frontend/.env`)
+```env
+VITE_API_BASE_URL=http://localhost:8080
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+---
+
+## 📚 Documentation Index
+Deep dive into Grandel's engineering specifications:
+
+- 🏛 **[System Architecture](docs/architecture/architecture.md)** — Architectural tiers, data flows, and component specs.
+- 🗄 **[Database Design](docs/database/database-design.md)** — Data dictionary, Mongoose models, indexes, and ER diagrams.
+- 🔌 **[API Documentation](docs/api/api-documentation.md)** — Full REST API guide with request and response payloads.
+- 💡 **[Feature Documentation](docs/features/)** — Architectural guides for all 9 key platform features.
+- 🔄 **[Project Workflows](docs/workflows/workflows.md)** — Step-by-step visual flows for booking, payment, and QR scan.
+- 🧪 **[Testing Strategy & Cases](docs/testing/test-plan.md)** — Automated test runs, benchmarks, and TC catalog.
+- 🛠 **[Troubleshooting & Known Issues](docs/troubleshooting/troubleshooting.md)** — Real debugging logs, root causes, and fixes.
+- 🛡 **[Security Documentation](docs/security/security.md)** — Cryptographic verification, session hardening, and injection defense.
+- 🤝 **[GitHub Guidelines](docs/github/github-guidelines.md)** — Issues, Pull Requests, and Git commit guidelines.
+
+---
+
+## 📄 License
+This project is licensed under the ISC License.

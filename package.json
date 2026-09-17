@@ -1,0 +1,30 @@
+{
+  "name": "grandel-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Grandel - AI-Powered Travel Booking Platform Monorepo",
+  "scripts": {
+    "dev": "npm run dev:all",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd Backend && npm start",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd Backend && npm install && cd ../frontend && npm install",
+    "build:frontend": "cd frontend && npm run build",
+    "test:aggregation": "cd Backend && node test-aggregation.js",
+    "test:caching": "cd Backend && node test-caching.js",
+    "test:mail": "cd Backend && node test-mail.js"
+  },
+  "keywords": [
+    "travel",
+    "hotel-booking",
+    "react",
+    "express",
+    "mongodb",
+    "ai",
+    "groq",
+    "gemini",
+    "razorpay"
+  ],
+  "author": "Prajwal Hage",
+  "license": "ISC"
+}
